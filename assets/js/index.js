@@ -97,9 +97,7 @@ function showEditTitle(){
 
 function submitTitle(){
     let editTitle = document.getElementById('edit-title-and-description');
-    if(editTitle.style.transform == 'scale(0,0)'){
-        editTitle.style.transform = 'scale(1,1)';
-    }
+    editTitle.style.transform = 'scale(0,0)';
 
     let form = this.parentNode;
     let title = document.getElementById('training-title');
