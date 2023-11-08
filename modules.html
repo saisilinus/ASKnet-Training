@@ -1,0 +1,139 @@
+---
+layout: default
+title: 'All modules'
+permalink: /modules
+---
+<section class="container">
+  <div class="row">
+    <div class="col text-center my-4">
+      <h2 class="title">Create your own training</h2>
+      <div class="underline mx-auto mt-3"></div>
+      <p class="introduction">Here you can easily create your own training plan for your workshop.</p>
+      <p class="introduction">Choose a training module you want to use in the workshop and set the order. The training configurator automatically calculates the times at which each module or its associated resources will start. You can also customize the times for your sessions. At the end, you can print your training plan. Good luck for your training.</p>
+    </div>
+  </div>
+</section>
+<section class="section bg-beige pt-5 pb-4">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+
+        {% assign duration-array = "" | split: ',' %}
+        {% assign difficulty-array = "" | split: ',' %}
+        {% assign participants-array = "" | split: ',' %}
+        {% for module in site.modules %}
+          {% unless duration-array contains module.module.duration %}
+            {% if module.module.duration == nil %}
+              {% assign duration-array = duration-array | push: "Unknown" %}
+            {% else %}
+              {% assign duration-array = duration-array | push: module.module.duration %}
+            {% endif %}
+          {% endunless %}
+          {% unless difficulty-array contains module.module.difficulty %}
+            {% if module.module.difficulty == nil %}
+              {% assign difficulty-array = difficulty-array | push: "Unknown" %}
+            {% else %}
+              {% assign difficulty-array = difficulty-array | push: module.module.difficulty %}
+            {% endif %}
+          {% endunless %}
+          {% unless participants-array contains module.module.max-participants %}
+            {% if module.module.max-participants == nil %}
+              {% assign participants-array = participants-array | push: "Unknown" %}
+            {% else %}
+              {% assign participants-array = participants-array | push: module.module.max-participants %}
+            {% endif %}
+          {% endunless %}
+        {% endfor %}
+
+        {% assign duration-array = duration-array | sort | uniq %}
+        {% comment %} {% if duration-array contains "Unknown" %}
+          {% assign duration-array = duration-array | join: "|" | replace: "|Unknown|","|" | split: "|" | reverse | unshift: "Unknown" | reverse %}
+        {% endif %} {% endcomment %}
+        {% assign difficulty-array = difficulty-array | sort | uniq %}
+        {% comment %} {% if difficulty-array contains "Unknown" %}
+          {% assign difficulty-array = difficulty-array | join: "|" | replace: "|Unknown|","|" | split: "|" | reverse | unshift: "Unknown" | reverse %}
+        {% endif %} {% endcomment %}
+        {% assign participants-array = participants-array | sort | uniq %}
+        {% comment %} {% if participants-array contains "Unknown" %}
+          {% assign participants-array = participants-array | join: "|" | replace: "|Unknown|","|" | split: "|" | reverse | unshift: "Unknown" | reverse %}
+        {% endif %} {% endcomment %}
+
+        <!-- <div class="btn btn-sm btn-primary filter-reset">reset filters </div> -->
+        
+        <div class="dropdown mr-2 mb-2" style="float:left">
+          <button class="btn btn-sm btn-primary dropdown-toggle" data-flip="false" type="button" id="dropdownMenu1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Duration</button>
+          <div class="dropdown-menu mr-2 mb-2 filter-duration">
+            <button class="dropdown-item all" type="button" data-duration="All">All</button>  
+            <div class="dropdown-divider"></div>
+            {% for duration in duration-array %}  
+              <button class="dropdown-item" type="button" data-duration="{{ duration }}">{{ duration }}</button>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="dropdown mr-2 mb-2" style="float:left">
+          <button class="btn btn-sm btn-primary dropdown-toggle" data-flip="false" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Difficulty Level</button>
+          <div class="dropdown-menu sm mr-2 mb-2 filter-difficulty">
+            <button class="dropdown-item all" type="button" data-difficulty="All">All</button>
+            <div class="dropdown-divider"></div>
+              {% for difficulty in difficulty-array %}
+            <button class="dropdown-item" type="button" data-difficulty="{{ difficulty }}">{{ difficulty }}</button>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="dropdown mr-2 mb-2" style="float:left">
+          <button class="btn btn-sm btn-primary dropdown-toggle" data-flip="false" type="button" id="dropdownMenu3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Max. participants</button>
+          <div class="dropdown-menu mr-2 mb-2 filter-participant">
+            <button class="dropdown-item all" type="button" data-participants="All">All</button>
+            <div class="dropdown-divider"></div>
+            {% for participants in participants-array %}
+              <button class="dropdown-item" type="button" data-participants="{{ participants }}">{{ participants }}</button>
+            {% endfor %}
+          </div>
+        </div>
+
+        <input type="search" class="form-control col-6 js-shuffle-search" id="filters-search-input" placeholder="search by name">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="row my-shuffle-container">
+      {% for module in site.modules %}
+        {% if module.module.duration == nil or module.module.duration == "Unknown" %}
+          {% assign duration = "Unknown" %}
+        {% else %}
+          {% assign duration = module.module.duration %}
+        {% endif %}
+        {% if module.module.difficulty == nil or module.module.difficulty == "Unknown" %}
+          {% assign difficulty = "Unknown" %}
+        {% else %}
+          {% assign difficulty = module.module.difficulty %}
+        {% endif %}
+        {% if module.module.max-participants == nil or module.module.max-participants == "Unknown" %}
+          {% assign participants = "Unknown" %}
+        {% else %}
+          {% assign participants = module.module.max-participants %}
+        {% endif %}
+        <div class="module-item col-lg-4 col-md-6" data-countries="[&quot;{{ duration }}&quot;]" data-difficultys="[&quot;{{ difficulty }}&quot;]" data-participants="[&quot;{{ participants }}&quot;]">
+          <div class="module-img">
+            <img src="{{ site.baseurl }}/assets/img/modules/{{ module.module.pic-url }}" class="img-fluid d-block mx-auto">
+          </div>
+          <div class="module-content">
+            <span class="">{{ module.module.name }}</span>
+            <span class="">{% if module.module.description %}<p class="intro"> {{ module.module.description | markdownify }}</p>{% endif %}</span>
+            <span>{{ module.module.duration }}</span>
+            <span>{{ module.module.max-participants }}</span>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="col-1@sm col-1@xs my-sizer-element"></div>
+  </div>
+</section>
+
+<script src="{{ site.baseurl }}/assets/js/modules.js"></script>
