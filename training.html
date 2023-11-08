@@ -40,13 +40,18 @@ permalink: /training/
                 {% endcase %}
 
                 {% assign module_cost = 0 %}
+                {% assign module_duration = module.module.duration %}
                 {% for actual_res in module.module.res %}
                     {% for res in site.resources %}
                         {% if res.resource.id == actual_res %}
                             {% assign module_cost = module_cost | plus: res.resource.cost %}
+                            {% assign module_duration = module_duration | plus: res.resource.duration %}
                         {% endif %}
                     {% endfor %}
                 {% endfor  %}
+                {% assign module_duration_hours = module_duration | divided_by:60 %}
+                {% assign module_duration_minutes = module_duration | modulo:60 %}
+
             
             <li id="{{ module.module.id }}" class="module {{ module.module.tag }}" data-duration="{{ module.module.duration }}" data-participants="{{ module.module.max-participants }}" data-trainer="{{ module.module.min-trainers }}" data-difficulty="{{ module.module.difficulty }}">
                 <div class="time">
@@ -103,7 +108,24 @@ permalink: /training/
                     <div class="thumbnail"><img src="/assets/img/modules/{{ module.module.pic-url }}" class="thumbnail"></div>
                     <div class="module-meta">
                         <div class="module-meta">
-                            <p class="module-duration"><i class="fas fa-hourglass-half"></i>{{ module.module.duration | divided_by:60 }} Hours {{ module.module.duration | modulo:60 }} Minutes</p>
+                            {% if module_duration > 0 %}
+                                <p class="module-duration"><i class="fas fa-hourglass-half"></i>
+                                    {% if module_duration_hours > 0 %}
+                                        {% if module_duration_hours == 1 %}
+                                            {{ module_duration_hours | append: ' ' }} Hour
+                                            {% else %}
+                                            {{ module_duration_hours | append: ' ' }} Hours
+                                        {% endif %}
+                                    {% endif %}
+                                    {% if module_duration_minutes > 0 %}
+                                        {% if module_duration_minutes == 1 %}
+                                            {{ module_duration_minutes }} Minute 
+                                            {% else %}
+                                            {{ module_duration_minutes }} Minutes
+                                        {% endif %}
+                                    {% endif %}
+                                </p>
+                            {% endif %}
                             <p class="difficulty-level"><i class="fas fa-graduation-cap"></i>{{ module_diff_text }}</p>
                             <p class="material-costs"><i class="fas fa-dollar-sign"></i>{{ module_cost }} $ material costs</p>
                         </div>
