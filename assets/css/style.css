@@ -125,8 +125,8 @@ body.index #content .button {
 }
 #content .edit-title-and-description-body .edit-title-and-description-header,
 #content .lightbox-body .edit-title-and-description-header {
-  background-color: #f6f8fa;
-  border: 1px solid #e1e4e8;
+  background-color: rgb(246, 248, 250);
+  border: 1px solid rgb(225, 228, 232);
   text-align: right;
   padding: 10px;
 }
@@ -159,8 +159,8 @@ body.index #content .button {
   border-radius: 3px;
   margin-bottom: 20px;
   padding: 10px;
-  background-color: #fafbfc;
-  color: #24292e;
+  background-color: rgb(250, 251, 252);
+  color: rgb(36, 41, 46);
 }
 #content .edit-title-and-description-body .edit-title-and-description-content textarea,
 #content .lightbox-body .edit-title-and-description-content textarea {
@@ -183,14 +183,18 @@ body.index #content .button {
   white-space: nowrap;
   vertical-align: middle;
   cursor: pointer;
-  user-select: none;
-  appearance: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
   background: rgba(223, 175, 95, 0.7);
   box-shadow: inset 0 1px 0 rgba(223, 175, 95, 0.7);
   border: 1px solid;
   border-radius: 6px;
   border-color: rgba(27, 31, 35, 0.15);
-  color: white;
+  color: rgb(255, 255, 255);
   float: right;
 }
 #content .edit-title-and-description-body .edit-title-and-description-content input#submit-title::after,
@@ -275,8 +279,6 @@ body.index #content .button {
   display: none;
 }
 #sidebar .module .content:hover {
-  -webkit-transform: scale(1.04);
-  -ms-transform: scale(1.04);
   transform: scale(1.04);
   transition: 0.2s ease;
   position: relative;
@@ -374,7 +376,8 @@ body.index #content .button {
   display: block;
   float: left;
   margin-right: 10px;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .button {
@@ -751,7 +754,9 @@ a.help {
   #sidebar {
     position: absolute;
     max-width: 100%;
-    appearance: none;
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
     left: 0;
     top: -100%;
     height: 100%;
@@ -763,14 +768,12 @@ a.help {
     display: block;
   }
   #sidebar .breaks,
-#sidebar .footer {
+  #sidebar .footer {
     display: none;
   }
-
   .module .content .options a.add-module {
     display: inline;
   }
-
   .open-sidebar #sidebar {
     top: 0;
     left: 0;
@@ -780,12 +783,10 @@ a.help {
     display: none;
     transition: all 500ms ease;
   }
-
   #content {
     padding: 0 10px;
     transition: all 500ms ease;
   }
-
   .add-modules-breaks p {
     display: none;
   }
@@ -797,4 +798,13 @@ a.help {
   .summary ul li {
     width: 50%;
   }
+}
+#title-and-edit-button {
+  display: flex;
+  gap: 1em;
+  align-items: center;
+}
+#title-and-edit-button #edit-icon {
+  font-weight: bold;
+  font-size: 0.9em;
 }/*# sourceMappingURL=style.css.map */

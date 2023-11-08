@@ -1,1 +1,1 @@
-{"version":3,"sourceRoot":"","sources":["../../_sass/brands.scss","../../_sass/_variables.scss"],"names":[],"mappings":"AAAA;AAAA;AAAA;AAAA;AAMA;EACE;EACA;EACA;EACA,cCLqB;EDMrB;EACA;;AAOF;EACE;EACA","file":"brands.css.map"}
+{"version":3,"sources":["../../_sass/brands.scss","../../_sass/_variables.scss","brands.css"],"names":[],"mappings":"AAAA;;;EAAA;AAMA;EACE,oCAAA;EACA,kBAAA;EACA,gBAAA;EACA,mBCLqB;EDMrB,sCAAA;EACA,oSAAA;AEDF;AFQA;EACE,oCAAA;EACA,gBAAA;AENF","file":"brands.css"}
