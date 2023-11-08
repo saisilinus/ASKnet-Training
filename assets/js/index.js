@@ -192,7 +192,7 @@ function initiateSubmitTimeButton(){
     for(let button of submitTimeButtons){
         button.onclick = submitTime;
         let form = button.parentNode;
-        inputActionOnEnter(form, `.duration`, `.${CLASS_SUBMITTIME}`);
+        activateButtonOnEnter(form, `.duration`, `.${CLASS_SUBMITTIME}`);
     }
 }
 
@@ -997,7 +997,7 @@ function clearNote(){
  * @param {String} inputSelector query selector for the input
  * @param {String} buttonSelector query selector for the button
  */
-function inputActionOnEnter(form, inputSelector, buttonSelector){
+function activateButtonOnEnter(form, inputSelector, buttonSelector){
     let input = form.querySelector(inputSelector);
     input.addEventListener("keypress", function(event) {
         // If the user presses the "Enter" key on the keyboard
