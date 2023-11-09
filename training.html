@@ -40,13 +40,18 @@ permalink: /training/
                 {% endcase %}
 
                 {% assign module_cost = 0 %}
+                {% assign module_duration = module.module.duration %}
                 {% for actual_res in module.module.res %}
                     {% for res in site.resources %}
                         {% if res.resource.id == actual_res %}
                             {% assign module_cost = module_cost | plus: res.resource.cost %}
+                            {% assign module_duration = module_duration | plus: res.resource.duration %}
                         {% endif %}
                     {% endfor %}
                 {% endfor  %}
+                {% assign module_duration_hours = module_duration | divided_by:60 %}
+                {% assign module_duration_minutes = module_duration | modulo:60 %}
+
             
             <li id="{{ module.module.id }}" class="module {{ module.module.tag }}" data-duration="{{ module.module.duration }}" data-participants="{{ module.module.max-participants }}" data-trainer="{{ module.module.min-trainers }}" data-difficulty="{{ module.module.difficulty }}">
                 <div class="time">
@@ -93,7 +98,7 @@ permalink: /training/
                         <a class="info" href="#" data-tooltip="this feature is coming" data-tooltip-location="left"><i class="fas fa-info-circle"></i></a> <a class="trash" href="#"><i class="fas fa-trash-alt"></i></a>
                         {% if module.module.url %}<a href="{{ module.module.url }}" class="button" target="_blank">Source &nbsp; <i class="fas fa-external-link-alt"></i></a>{% endif %}
                     </div>
-                    <h2>{{ module.module.name }}</h2>
+                    <h2 style="padding-right: 35px;">{{ module.module.name }}</h2>
                     <p class="intro">Learning Objective:</p>
                     {% if module.module.description %}<p class="intro"> {{ module.module.description | markdownify }}</p>{% endif %}
                     <p class="trainer-notes-display"></p>
@@ -103,7 +108,16 @@ permalink: /training/
                     <div class="thumbnail"><img src="/assets/img/modules/{{ module.module.pic-url }}" class="thumbnail"></div>
                     <div class="module-meta">
                         <div class="module-meta">
-                            <p class="module-duration"><i class="fas fa-hourglass-half"></i>{{ module.module.duration | divided_by:60 }} Hours {{ module.module.duration | modulo:60 }} Minutes</p>
+                            {% if module_duration > 0 %}
+                                <p class="module-duration"><i class="fas fa-hourglass-half"></i>
+                                    {% if module_duration_hours > 0 %}
+                                        {{ module_duration_hours | append: ' ' }} h
+                                    {% endif %}
+                                    {% if module_duration_minutes > 0 %}
+                                        {{ module_duration_minutes }} min
+                                    {% endif %}
+                                </p>
+                            {% endif %}
                             <p class="difficulty-level"><i class="fas fa-graduation-cap"></i>{{ module_diff_text }}</p>
                             <p class="material-costs"><i class="fas fa-dollar-sign"></i>{{ module_cost }} $ material costs</p>
                         </div>
@@ -301,7 +315,10 @@ permalink: /training/
                 </div>
             </div>
             
-            <h1 id="training-title">{{ page.title }} - Title of the Training <a id="edit-icon" class="edit" href="#edit-title-and-description">Edit title and description</a></h1>
+            <div id="title-and-edit-button" style="display: flex; gap: 1rem; align-items: center;">
+                <h1 id="training-title">{{ page.title }} - Title of the Training</h1>
+                <a id="edit-icon" style="font-size: 0.9rem; font-weight: bold;" class="edit" href="#edit-title-and-description">Edit title and description</a>
+            </div>
             <p id="training-description">Short description about the training.</p>
             <ul id="module-list-training" class="training-list">
                 <div id="trainingstart" class="trainingstart" data-duration="15" data-start="09:00">
