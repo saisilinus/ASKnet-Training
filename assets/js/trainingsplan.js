@@ -189,6 +189,8 @@ function initiateSubmitTimeButton(){
     let submitTimeButtons = document.querySelectorAll(`.${CLASS_SUBMITTIME}`);
     for(let button of submitTimeButtons){
         button.onclick = submitTime;
+        let form = button.parentNode;
+        activateButtonOnEnter(form, `.duration`, `.${CLASS_SUBMITTIME}`);
     }
 }
 
@@ -985,6 +987,25 @@ function clearNote(){
     let form = this.parentNode.parentNode;
     let inputEl = form.querySelector('.notes');
     inputEl.value = "";
+}
+
+/**
+ * Enables input action on 'Enter' keypress
+ * @param {Element} form HTML form element
+ * @param {String} inputSelector query selector for the input
+ * @param {String} buttonSelector query selector for the button
+ */
+function activateButtonOnEnter(form, inputSelector, buttonSelector){
+    let input = form.querySelector(inputSelector);
+    input.addEventListener("keypress", function(event) {
+        // If the user presses the "Enter" key on the keyboard
+        if (event.key === "Enter") {
+          // Cancel the default action, if needed
+          event.preventDefault();
+          // Trigger the button element with a click
+          form.querySelector(buttonSelector).click();
+        }
+    });
 }
 
 /**
