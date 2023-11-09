@@ -111,18 +111,10 @@ permalink: /training/
                             {% if module_duration > 0 %}
                                 <p class="module-duration"><i class="fas fa-hourglass-half"></i>
                                     {% if module_duration_hours > 0 %}
-                                        {% if module_duration_hours == 1 %}
-                                            {{ module_duration_hours | append: ' ' }} Hour
-                                            {% else %}
-                                            {{ module_duration_hours | append: ' ' }} Hours
-                                        {% endif %}
+                                        {{ module_duration_hours | append: ' ' }} h
                                     {% endif %}
                                     {% if module_duration_minutes > 0 %}
-                                        {% if module_duration_minutes == 1 %}
-                                            {{ module_duration_minutes }} Minute 
-                                            {% else %}
-                                            {{ module_duration_minutes }} Minutes
-                                        {% endif %}
+                                        {{ module_duration_minutes }} min
                                     {% endif %}
                                 </p>
                             {% endif %}
