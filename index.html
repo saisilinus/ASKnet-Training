@@ -1,22 +1,28 @@
 ---
-layout: index
+layout: default
 title: 'Start training plan'
 permalink: /
 ---
-<div id="content">
-    <div class="title">Create your own training</div>
-    <p class="introduction">Here you can easily create your own training plan for your workshop.</p>
-    <p class="introduction">Choose a training module you want to use in the workshop and set the order. The training configurator automatically calculates the times at which each module or its associated resources will start. You can also customize the times for your sessions. At the end, you can print your training plan. Good luck for your training.</p>
-    <main>
-        
-        <div class="button" name="submit_button" onclick="redirectCustom();"><span class="text">Start training plan</span></div>
-        
-        <div class="progress-bar"></div>
-        <svg x="0px" y="0px" viewBox="0 0 25 30" style="enable-background:new 0 0 25 30;">
-            <path class="check" class="st0" d="M2,19.2C5.9,23.6,9.4,28,9.4,28L23,2"/>
-        </svg>
-    </main>
+
+
+<div class="container col-lg-5 pt-5 d-flex align-items-center justify-content-center">
+    <div class="d-flex justify-content-center">
+        <div class="text-center">
+            <h1 class="mx-auto my-0 title">Create your own training</h1>
+            <h2 class="mx-auto mt-2 mb-5">Here you can easily create your own training plan for your workshop.</h2>
+            <h3 class="mx-auto mt-2 mb-5">Choose a training module you want to use in the workshop and set the order. The training configurator automatically calculates the times at which each module or its associated resources will start. You can also customize the times for your sessions. At the end, you can print your training plan. Good luck for your training.</h3>
+            <main class="progressbar-button">
+              <div class="button" name="submit_button" onclick="redirectCustom();"><span class="text">Start training plan</span></div>
+              <div class="progress-bar"></div>
+              <svg x="0px" y="0px" viewBox="0 0 25 30" style="enable-background:new 0 0 25 30;">
+                  <path class="check" class="st0" d="M2,19.2C5.9,23.6,9.4,28,9.4,28L23,2"/>
+              </svg>
+            </main>
+        </div>
+    </div>
 </div>
+
+<!-- Progressbar to load traininsplan-->
 <script>
     function toPage() 
     {  
@@ -27,60 +33,4 @@ permalink: /
     setTimeout('toPage()', 5000);
     }
 </script>
-<script>
-    var basicTimeline = anime.timeline({
-  autoplay: false
-});
-
-var pathEls = $(".check");
-for (var i = 0; i < pathEls.length; i++) {
-  var pathEl = pathEls[i];
-  var offset = anime.setDashoffset(pathEl);
-  pathEl.setAttribute("stroke-dashoffset", offset);
-}
-
-basicTimeline
-  .add({
-    targets: ".text",
-    duration: 1,
-    opacity: "0"
-  })
-  .add({
-    targets: ".button",
-    duration: 1300,
-    height: 10,
-    width: 300,
-    border: "0",
-    borderRadius: 100
-  })
-  .add({
-    targets: ".progress-bar",
-    duration: 2000,
-    width: 300,
-    easing: "linear"
-  })
-  .add({
-    targets: ".button",
-    duration: 1,
-    opacity: "0"
-  })
-  .add({
-    targets: ".progress-bar",
-    width: 80,
-    height: 80,
-    delay: 500,
-    duration: 750,
-    borderRadius: 80,
-    backgroundColor: "#DFAF5F"
-  })
-  .add({
-    targets: pathEl,
-    strokeDashoffset: [offset, 0],
-    duration: 200,
-    easing: "easeInOutSine"
-  });
-
-$(".button").click(function() {
-  basicTimeline.play();
-});
-</script>
+<script src="assets/js/progressbar.js"></script>
