@@ -18,17 +18,9 @@ permalink: /modules
     <div class="row">
       <div class="col-lg-12">
 
-        {% assign duration-array = "" | split: ',' %}
         {% assign difficulty-array = "" | split: ',' %}
-        {% assign participants-array = "" | split: ',' %}
+        {% assign participant-array = "" | split: ',' %}
         {% for module in site.modules %}
-          {% unless duration-array contains module.module.duration %}
-            {% if module.module.duration == nil %}
-              {% assign duration-array = duration-array | push: "Unknown" %}
-            {% else %}
-              {% assign duration-array = duration-array | push: module.module.duration %}
-            {% endif %}
-          {% endunless %}
           {% unless difficulty-array contains module.module.difficulty %}
             {% if module.module.difficulty == nil %}
               {% assign difficulty-array = difficulty-array | push: "Unknown" %}
@@ -36,40 +28,23 @@ permalink: /modules
               {% assign difficulty-array = difficulty-array | push: module.module.difficulty %}
             {% endif %}
           {% endunless %}
-          {% unless participants-array contains module.module.max-participants %}
+          {% unless participant-array contains module.module.max-participants %}
             {% if module.module.max-participants == nil %}
-              {% assign participants-array = participants-array | push: "Unknown" %}
+              {% assign participant-array = participant-array | push: "Unknown" %}
             {% else %}
-              {% assign participants-array = participants-array | push: module.module.max-participants %}
+              {% assign participant-array = participant-array | push: module.module.max-participants %}
             {% endif %}
           {% endunless %}
         {% endfor %}
 
-        {% assign duration-array = duration-array | sort | uniq %}
-        {% comment %} {% if duration-array contains "Unknown" %}
-          {% assign duration-array = duration-array | join: "|" | replace: "|Unknown|","|" | split: "|" | reverse | unshift: "Unknown" | reverse %}
-        {% endif %} {% endcomment %}
         {% assign difficulty-array = difficulty-array | sort | uniq %}
         {% comment %} {% if difficulty-array contains "Unknown" %}
           {% assign difficulty-array = difficulty-array | join: "|" | replace: "|Unknown|","|" | split: "|" | reverse | unshift: "Unknown" | reverse %}
         {% endif %} {% endcomment %}
-        {% assign participants-array = participants-array | sort | uniq %}
-        {% comment %} {% if participants-array contains "Unknown" %}
-          {% assign participants-array = participants-array | join: "|" | replace: "|Unknown|","|" | split: "|" | reverse | unshift: "Unknown" | reverse %}
+        {% assign participant-array = participant-array | sort | uniq %}
+        {% comment %} {% if participant-array contains "Unknown" %}
+          {% assign participant-array = participant-array | join: "|" | replace: "|Unknown|","|" | split: "|" | reverse | unshift: "Unknown" | reverse %}
         {% endif %} {% endcomment %}
-
-        <!-- <div class="btn btn-sm btn-primary filter-reset">reset filters </div> -->
-        
-        <div class="dropdown mr-2 mb-2" style="float:left">
-          <button class="btn btn-sm btn-primary dropdown-toggle" data-flip="false" type="button" id="dropdownMenu1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Duration</button>
-          <div class="dropdown-menu mr-2 mb-2 filter-duration">
-            <button class="dropdown-item all" type="button" data-duration="All">All</button>  
-            <div class="dropdown-divider"></div>
-            {% for duration in duration-array %}  
-              <button class="dropdown-item" type="button" data-duration="{{ duration }}">{{ duration }}</button>
-            {% endfor %}
-          </div>
-        </div>
 
         <div class="dropdown mr-2 mb-2" style="float:left">
           <button class="btn btn-sm btn-primary dropdown-toggle" data-flip="false" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Difficulty Level</button>
@@ -83,12 +58,12 @@ permalink: /modules
         </div>
 
         <div class="dropdown mr-2 mb-2" style="float:left">
-          <button class="btn btn-sm btn-primary dropdown-toggle" data-flip="false" type="button" id="dropdownMenu3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Max. participants</button>
+          <button class="btn btn-sm btn-primary dropdown-toggle" data-flip="false" type="button" id="dropdownMenu3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Max. participant</button>
           <div class="dropdown-menu mr-2 mb-2 filter-participant">
             <button class="dropdown-item all" type="button" data-participants="All">All</button>
             <div class="dropdown-divider"></div>
-            {% for participants in participants-array %}
-              <button class="dropdown-item" type="button" data-participants="{{ participants }}">{{ participants }}</button>
+            {% for participant in participant-array %}
+              <button class="dropdown-item" type="button" data-participants="{{ participant }}">{{ participant }}</button>
             {% endfor %}
           </div>
         </div>
@@ -103,22 +78,17 @@ permalink: /modules
   <div class="container">
     <div class="row my-shuffle-container">
       {% for module in site.modules %}
-        {% if module.module.duration == nil or module.module.duration == "Unknown" %}
-          {% assign duration = "Unknown" %}
-        {% else %}
-          {% assign duration = module.module.duration %}
-        {% endif %}
         {% if module.module.difficulty == nil or module.module.difficulty == "Unknown" %}
           {% assign difficulty = "Unknown" %}
         {% else %}
           {% assign difficulty = module.module.difficulty %}
         {% endif %}
         {% if module.module.max-participants == nil or module.module.max-participants == "Unknown" %}
-          {% assign participants = "Unknown" %}
+          {% assign participant = "Unknown" %}
         {% else %}
-          {% assign participants = module.module.max-participants %}
+          {% assign participant = module.module.max-participants %}
         {% endif %}
-        <div class="module-item col-lg-4 col-md-6" data-durations="[&quot;{{ duration }}&quot;]" data-difficulties="[&quot;{{ difficulty }}&quot;]" data-participants="[&quot;{{ participants }}&quot;]">
+        <div class="module-item col-lg-4 col-md-6" data-difficulties="[&quot;{{ difficulty }}&quot;]" data-participants="[&quot;{{ participant }}&quot;]">
           <div class="module-img">
             <img src="{{ site.baseurl }}/assets/img/modules/{{ module.module.pic-url }}" class="img-fluid d-block mx-auto">
           </div>

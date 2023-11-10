@@ -7,7 +7,6 @@
   class Demo {
       constructor(element) {
           this.element = element;
-          this.durations = Array.from(document.querySelectorAll('.filter-duration button'));
           this.difficulties = Array.from(document.querySelectorAll('.filter-difficulty button'));
           this.participants = Array.from(document.querySelectorAll('.filter-participant button'));
           this.reset = Array.from(document.querySelectorAll('.filter-reset'));
@@ -19,7 +18,6 @@
           // Log events.
           //this.addShuffleEventListeners();
           this.filters = {
-              durations: [],
               difficulties: [],
               participants: [],
           };
@@ -46,22 +44,17 @@
        * Bind event listeners for when the filters change.
        */
       _bindEventListeners = function () {
-          this._onDurationChange = this._handleDurationChange.bind(this);
           this._onDifficultyChange = this._handleDifficultyChange.bind(this);
           this._onParticipantChange = this._handleParticipantChange.bind(this);
           this._onResetClick = this._resetFilters.bind(this);
-
-          this.durations.forEach(function (button) {
-              button.addEventListener('click', this._onDurationChange);
-          }, this);
 
           this.difficulties.forEach(function (button) {
               button.addEventListener('click', this._onDifficultyChange);
           }, this);
 
           this.participants.forEach(function (button) {
-              button.addEventListener('click', this._onParticipantChange);
-          }, this);
+            button.addEventListener('click', this._onParticipantChange);
+        }, this);
 
           this.reset.forEach(function (button) {
               button.addEventListener('click', this._onResetClick);
@@ -74,13 +67,6 @@
        * Get the values of each `active` button.
        * @return {Array.<string>}
        */
-      _getCurrentDurationFilters = function () {
-          return this.durations.filter(function (button) {
-              return button.classList.contains('active');
-          }).map(function (button) {
-              return button.getAttribute('data-duration');
-          });
-      };
 
       _getCurrentDifficultyFilters = function () {
           return this.difficulties.filter(function (button) {
@@ -98,10 +84,8 @@
           });
       };
 
-
-
       _resetFilters = function () {
-          var allFilterButtons = Array.from(document.querySelectorAll('.filter-duration button, .filter-difficulty button, .filter-participant button'));
+          var allFilterButtons = Array.from(document.querySelectorAll('.filter-difficulty button, .filter-participant button'));
 
           // remove all "active" classes
           allFilterButtons.forEach(function (btn) {
@@ -109,42 +93,10 @@
           });
 
           //filter() (filter aktualisieren)
-          this.filters.durations = this._getCurrentDurationFilters();
           this.filters.difficulties = this._getCurrentDifficultyFilters();
           this.filters.participants = this._getCurrentParticipantFilters();
           this.filter();
       }
-
-      /**
-       * A duration button was clicked. Update filters and display.
-       * @param {Event} evt Click event object.
-       */
-      _handleDurationChange = function (evt) {
-          var button = evt.currentTarget;
-
-          if (button.getAttribute('data-duration') == 'All') {
-              // remove all "active" classes
-              this.durations.forEach(function (btn) {
-                  btn.classList.remove('active');
-              });
-          } else {
-
-              // Treat these buttons like radio buttons where only 1 can be selected.
-              if (button.classList.contains('active')) {
-                  button.classList.remove('active');
-              } else {
-                  this.durations.forEach(function (btn) {
-                      btn.classList.remove('active');
-                  });
-
-                  button.classList.add('active');
-              }
-          }
-
-          this.filters.durations = this._getCurrentDurationFilters();
-          this.filter();
-      };
-
 
       /**
        * A difficulty  state changed, update the current filters and filte.r
@@ -170,31 +122,35 @@
           this.filter();
       };
 
-
       /**
-       * A participant  state changed, update the current filters and filte.r
+       * A participant button was clicked. Update filters and display.
+       * @param {Event} evt Click event object.
        */
-       _handleParticipantChange = function (evt) {
-          var button = evt.currentTarget;
+      _handleParticipantChange = function (evt) {
+        var button = evt.currentTarget;
 
-          if (button.getAttribute('data-participant') == 'All') {
-              // remove all "active" classes
-              this.participants.forEach(function (btn) {
-                  btn.classList.remove('active');
-              });
-          } else {
+        if (button.getAttribute('data-participant') == 'All') {
+            // remove all "active" classes
+            this.participants.forEach(function (btn) {
+                btn.classList.remove('active');
+            });
+        } else {
 
-              if (button.classList.contains('active')) {
-                  button.classList.remove('active');
-              } else {
-                  button.classList.add('active');
-              }
-          }
+            // Treat these buttons like radio buttons where only 1 can be selected.
+            if (button.classList.contains('active')) {
+                button.classList.remove('active');
+            } else {
+                this.participants.forEach(function (btn) {
+                    btn.classList.remove('active');
+                });
 
-          this.filters.participants = this._getCurrentParticipantFilters();
-          this.filter();
-      };
+                button.classList.add('active');
+            }
+        }
 
+        this.filters.participants = this._getCurrentParticipantFilters();
+        this.filter();
+    };
 
 
       /**
@@ -242,17 +198,10 @@
               });
           }
 
-          var durations = this.filters.durations;
           var difficulties = this.filters.difficulties;
           var participants = this.filters.participants;
-          var duration = JSON.parse(element.getAttribute('data-durations'));
           var difficulty = JSON.parse(element.getAttribute('data-difficulties'));
           var participant = JSON.parse(element.getAttribute('data-participants'));
-
-          // If there are active filters and this duration is not in the filter array 
-          if (durations.length > 0 && !durations.commonElements(duration)) {
-              return false;
-          }
 
           // If there are active filters and this difficulty is not in the filter array 
           if (difficulties.length > 0 && !difficulties.commonElements(difficulty)) {
@@ -261,7 +210,7 @@
 
           // If there are active filters and this participant is not in the filter array 
           if (participants.length > 0 && !participants.commonElements(participant)) {
-              return false;
+            return false;
           }
 
           return true;
@@ -338,7 +287,7 @@
               // If there is a current filter applied, ignore elements that don't match it.
               if (shuffle.group !== Shuffle.ALL_ITEMS) {
                   // Get the item's groups.
-                  const groups = JSON.parse(element.getAttribute('data-durations'));
+                  const groups = JSON.parse(element.getAttribute('data-difficulties'));
                   const isElementInCurrentGroup = groups.indexOf(shuffle.group) !== -1;
                   // Only search elements in the current group
                   if (!isElementInCurrentGroup) {
@@ -355,8 +304,5 @@
   document.addEventListener('DOMContentLoaded', function () {
       window.demo = new Demo(document.querySelector('.my-shuffle-container'));
   });
-
-
-
 
 })(jQuery);
