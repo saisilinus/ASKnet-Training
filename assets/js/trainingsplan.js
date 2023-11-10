@@ -399,9 +399,27 @@ function runDynamicCalculationsOnUpdate(evt) {
 function runDynamicCalculationsOnAdd(evt) {
     let mod = evt.item;
     insertTimeBreaks(mod);
+    insertIntroductionDuration(mod);
     calculateTime();
     calculateSummary();
     updateAuthorList();
+}
+
+/**
+ * Inserts an introduction break based on the module's duration
+ * @param {Node} mod Module node
+ */
+function insertIntroductionDuration(mod) {
+    if (mod.dataset.duration > 0) {
+        let firstResource = mod.querySelector(`.${CLASS_RESOURCE}`);
+        const MODULE_TIME_BREAK = document.getElementsByClassName(CLASS_TIMEBREAK)[0].cloneNode(true);
+        MODULE_TIME_BREAK.dataset.duration = mod.dataset.duration;
+        const title = MODULE_TIME_BREAK.querySelector('.break-title');
+        title.innerText = 'Introduction';
+        firstResource.parentNode.insertBefore(MODULE_TIME_BREAK, firstResource);
+        initiateTrashButton();
+        initiateTimeEdit();
+    }
 }
 
 function calculateTime() {
@@ -421,7 +439,7 @@ function calculateTime() {
     moduleList = moduleList.filter(el => el.nodeName.includes('LI'));
     for (mod of moduleList) {
         if (mod.className.includes(CLASS_MODULE)) {
-            const duration = parseInt(mod.dataset.duration);
+            const duration = 0;
             let moduleStartTime = clockTime;
             clockTime = insertClockTime(clockTime, duration, mod);
             totalTime+=duration;
