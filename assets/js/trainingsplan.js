@@ -692,6 +692,7 @@ function addTimeBreakAfter(resource) {
 const CLASS_SELECTED = 'selected';
 const ID_WORDCLOUD = 'wordcloud';
 const ID_SHOW_ALL_CATEGORIES = 'show-all-modules';
+const ID_SHOW_TAGS_BUTTON = 'show-tags-button';
 
 function initiateWordcloudFilter() {
     const wordcloud = document.getElementById(ID_WORDCLOUD).getElementsByTagName('li');
@@ -781,6 +782,23 @@ function updateSelectableModulesList() {
                 mod.style.display = 'none';
             }
         }
+    }
+}
+
+function initiateShowTagsButton() {
+    let button = document.getElementById(ID_SHOW_TAGS_BUTTON);
+    button.onclick = toggleShowTags;
+}
+
+function toggleShowTags () {
+    let tags = document.getElementById(ID_WORDCLOUD);
+    let button = document.getElementById(ID_SHOW_TAGS_BUTTON);
+    if (tags.style.display == 'block') {
+        tags.style.display = 'none';
+        button.innerHTML = `<i class="fas fa-angle-down"></i>`;
+    } else {
+        tags.style.display = 'block';
+        button.innerHTML = `<i class="fas fa-angle-up"></i>`;
     }
 }
 
@@ -1023,4 +1041,5 @@ window.onload = function () {
     calculateSummary();
     initiateAuthorListToggleButton();
     initiateEditNotes();
+    initiateShowTagsButton();
 }
