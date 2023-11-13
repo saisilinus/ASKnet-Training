@@ -785,11 +785,17 @@ function updateSelectableModulesList() {
     }
 }
 
+/**
+ * Activates the button for showing/hiding filter tags
+ */
 function initiateShowTagsButton() {
     let button = document.getElementById(ID_SHOW_TAGS_BUTTON);
     button.onclick = toggleShowTags;
 }
 
+/**
+ * Shows/hides filter tags
+ */
 function toggleShowTags () {
     let tags = document.getElementById(ID_WORDCLOUD);
     let button = document.getElementById(ID_SHOW_TAGS_BUTTON);
