@@ -18,10 +18,19 @@ permalink: /training/
                 <li data-tag="Organizational_Development">Organizational Development</li>
                 <li data-tag="Media&Art">Media & Art</li>
                 <li data-tag="Data_Security&Research">Data Security & Research</li>
-                <li data-tag="Open_Source&Knowledge">Opensource & Knowledge</li>
+                <li data-tag="Open_Source&Knowledge">Open Source & Knowledge</li>
                 <li data-tag="Sustainability">Sustainability</li>
             </ul>
             <div class="clearer"></div>
+            <div id="search-bar">
+                <h4>Search module by name</h4>
+                <form id="search-bar-form">
+                    <div class="input-container">
+                        <input id="search-bar-input" type="text" />
+                        <a id="search-bar-button"><i class="fas fa-search"></i></a>
+                    </div>
+                </form>
+            </div>
         </div>
         <div class="clearer"></div>
         <ul id="module-list-side-bar" class="module-draggable-list">
@@ -53,7 +62,7 @@ permalink: /training/
                 {% assign module_duration_minutes = module_duration | modulo:60 %}
 
             
-            <li id="{{ module.module.id }}" class="module {{ module.module.tag }}" data-duration="{{ module.module.duration }}" data-participants="{{ module.module.max-participants }}" data-trainer="{{ module.module.min-trainers }}" data-difficulty="{{ module.module.difficulty }}">
+            <li id="{{ module.module.id }}" class="module {{ module.module.tag }}" data-duration="{{ module.module.duration }}" data-participants="{{ module.module.max-participants }}" data-trainer="{{ module.module.min-trainers }}" data-difficulty="{{ module.module.difficulty }}" data-name="{{ module.module.name }}">
                 <div class="time">
                     <div style="display:inline;" data-tooltip="move module" data-tooltip-location="right"><i
                             class="fas fa-hand-pointer"></i>
