@@ -36,7 +36,6 @@ function initiateSortable() {
         group: ID_MODULE_LIST_SIDE_BAR,
         animation: ANIMATION_SPEED,
         multiDrag: true,
-        multiDragKey: 'ctrl',
         avoidImplicitDeselect: true,
         fallbackTolerance: 3,
         selectedClass: CLASS_MULTIDRAGSELECTED,
