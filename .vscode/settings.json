@@ -1,5 +1,4 @@
 {
-  "html.format.enable": false,
   "liveSassCompile.settings.formats": [
     {
       "format": "compressed",
