@@ -471,7 +471,7 @@ function calculateTime() {
             totalTime+=duration;
 
             let resources = document.querySelectorAll(`#${mod.id} li`);
-            let moduleEndTime = null;
+            let moduleEndTime = clockTime;
             for(let el of resources){
                 if(el.className.includes(CLASS_DAYBREAK)){
                     clockTime = parseDatefromString(clockTime, el.dataset.start);
