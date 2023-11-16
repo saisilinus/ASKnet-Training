@@ -10,6 +10,7 @@ const CLASS_CLOSETIME = 'close'
 const CLASS_EDITTIME = 'edit-time';
 const CLASS_MODULEDURATION = 'module-duration';
 const CLASS_MULTIDRAGSELECTED = 'multidrag-selected';
+const GROUP_MODULELIST = 'module-list-group';
 
 /**
  * Drag & Drop
@@ -21,19 +22,21 @@ function initiateSortable() {
     Sortable.create(moduleListTraining, {
         filter: '.trainingstart',
         group: {
-            name: 'module_list_training',
+            name: GROUP_MODULELIST,
             put: true
         },
         fallbackOnBody: true,
         swapThreshold: 0.2,
         animation: ANIMATION_SPEED,
+        multiDrag: true,
+        avoidImplicitDeselect: true,
         onAdd: runDynamicCalculationsOnAdd,
         onUpdate: runDynamicCalculationsOnUpdate,
     });
 
     let moduleListSideBar = document.getElementById(ID_MODULE_LIST_SIDE_BAR);
     Sortable.create(moduleListSideBar, {
-        group: ID_MODULE_LIST_SIDE_BAR,
+        group: GROUP_MODULELIST,
         animation: ANIMATION_SPEED,
         multiDrag: true,
         avoidImplicitDeselect: true,
@@ -47,7 +50,7 @@ function initiateSortable() {
     let breakListSideBar = document.getElementById('break-list-side-bar');
     Sortable.create(breakListSideBar, {
         group: {
-            name: 'break-list-side-bar',
+            name: GROUP_MODULELIST,
             pull: 'clone'
         },
         sort: false,
