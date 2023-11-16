@@ -26,7 +26,7 @@ You can also add helpful attachments to your training plan, such as a timetable,
 
 ## Documentation
 
-All information on how to use the training plan, install it or create additional modules can be found in the [documentation](https://asktraining.github.io/docs/).
+All information on how to use the training plan, install it or create additional modules can be found in the [documentation](https://github.com/ASKnetCommunity/OER_documents_template/wiki/%23ASKtraining-Integration).
 
 ## Developer
 
