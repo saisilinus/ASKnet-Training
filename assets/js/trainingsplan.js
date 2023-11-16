@@ -410,16 +410,14 @@ function runDynamicCalculationsOnAdd(evt) {
  * @param {Node} mod Module node
  */
 function insertIntroductionDuration(mod) {
-    if (mod.dataset.duration > 0) {
-        let firstResource = mod.querySelector(`.${CLASS_RESOURCE}`);
-        const MODULE_TIME_BREAK = document.getElementsByClassName(CLASS_TIMEBREAK)[0].cloneNode(true);
-        MODULE_TIME_BREAK.dataset.duration = mod.dataset.duration;
-        const title = MODULE_TIME_BREAK.querySelector('.break-title');
-        title.innerText = 'Introduction';
-        firstResource.parentNode.insertBefore(MODULE_TIME_BREAK, firstResource);
-        initiateTrashButton();
-        initiateTimeEdit();
-    }
+    let resourceList = mod.querySelector('.resource-list');
+    let MODULE_TIME_BREAK = document.getElementsByClassName(CLASS_TIMEBREAK)[0].cloneNode(true);
+    MODULE_TIME_BREAK.dataset.duration = mod.dataset.duration > 0 ? mod.dataset.duration : 15;
+    let title = MODULE_TIME_BREAK.querySelector('.break-title');
+    title.innerText = 'Introduction';
+    resourceList.prepend(MODULE_TIME_BREAK);
+    initiateTrashButton();
+    initiateTimeEdit();
 }
 
 function calculateTime() {
@@ -457,11 +455,13 @@ function calculateTime() {
             }
 
             let moduleDurationEl = getChildByClassName(mod, CLASS_MODULEDURATION);
-            const durationSplit = getDurationSplit(moduleEndTime - moduleStartTime)
-            if(durationSplit.days != undefined ){
-                moduleDurationEl.innerHTML = `<i class="fas fa-hourglass-half"></i>${durationSplit.days} days ${durationSplit.hours} hours ${durationSplit.minutes} minutes`;
-            } else {
-                moduleDurationEl.innerHTML = `<i class="fas fa-hourglass-half"></i>${durationSplit.hours} hours ${durationSplit.minutes} minutes`;
+            if (moduleDurationEl) {
+                const durationSplit = getDurationSplit(moduleEndTime - moduleStartTime)
+                if(durationSplit.days != undefined ){
+                    moduleDurationEl.innerHTML = `<i class="fas fa-hourglass-half"></i>${durationSplit.days} days ${durationSplit.hours} hours ${durationSplit.minutes} minutes`;
+                } else {
+                    moduleDurationEl.innerHTML = `<i class="fas fa-hourglass-half"></i>${durationSplit.hours} hours ${durationSplit.minutes} minutes`;
+                }
             }
 
         } else if (mod.className.includes(CLASS_TIMEBREAK)) {
