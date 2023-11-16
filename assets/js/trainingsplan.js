@@ -280,6 +280,14 @@ function closeTime(){
  */
 function updateClonedBreaks(evt){
     let timebreak = evt.item;
+    activateTimeBreak(timebreak);
+}
+
+/**
+ * Activates the event listeners on a cloned timebreak
+ * @param {Element} timebreak Timebreak element
+ */
+function activateTimeBreak(timebreak){
     let iconButton = timebreak.querySelector('.fa-edit');
     iconButton.onclick = toggleTimeEditWindow;
     let submitButton = timebreak.querySelector('.submit');
@@ -365,8 +373,8 @@ function initiateAddTimebreak(){
 function addTimebreak(){
     const timeBreak = document.getElementsByClassName(CLASS_TIMEBREAK)[0].cloneNode(true);
     let moduleList = document.getElementById(ID_MODULE_LIST_TRAINING);
+    activateTimeBreak(timeBreak);
     moduleList.appendChild(timeBreak);
-    initiateTrashButton();
     calculateTime();
     calculateSummary();
 }
@@ -410,14 +418,15 @@ function runDynamicCalculationsOnAdd(evt) {
  * @param {Node} mod Module node
  */
 function insertIntroductionDuration(mod) {
-    let resourceList = mod.querySelector('.resource-list');
-    let MODULE_TIME_BREAK = document.getElementsByClassName(CLASS_TIMEBREAK)[0].cloneNode(true);
-    MODULE_TIME_BREAK.dataset.duration = mod.dataset.duration > 0 ? mod.dataset.duration : 15;
-    let title = MODULE_TIME_BREAK.querySelector('.break-title');
-    title.innerText = 'Introduction';
-    resourceList.prepend(MODULE_TIME_BREAK);
-    initiateTrashButton();
-    initiateTimeEdit();
+    if (mod.className.includes(CLASS_MODULE)) {
+        let resourceList = mod.querySelector('.resource-list');
+        let MODULE_TIME_BREAK = document.getElementsByClassName(CLASS_TIMEBREAK)[0].cloneNode(true);
+        MODULE_TIME_BREAK.dataset.duration = mod.dataset.duration > 0 ? mod.dataset.duration : 15;
+        let title = MODULE_TIME_BREAK.querySelector('.break-title');
+        title.innerText = 'Introduction';
+        activateTimeBreak(MODULE_TIME_BREAK);
+        resourceList.prepend(MODULE_TIME_BREAK);
+    }
 }
 
 function calculateTime() {
@@ -698,9 +707,8 @@ function insertTimeBreaks(mod) {
 
 function addTimeBreakAfter(resource) {
     const MODULE_TIME_BREAK = document.getElementsByClassName(CLASS_TIMEBREAK)[0].cloneNode(true);
+    activateTimeBreak(MODULE_TIME_BREAK);
     resource.parentNode.insertBefore(MODULE_TIME_BREAK, resource.nextSibling);
-    initiateTrashButton();
-    initiateTimeEdit();
 }
 
 /**
