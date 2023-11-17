@@ -280,6 +280,14 @@ function closeTime(){
  */
 function updateClonedBreaks(evt){
     let timebreak = evt.item;
+    activateTimeBreak(timebreak);
+}
+
+/**
+ * Activates the event listeners on a cloned timebreak
+ * @param {Element} timebreak Timebreak element
+ */
+function activateTimeBreak(timebreak){
     let iconButton = timebreak.querySelector('.fa-edit');
     iconButton.onclick = toggleTimeEditWindow;
     let submitButton = timebreak.querySelector('.submit');
@@ -365,8 +373,8 @@ function initiateAddTimebreak(){
 function addTimebreak(){
     const timeBreak = document.getElementsByClassName(CLASS_TIMEBREAK)[0].cloneNode(true);
     let moduleList = document.getElementById(ID_MODULE_LIST_TRAINING);
+    activateTimeBreak(timeBreak);
     moduleList.appendChild(timeBreak);
-    initiateTrashButton();
     calculateTime();
     calculateSummary();
 }
@@ -399,9 +407,26 @@ function runDynamicCalculationsOnUpdate(evt) {
 function runDynamicCalculationsOnAdd(evt) {
     let mod = evt.item;
     insertTimeBreaks(mod);
+    insertIntroductionDuration(mod);
     calculateTime();
     calculateSummary();
     updateAuthorList();
+}
+
+/**
+ * Inserts an introduction break based on the module's duration
+ * @param {Node} mod Module node
+ */
+function insertIntroductionDuration(mod) {
+    if (mod.className.includes(CLASS_MODULE)) {
+        let resourceList = mod.querySelector('.resource-list');
+        let MODULE_TIME_BREAK = document.getElementsByClassName(CLASS_TIMEBREAK)[0].cloneNode(true);
+        MODULE_TIME_BREAK.dataset.duration = mod.dataset.duration > 0 ? mod.dataset.duration : 15;
+        let title = MODULE_TIME_BREAK.querySelector('.break-title');
+        title.innerText = 'Introduction';
+        activateTimeBreak(MODULE_TIME_BREAK);
+        resourceList.prepend(MODULE_TIME_BREAK);
+    }
 }
 
 function calculateTime() {
@@ -421,7 +446,7 @@ function calculateTime() {
     moduleList = moduleList.filter(el => el.nodeName.includes('LI'));
     for (mod of moduleList) {
         if (mod.className.includes(CLASS_MODULE)) {
-            const duration = parseInt(mod.dataset.duration);
+            const duration = 0;
             let moduleStartTime = clockTime;
             clockTime = insertClockTime(clockTime, duration, mod);
             totalTime+=duration;
@@ -439,12 +464,15 @@ function calculateTime() {
             }
 
             let moduleDurationEl = getChildByClassName(mod, CLASS_MODULEDURATION);
-            const durationSplit = getDurationSplit(moduleEndTime - moduleStartTime)
-            if(durationSplit.days != undefined ){
-                moduleDurationEl.innerHTML = `<i class="fas fa-hourglass-half"></i>${durationSplit.days} days ${durationSplit.hours} hours ${durationSplit.minutes} minutes`;
-            } else {
-                moduleDurationEl.innerHTML = `<i class="fas fa-hourglass-half"></i>${durationSplit.hours} hours ${durationSplit.minutes} minutes`;
-            }
+            const durationSplit = getDurationSplit(moduleEndTime - moduleStartTime);
+            let durationHtml = '<i class="fas fa-hourglass-half"></i>';
+            Object.keys(durationSplit).forEach((key, index) => {
+                if (durationSplit[key]) {
+                    durationHtml += index === 0 ? '' : ' ';
+                    durationHtml += `${durationSplit[key]}${key[0]}`;
+                }
+            });
+            moduleDurationEl.innerHTML = durationHtml;
 
         } else if (mod.className.includes(CLASS_TIMEBREAK)) {
             const duration = parseInt(mod.dataset.duration);
@@ -680,9 +708,8 @@ function insertTimeBreaks(mod) {
 
 function addTimeBreakAfter(resource) {
     const MODULE_TIME_BREAK = document.getElementsByClassName(CLASS_TIMEBREAK)[0].cloneNode(true);
+    activateTimeBreak(MODULE_TIME_BREAK);
     resource.parentNode.insertBefore(MODULE_TIME_BREAK, resource.nextSibling);
-    initiateTrashButton();
-    initiateTimeEdit();
 }
 
 /**

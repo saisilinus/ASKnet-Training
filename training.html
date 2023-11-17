@@ -55,8 +55,8 @@ permalink: /training/
             
             <li id="{{ module.module.id }}" class="module {{ module.module.tag }}" data-duration="{{ module.module.duration }}" data-participants="{{ module.module.max-participants }}" data-trainer="{{ module.module.min-trainers }}" data-difficulty="{{ module.module.difficulty }}">
                 <div class="time">
-                    <div style="display:inline;" data-tooltip="move module" data-tooltip-location="right"><i
-                            class="fas fa-hand-pointer"></i>
+                    <div style="display:inline;" data-tooltip="move module" data-tooltip-location="right">
+                        <i class="fas fa-sort"></i>
                     </div>
                 </div>
                 <!--
@@ -95,7 +95,7 @@ permalink: /training/
                     </div>
                     <div class="options">
                         <a class="button add-module" src="#">Add Module</a>
-                        <a class="info" href="#" data-tooltip="this feature is coming" data-tooltip-location="left"><i class="fas fa-info-circle"></i></a> <a class="trash" href="#"><i class="fas fa-trash-alt"></i></a>
+                        <a class="info" href="#" data-tooltip="this feature is coming" data-tooltip-location="left"><i class="fas fa-info-circle"></i></a> <a class="trash"><i class="fas fa-trash-alt"></i></a>
                         {% if module.module.url %}<a href="{{ module.module.url }}" class="button" target="_blank">Source &nbsp; <i class="fas fa-external-link-alt"></i></a>{% endif %}
                     </div>
                     <h2 style="padding-right: 35px;">{{ module.module.name }}</h2>
@@ -108,16 +108,18 @@ permalink: /training/
                     <div class="thumbnail"><img src="/assets/img/modules/{{ module.module.pic-url }}" class="thumbnail"></div>
                     <div class="module-meta">
                         <div class="module-meta">
-                            {% if module_duration > 0 %}
-                                <p class="module-duration"><i class="fas fa-hourglass-half"></i>
+                            <p class="module-duration"><i class="fas fa-hourglass-half"></i>
+                                {% if module_duration > 0 %}
                                     {% if module_duration_hours > 0 %}
                                         {{ module_duration_hours | append: ' ' }} h
                                     {% endif %}
                                     {% if module_duration_minutes > 0 %}
                                         {{ module_duration_minutes }} min
                                     {% endif %}
-                                </p>
-                            {% endif %}
+                                {% else %}
+                                    15 min
+                                {% endif %}
+                            </p>
                             <p class="difficulty-level"><i class="fas fa-graduation-cap"></i>{{ module_diff_text }}</p>
                             <p class="material-costs"><i class="fas fa-dollar-sign"></i>{{ module_cost }} $ material costs</p>
                         </div>
@@ -236,7 +238,7 @@ permalink: /training/
         <ul id="break-list-side-bar" class="breaks">
             <li class="timebreak" data-duration="15">
                 <div class="time">
-                    <div style="display:inline;" data-tooltip="edit duration" data-tooltip-location="right"><i class="fas fa-edit"></i></div> <span class='clock-time'>10:20am - 12:30am</span></a>
+                    <div style="display:inline;" data-tooltip="edit duration" data-tooltip-location="right"><i class="far fa-edit"></i></div> <span class='clock-time'>10:20am - 12:30am</span></a>
                     <div class="edit-time">
                         <form>
                             <input type="text" class="title" placeholder="Time Break">
@@ -250,7 +252,7 @@ permalink: /training/
                 </div>
                 <div class="content">
                     <div class="options">
-                        <a class="trash" href="#"><i class="fas fa-trash-alt"></i></a>
+                        <a class="trash"><i class="fas fa-trash-alt"></i></a>
                     </div>
                     <p class="break-title">Time Break</p>
                 </div>
@@ -258,7 +260,7 @@ permalink: /training/
             </li>
             <li class="daybreak" data-duration="15" data-start="09:00">
                 <div class="time">
-                    <div style="display:inline;" data-tooltip="edit duration" data-tooltip-location="right"><i class="fas fa-edit"></i></div> <span class='clock-time'>10:00am - 10:20pm</span></a>
+                    <div style="display:inline;" data-tooltip="edit duration" data-tooltip-location="right"><i class="far fa-edit"></i></div> <span class='clock-time'>10:00am - 10:20pm</span></a>
                     <div class="edit-time">
                         <form>
                             <label>Start-Time:</label>
@@ -323,7 +325,7 @@ permalink: /training/
             <ul id="module-list-training" class="training-list">
                 <div id="trainingstart" class="trainingstart" data-duration="15" data-start="09:00">
                     <div class="time">
-                        <div style="display:inline;" data-tooltip="edit start time & title" data-tooltip-location="right"><i class="fas fa-edit"></i></div> <span class='clock-time'>10:00am - 10:20pm</span></a>
+                        <div style="display:inline;" data-tooltip="edit start time & title" data-tooltip-location="right"><i class="far fa-edit"></i></div> <span class='clock-time'>10:00am - 10:20pm</span></a>
                         <div class="edit-time">
                             <form>
                                 <input style="margin-bottom:20px;" type="text" class="title" placeholder="Introduction into the training">
