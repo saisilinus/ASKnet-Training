@@ -802,9 +802,11 @@ function toggleShowTags () {
     if (tags.style.display == 'block') {
         tags.style.display = 'none';
         button.innerHTML = `<i class="fas fa-angle-down"></i>`;
+        button.dataset.tooltip = 'show tags';
     } else {
         tags.style.display = 'block';
         button.innerHTML = `<i class="fas fa-angle-up"></i>`;
+        button.dataset.tooltip = 'hide tags';
     }
 }
 
