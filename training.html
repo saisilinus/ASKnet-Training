@@ -95,7 +95,7 @@ permalink: /training/
                     </div>
                     <div class="options">
                         <a class="button add-module" src="#">Add Module</a>
-                        <a class="info" href="#" data-tooltip="this feature is coming" data-tooltip-location="left"><i class="fas fa-info-circle"></i></a> <a class="trash" href="#"><i class="fas fa-trash-alt"></i></a>
+                        <a class="info" href="#" data-tooltip="this feature is coming" data-tooltip-location="left"><i class="fas fa-info-circle"></i></a> <a class="trash"><i class="fas fa-trash-alt"></i></a>
                         {% if module.module.url %}<a href="{{ module.module.url }}" class="button" target="_blank">Source &nbsp; <i class="fas fa-external-link-alt"></i></a>{% endif %}
                     </div>
                     <h2 style="padding-right: 35px;">{{ module.module.name }}</h2>
@@ -108,16 +108,18 @@ permalink: /training/
                     <div class="thumbnail"><img src="/assets/img/modules/{{ module.module.pic-url }}" class="thumbnail"></div>
                     <div class="module-meta">
                         <div class="module-meta">
-                            {% if module_duration > 0 %}
-                                <p class="module-duration"><i class="fas fa-hourglass-half"></i>
+                            <p class="module-duration"><i class="fas fa-hourglass-half"></i>
+                                {% if module_duration > 0 %}
                                     {% if module_duration_hours > 0 %}
                                         {{ module_duration_hours | append: ' ' }} h
                                     {% endif %}
                                     {% if module_duration_minutes > 0 %}
                                         {{ module_duration_minutes }} min
                                     {% endif %}
-                                </p>
-                            {% endif %}
+                                {% else %}
+                                    15 min
+                                {% endif %}
+                            </p>
                             <p class="difficulty-level"><i class="fas fa-graduation-cap"></i>{{ module_diff_text }}</p>
                             <p class="material-costs"><i class="fas fa-dollar-sign"></i>{{ module_cost }} $ material costs</p>
                         </div>

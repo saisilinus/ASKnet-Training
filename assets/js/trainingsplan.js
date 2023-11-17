@@ -464,14 +464,15 @@ function calculateTime() {
             }
 
             let moduleDurationEl = getChildByClassName(mod, CLASS_MODULEDURATION);
-            if (moduleDurationEl) {
-                const durationSplit = getDurationSplit(moduleEndTime - moduleStartTime)
-                if(durationSplit.days != undefined ){
-                    moduleDurationEl.innerHTML = `<i class="fas fa-hourglass-half"></i>${durationSplit.days} days ${durationSplit.hours} hours ${durationSplit.minutes} minutes`;
-                } else {
-                    moduleDurationEl.innerHTML = `<i class="fas fa-hourglass-half"></i>${durationSplit.hours} hours ${durationSplit.minutes} minutes`;
+            const durationSplit = getDurationSplit(moduleEndTime - moduleStartTime);
+            let durationHtml = '<i class="fas fa-hourglass-half"></i>';
+            Object.keys(durationSplit).forEach((key, index) => {
+                if (durationSplit[key]) {
+                    durationHtml += index === 0 ? '' : ' ';
+                    durationHtml += `${durationSplit[key]}${key[0]}`;
                 }
-            }
+            });
+            moduleDurationEl.innerHTML = durationHtml;
 
         } else if (mod.className.includes(CLASS_TIMEBREAK)) {
             const duration = parseInt(mod.dataset.duration);
