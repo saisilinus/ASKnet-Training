@@ -719,6 +719,7 @@ function addTimeBreakAfter(resource) {
 const CLASS_SELECTED = 'selected';
 const ID_WORDCLOUD = 'wordcloud';
 const ID_SHOW_ALL_CATEGORIES = 'show-all-modules';
+const ID_SHOW_TAGS_BUTTON = 'show-tags-button';
 
 function initiateWordcloudFilter() {
     const wordcloud = document.getElementById(ID_WORDCLOUD).getElementsByTagName('li');
@@ -808,6 +809,31 @@ function updateSelectableModulesList() {
                 mod.style.display = 'none';
             }
         }
+    }
+}
+
+/**
+ * Activates the button for showing/hiding filter tags
+ */
+function initiateShowTagsButton() {
+    let button = document.getElementById(ID_SHOW_TAGS_BUTTON);
+    button.onclick = toggleShowTags;
+}
+
+/**
+ * Shows/hides filter tags
+ */
+function toggleShowTags () {
+    let tags = document.getElementById(ID_WORDCLOUD);
+    let button = document.getElementById(ID_SHOW_TAGS_BUTTON);
+    if (tags.style.display == 'block') {
+        tags.style.display = 'none';
+        button.innerHTML = `<i class="fas fa-angle-down"></i>`;
+        button.dataset.tooltip = 'show tags';
+    } else {
+        tags.style.display = 'block';
+        button.innerHTML = `<i class="fas fa-angle-up"></i>`;
+        button.dataset.tooltip = 'hide tags';
     }
 }
 
@@ -1050,4 +1076,5 @@ window.onload = function () {
     calculateSummary();
     initiateAuthorListToggleButton();
     initiateEditNotes();
+    initiateShowTagsButton();
 }
