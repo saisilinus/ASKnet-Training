@@ -62,7 +62,7 @@ permalink: /training/
                 {% assign module_duration_minutes = module_duration | modulo:60 %}
 
             
-            <li id="{{ module.module.id }}" class="module {{ module.module.tag }}" data-duration="{{ module.module.duration }}" data-participants="{{ module.module.max-participants }}" data-trainer="{{ module.module.min-trainers }}" data-difficulty="{{ module.module.difficulty }}" data-name="{{ module.module.name }}">
+            <li id="{{ module.module.id }}" class="module {{ module.module.tag }}" data-duration="{{ module.module.duration }}" data-participants="{{ module.module.max-participants }}" data-trainer="{{ module.module.min-trainers }}" data-difficulty="{{ module.module.difficulty }}" data-name="{{ module.module.name }}" data-description="{{ module.module.description }}">
                 <div class="time">
                     <div style="display:inline;" data-tooltip="move module" data-tooltip-location="right"><i
                             class="fas fa-hand-pointer"></i>

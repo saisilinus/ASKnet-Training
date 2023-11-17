@@ -801,7 +801,8 @@ function updateModulesBySearch(){
     if (searchWord.length > 0) {
         for (mod of sideBarModules) {
             const modName = mod.dataset.name.toLowerCase();
-            if (modName.includes(searchWord)) {
+            const modDescription = mod.dataset.description.toLowerCase();
+            if (modName.includes(searchWord) || modDescription.includes(searchWord)) {
                 mod.style.display = '';
             } else {
                 mod.style.display = 'none';
