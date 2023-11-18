@@ -18,6 +18,14 @@ All information on how to use the training plan, install it or create additional
 
 Here you can see the [concept paper](https://md.bmen.cc/training-generator)
 
+### Editor Settings
+
+The settings for [VSCode](https://code.visualstudio.com/) and [VSCodium](https://vscodium.com/) can be found in the [.vscode](/.vscode) directory.
+
+VSCode and VSCodium users will get a recommendation to install the [Live Sass Compiler](https://marketplace.visualstudio.com/items?itemName=glenn2223.live-sass) when they open the repository for the first time in their editor. The extension will use the editor settings to compile any `SASS` files that you edit.
+
+Users of other editors will need to get an alternative `SASS` compiler and to adapt their settings to the ones in `.vscode > settings.json` to work on the `SASS` files. Check [here](#styling-css-sass-etc) for more info.
+
 ### Run local
 
 To run the training plan locally, the following are required:
@@ -31,29 +39,38 @@ If the requirements are met, all you need to do is check out this Git repository
 ```
 docker compose up -d
 ```
+
 and then go to your browser and type `http://0.0.0.0:4000`
 
-Note: In case the browser can't open the link above open the "Gemfile" in the "Training" repository and add: 
+Note: In case the browser can't open the link above open the "Gemfile" in the "Training" repository and add:
+
 ```
 gem "webrick" 
 ```
-to the end of the file, save the file, stop docker compose and start docker compose again with 
+
+to the end of the file, save the file, stop docker compose and start docker compose again with
+
 ```
 docker compose up 
 ```
+
 again. This is only a temporary adjustment for local instance development! DO NOT COMMIT TO MAIN BRANCH!
 
 To stop the training plan:
+
 ```
 docker compose stop
 ```
+
 Then you can use the following command to start the training planner at any time without needing an internet connection:
+
 ```
 docker compose start
 ```
+
 ### Styling (CSS, SASS, etc.)
 
-Basically, all styling changes are made in the **Sass files** in the `/_sass` folder. The min.css and min.css.map files (target) will be compiled automaticly from the Sass files (source). You can find more information about the Sass syntax here: https://sass-lang.com/documentation/syntax/
+Basically, all styling changes are made in the **Sass files** in the `/_sass` folder. The min.css and min.css.map files (target) will be compiled automaticly from the Sass files (source). You can find more information about the Sass syntax here: <https://sass-lang.com/documentation/syntax/>
 
 #### Compiling CSS from Sass
 
@@ -72,7 +89,8 @@ The following settings in the plugin are recommended:
     }
 ],
 ```
-How to change the settings for the `Live Sass Compiler` plugin and how to use it you can find it here: https://github.com/glenn2223/vscode-live-sass-compiler/blob/master/docs/settings.md
+
+How to change the settings for the `Live Sass Compiler` plugin and how to use it you can find it here: <https://github.com/glenn2223/vscode-live-sass-compiler/blob/master/docs/settings.md>
 
 #### Ohter CSS-Libraries
 
@@ -81,7 +99,6 @@ CSS libraries from other sources are saved directly in the `/assets/css` folder 
 Example: `bootstrap-5.3.2.min.css`
 
 The library must then be integrated either in a layout file in the `/_layouts` directory or in `main.sass` in the `/_sass` directory.
-
 
 ## Partners and Funder
 
@@ -96,6 +113,6 @@ The library must then be integrated either in a layout file in the `/_layouts` d
 
 The Configurator Software is licensed under a GPLv3 License (see LICENSE.md File)
 
-first prototype developed by [NanoLogika](https://www.nanologika.de) 
+first prototype developed by [NanoLogika](https://www.nanologika.de)
 
-[![nanoLogika Logo](assets/img/partner-nanologika-logo.png)](https://www.nanologika.de) 
+[![nanoLogika Logo](assets/img/partner-nanologika-logo.png)](https://www.nanologika.de)
