@@ -20,6 +20,7 @@ permalink: /modules
 
         {% assign difficulty-array = "" | split: ',' %}
         {% assign participant-array = "" | split: ',' %}
+        {% assign tag-array = "" | split: ',' %}
         {% for module in site.modules %}
           {% unless difficulty-array contains module.module.difficulty %}
             {% if module.module.difficulty == nil %}
@@ -35,6 +36,13 @@ permalink: /modules
               {% assign participant-array = participant-array | push: module.module.max-participants %}
             {% endif %}
           {% endunless %}
+          {% unless tag-array contains module.module.tag %}
+            {% if module.module.tag == nil %}
+              {% assign tag-array = tag-array | push: "Unknown" %}
+            {% else %}
+              {% assign tag-array = tag-array | push: module.module.tag %}
+            {% endif %}
+          {% endunless %}
         {% endfor %}
 
         {% assign difficulty-array = difficulty-array | sort | uniq %}
@@ -45,9 +53,10 @@ permalink: /modules
         {% comment %} {% if participant-array contains "Unknown" %}
           {% assign participant-array = participant-array | join: "|" | replace: "|Unknown|","|" | split: "|" | reverse | unshift: "Unknown" | reverse %}
         {% endif %} {% endcomment %}
-
-        <div class="dropdown mr-2 mb-2" style="float:left">
-          <button class="btn btn-sm btn-primary dropdown-toggle" data-flip="false" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Difficulty Level</button>
+        {% assign tag-array = tag-array | sort | uniq %}
+        {% comment %} {% if tag-array contains "Unknown" %}
+          {% assign tag-array = tag-array | join: "|" | replace: "|Unknown|","|" | split: "|" | reverse | unshift: "Unknown" | reverse %}
+        {% endif %} {% endcomment %}
           <div class="dropdown-menu sm mr-2 mb-2 filter-difficulty">
             <button class="dropdown-item all" type="button" data-difficulty="All">All</button>
             <div class="dropdown-divider"></div>
@@ -67,8 +76,20 @@ permalink: /modules
             {% endfor %}
           </div>
         </div>
-
-        <input type="search" class="form-control col-6 js-shuffle-search" id="filters-search-input" placeholder="search by name">
+          <div class="dropdown bd-highlight p-2">
+            <button class="btn btn-sm btn-primary dropdown-toggle" data-flip="false" type="button" id="dropdownMenu3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tags</button>
+            <div class="dropdown-menu mr-2 mb-2 filter-tag">
+              <button class="dropdown-item all" type="button" data-tag="All">All</button>
+              <div class="dropdown-divider"></div>
+              {% for tag in tag-array %}
+                <button class="dropdown-item" type="button" data-tag="{{ tag }}">{{ tag }}</button>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="p-2 flex-grow-1 bd-highlight">
+            <input type="search" class="form-control col-6 js-shuffle-search" id="filters-search-input" placeholder="search by module title">
+          </div>
+        </div>
       </div>
     </div>
   </div>
