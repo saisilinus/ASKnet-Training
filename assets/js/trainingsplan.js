@@ -9,6 +9,8 @@ const CLASS_SUBMITTIME = 'submit';
 const CLASS_CLOSETIME = 'close'
 const CLASS_EDITTIME = 'edit-time';
 const CLASS_MODULEDURATION = 'module-duration';
+const CLASS_MULTIDRAGSELECTED = 'multidrag-selected';
+const GROUP_MODULELIST = 'module-list-group';
 
 /**
  * Drag & Drop
@@ -20,26 +22,35 @@ function initiateSortable() {
     Sortable.create(moduleListTraining, {
         filter: '.trainingstart',
         group: {
-            name: 'module_list_training',
+            name: GROUP_MODULELIST,
             put: true
         },
         fallbackOnBody: true,
         swapThreshold: 0.2,
         animation: ANIMATION_SPEED,
+        multiDrag: true,
+        avoidImplicitDeselect: true,
         onAdd: runDynamicCalculationsOnAdd,
-        onUpdate: runDynamicCalculationsOnUpdate
+        onUpdate: runDynamicCalculationsOnUpdate,
     });
 
     let moduleListSideBar = document.getElementById(ID_MODULE_LIST_SIDE_BAR);
     Sortable.create(moduleListSideBar, {
-        group: ID_MODULE_LIST_SIDE_BAR,
-        animation: ANIMATION_SPEED
+        group: GROUP_MODULELIST,
+        animation: ANIMATION_SPEED,
+        multiDrag: true,
+        avoidImplicitDeselect: true,
+        fallbackTolerance: 3,
+        selectedClass: CLASS_MULTIDRAGSELECTED,
+        onSelect: onModuleSelect,
+        onDeselect: onModuleDeselect,
+        onEnd: onModuleDrag,
     });
 
     let breakListSideBar = document.getElementById('break-list-side-bar');
     Sortable.create(breakListSideBar, {
         group: {
-            name: 'break-list-side-bar',
+            name: GROUP_MODULELIST,
             pull: 'clone'
         },
         sort: false,
@@ -72,6 +83,39 @@ function initiateSortable() {
             onUpdate: calculateTime
         });
         index++;
+    }
+}
+
+/**
+ * Performs actions when a module is selected
+ * @param {Event} evt Selection event
+ */
+function onModuleSelect(evt){
+    let module = evt.item;
+    let checkBox = module.querySelector('.select-check');
+    checkBox.innerHTML = '<i class="far fa-check-circle"></i>';
+    checkBox.dataset.tooltip = 'deselect module';
+}
+
+/**
+ * Performs actions when a module is deselected
+ * @param {Event} evt Selection event
+ */
+function onModuleDeselect(evt){
+    let module = evt.item;
+    let checkBox = module.querySelector('.select-check');
+    checkBox.innerHTML = '<i class="far fa-circle"></i>';
+    checkBox.dataset.tooltip = 'select module';
+}
+
+/**
+ * Performs actions after a module is dragged
+ * @param {Event} evt Dragging event
+ */
+function onModuleDrag(evt){
+    for (let i in evt.items) {
+        Sortable.utils.deselect(evt.items[i]); // this is the ideal solution but doesn't work for now
+        evt.items[i].className = evt.items[i].className.split(' ').filter(clazz => clazz != CLASS_MULTIDRAGSELECTED).join(' ');
     }
 }
 
@@ -452,7 +496,7 @@ function calculateTime() {
             totalTime+=duration;
 
             let resources = document.querySelectorAll(`#${mod.id} li`);
-            let moduleEndTime = null;
+            let moduleEndTime = clockTime;
             for(let el of resources){
                 if(el.className.includes(CLASS_DAYBREAK)){
                     clockTime = parseDatefromString(clockTime, el.dataset.start);
@@ -464,6 +508,16 @@ function calculateTime() {
             }
 
             let moduleDurationEl = getChildByClassName(mod, CLASS_MODULEDURATION);
+
+            if (moduleDurationEl) {
+                const durationSplit = getDurationSplit(moduleEndTime - moduleStartTime);
+                if(durationSplit.days != undefined ){
+                    moduleDurationEl.innerHTML = `<i class="fas fa-hourglass-half"></i>${durationSplit.days} days ${durationSplit.hours} hours ${durationSplit.minutes} minutes`;
+                } else {
+                    moduleDurationEl.innerHTML = `<i class="fas fa-hourglass-half"></i>${durationSplit.hours} hours ${durationSplit.minutes} minutes`;
+                }
+            }
+
             const durationSplit = getDurationSplit(moduleEndTime - moduleStartTime);
             let durationHtml = '<i class="fas fa-hourglass-half"></i>';
             Object.keys(durationSplit).forEach((key, index) => {
@@ -473,6 +527,7 @@ function calculateTime() {
                 }
             });
             moduleDurationEl.innerHTML = durationHtml;
+
 
         } else if (mod.className.includes(CLASS_TIMEBREAK)) {
             const duration = parseInt(mod.dataset.duration);
