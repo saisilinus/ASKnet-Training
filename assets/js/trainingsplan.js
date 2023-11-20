@@ -234,7 +234,7 @@ function initiateSubmitTimeButton(){
     for(let button of submitTimeButtons){
         button.onclick = submitTime;
         let form = button.parentNode;
-        activateButtonOnEnter(form, `.duration`, `.${CLASS_SUBMITTIME}`);
+        clickButtonOnEnter(form, `.duration`, `.${CLASS_SUBMITTIME}`);
     }
 }
 
@@ -324,6 +324,14 @@ function closeTime(){
  */
 function updateClonedBreaks(evt){
     let timebreak = evt.item;
+    activateTimeBreak(timebreak);
+}
+
+/**
+ * Activates the event listeners on a cloned timebreak
+ * @param {Element} timebreak Timebreak element
+ */
+function activateTimeBreak(timebreak){
     let iconButton = timebreak.querySelector('.fa-edit');
     iconButton.onclick = toggleTimeEditWindow;
     let submitButton = timebreak.querySelector('.submit');
@@ -409,8 +417,8 @@ function initiateAddTimebreak(){
 function addTimebreak(){
     const timeBreak = document.getElementsByClassName(CLASS_TIMEBREAK)[0].cloneNode(true);
     let moduleList = document.getElementById(ID_MODULE_LIST_TRAINING);
+    activateTimeBreak(timeBreak);
     moduleList.appendChild(timeBreak);
-    initiateTrashButton();
     calculateTime();
     calculateSummary();
 }
@@ -443,9 +451,26 @@ function runDynamicCalculationsOnUpdate(evt) {
 function runDynamicCalculationsOnAdd(evt) {
     let mod = evt.item;
     insertTimeBreaks(mod);
+    insertIntroductionDuration(mod);
     calculateTime();
     calculateSummary();
     updateAuthorList();
+}
+
+/**
+ * Inserts an introduction break based on the module's duration
+ * @param {Node} mod Module node
+ */
+function insertIntroductionDuration(mod) {
+    if (mod.className.includes(CLASS_MODULE)) {
+        let resourceList = mod.querySelector('.resource-list');
+        let MODULE_TIME_BREAK = document.getElementsByClassName(CLASS_TIMEBREAK)[0].cloneNode(true);
+        MODULE_TIME_BREAK.dataset.duration = mod.dataset.duration > 0 ? mod.dataset.duration : 15;
+        let title = MODULE_TIME_BREAK.querySelector('.break-title');
+        title.innerText = 'Introduction';
+        activateTimeBreak(MODULE_TIME_BREAK);
+        resourceList.prepend(MODULE_TIME_BREAK);
+    }
 }
 
 function calculateTime() {
@@ -465,7 +490,7 @@ function calculateTime() {
     moduleList = moduleList.filter(el => el.nodeName.includes('LI'));
     for (mod of moduleList) {
         if (mod.className.includes(CLASS_MODULE)) {
-            const duration = parseInt(mod.dataset.duration);
+            const duration = 0;
             let moduleStartTime = clockTime;
             clockTime = insertClockTime(clockTime, duration, mod);
             totalTime+=duration;
@@ -483,6 +508,7 @@ function calculateTime() {
             }
 
             let moduleDurationEl = getChildByClassName(mod, CLASS_MODULEDURATION);
+
             if (moduleDurationEl) {
                 const durationSplit = getDurationSplit(moduleEndTime - moduleStartTime);
                 if(durationSplit.days != undefined ){
@@ -491,6 +517,17 @@ function calculateTime() {
                     moduleDurationEl.innerHTML = `<i class="fas fa-hourglass-half"></i>${durationSplit.hours} hours ${durationSplit.minutes} minutes`;
                 }
             }
+
+            const durationSplit = getDurationSplit(moduleEndTime - moduleStartTime);
+            let durationHtml = '<i class="fas fa-hourglass-half"></i>';
+            Object.keys(durationSplit).forEach((key, index) => {
+                if (durationSplit[key]) {
+                    durationHtml += index === 0 ? '' : ' ';
+                    durationHtml += `${durationSplit[key]}${key[0]}`;
+                }
+            });
+            moduleDurationEl.innerHTML = durationHtml;
+
 
         } else if (mod.className.includes(CLASS_TIMEBREAK)) {
             const duration = parseInt(mod.dataset.duration);
@@ -726,9 +763,8 @@ function insertTimeBreaks(mod) {
 
 function addTimeBreakAfter(resource) {
     const MODULE_TIME_BREAK = document.getElementsByClassName(CLASS_TIMEBREAK)[0].cloneNode(true);
+    activateTimeBreak(MODULE_TIME_BREAK);
     resource.parentNode.insertBefore(MODULE_TIME_BREAK, resource.nextSibling);
-    initiateTrashButton();
-    initiateTimeEdit();
 }
 
 /**
@@ -738,6 +774,7 @@ function addTimeBreakAfter(resource) {
 const CLASS_SELECTED = 'selected';
 const ID_WORDCLOUD = 'wordcloud';
 const ID_SHOW_ALL_CATEGORIES = 'show-all-modules';
+const ID_SHOW_TAGS_BUTTON = 'show-tags-button';
 
 function initiateWordcloudFilter() {
     const wordcloud = document.getElementById(ID_WORDCLOUD).getElementsByTagName('li');
@@ -800,7 +837,7 @@ function hideAllModules() {
 function updateSelectableModulesList() {
     const wordcloud = Array.from(document.getElementById(ID_WORDCLOUD).getElementsByTagName('li'));
     const wordcloudSelectedCategories = wordcloud.filter(li => li.className.includes(CLASS_SELECTED));
-    const selectedCategories = wordcloudSelectedCategories.map(li => li.textContent);
+    const selectedCategories = wordcloudSelectedCategories.map(li => li.dataset.tag);
 
     const sideBarModules = Array.from(document.getElementById(ID_MODULE_LIST_SIDE_BAR).getElementsByClassName(CLASS_MODULE));
 
@@ -827,6 +864,63 @@ function updateSelectableModulesList() {
                 mod.style.display = 'none';
             }
         }
+    }
+}
+
+function initiateSearchButton() {
+    let button = document.getElementById('search-bar-button');
+    button.onclick = updateModulesBySearch;
+    let form = document.getElementById('search-bar-form');
+    clickButtonOnEnter(form, '#search-bar-input', '#search-bar-button');
+}
+
+/**
+ * filters modules based on user input
+ * @returns 
+ */
+function updateModulesBySearch(){
+    const searchWord = document.getElementById('search-bar-input').value.toLowerCase().trim();
+    const sideBarModules = Array.from(document.getElementById(ID_MODULE_LIST_SIDE_BAR).getElementsByClassName(CLASS_MODULE));
+    if (searchWord.length > 0) {
+        for (mod of sideBarModules) {
+            const modName = mod.dataset.name.toLowerCase();
+            const modDescription = mod.dataset.description.toLowerCase();
+            if (modName.includes(searchWord) || modDescription.includes(searchWord)) {
+                mod.style.display = '';
+            } else {
+                mod.style.display = 'none';
+            }
+        }
+    } else {
+        showAllModules();
+        let all = document.getElementById('show-all-modules');
+        all.className = all.className.concat(CLASS_SELECTED);
+        return;
+    }
+}
+
+/**
+ * Activates the button for showing/hiding filter tags
+ */
+function initiateShowTagsButton() {
+    let button = document.getElementById(ID_SHOW_TAGS_BUTTON);
+    button.onclick = toggleShowTags;
+}
+
+/**
+ * Shows/hides filter tags
+ */
+function toggleShowTags () {
+    let tags = document.getElementById(ID_WORDCLOUD);
+    let button = document.getElementById(ID_SHOW_TAGS_BUTTON);
+    if (tags.style.display == 'block') {
+        tags.style.display = 'none';
+        button.innerHTML = `<i class="fas fa-angle-down"></i>`;
+        button.dataset.tooltip = 'show tags';
+    } else {
+        tags.style.display = 'block';
+        button.innerHTML = `<i class="fas fa-angle-up"></i>`;
+        button.dataset.tooltip = 'hide tags';
     }
 }
 
@@ -1041,7 +1135,7 @@ function clearNote(){
  * @param {String} inputSelector query selector for the input
  * @param {String} buttonSelector query selector for the button
  */
-function activateButtonOnEnter(form, inputSelector, buttonSelector){
+function clickButtonOnEnter(form, inputSelector, buttonSelector){
     let input = form.querySelector(inputSelector);
     input.addEventListener("keypress", function(event) {
         // If the user presses the "Enter" key on the keyboard
@@ -1069,4 +1163,6 @@ window.onload = function () {
     calculateSummary();
     initiateAuthorListToggleButton();
     initiateEditNotes();
+    initiateSearchButton();
+    initiateShowTagsButton();
 }
