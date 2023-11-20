@@ -190,7 +190,7 @@ function initiateSubmitTimeButton(){
     for(let button of submitTimeButtons){
         button.onclick = submitTime;
         let form = button.parentNode;
-        activateButtonOnEnter(form, `.duration`, `.${CLASS_SUBMITTIME}`);
+        clickButtonOnEnter(form, `.duration`, `.${CLASS_SUBMITTIME}`);
     }
 }
 
@@ -782,7 +782,7 @@ function hideAllModules() {
 function updateSelectableModulesList() {
     const wordcloud = Array.from(document.getElementById(ID_WORDCLOUD).getElementsByTagName('li'));
     const wordcloudSelectedCategories = wordcloud.filter(li => li.className.includes(CLASS_SELECTED));
-    const selectedCategories = wordcloudSelectedCategories.map(li => li.textContent);
+    const selectedCategories = wordcloudSelectedCategories.map(li => li.dataset.tag);
 
     const sideBarModules = Array.from(document.getElementById(ID_MODULE_LIST_SIDE_BAR).getElementsByClassName(CLASS_MODULE));
 
@@ -809,6 +809,38 @@ function updateSelectableModulesList() {
                 mod.style.display = 'none';
             }
         }
+    }
+}
+
+function initiateSearchButton() {
+    let button = document.getElementById('search-bar-button');
+    button.onclick = updateModulesBySearch;
+    let form = document.getElementById('search-bar-form');
+    clickButtonOnEnter(form, '#search-bar-input', '#search-bar-button');
+}
+
+/**
+ * filters modules based on user input
+ * @returns 
+ */
+function updateModulesBySearch(){
+    const searchWord = document.getElementById('search-bar-input').value.toLowerCase().trim();
+    const sideBarModules = Array.from(document.getElementById(ID_MODULE_LIST_SIDE_BAR).getElementsByClassName(CLASS_MODULE));
+    if (searchWord.length > 0) {
+        for (mod of sideBarModules) {
+            const modName = mod.dataset.name.toLowerCase();
+            const modDescription = mod.dataset.description.toLowerCase();
+            if (modName.includes(searchWord) || modDescription.includes(searchWord)) {
+                mod.style.display = '';
+            } else {
+                mod.style.display = 'none';
+            }
+        }
+    } else {
+        showAllModules();
+        let all = document.getElementById('show-all-modules');
+        all.className = all.className.concat(CLASS_SELECTED);
+        return;
     }
 }
 
@@ -1048,7 +1080,7 @@ function clearNote(){
  * @param {String} inputSelector query selector for the input
  * @param {String} buttonSelector query selector for the button
  */
-function activateButtonOnEnter(form, inputSelector, buttonSelector){
+function clickButtonOnEnter(form, inputSelector, buttonSelector){
     let input = form.querySelector(inputSelector);
     input.addEventListener("keypress", function(event) {
         // If the user presses the "Enter" key on the keyboard
@@ -1076,5 +1108,6 @@ window.onload = function () {
     calculateSummary();
     initiateAuthorListToggleButton();
     initiateEditNotes();
+    initiateSearchButton();
     initiateShowTagsButton();
 }
