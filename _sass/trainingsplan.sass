@@ -200,6 +200,8 @@ body.index
     z-index: 2
     box-shadow: 0 0 1em 0.5em $color-body-sidebar
     border-right: 1px $color-general-borders solid
+    display: flex
+    flex-direction: column
     .header
         background: #999999
         border-bottom: 1px #000 solid
@@ -208,7 +210,7 @@ body.index
         display: none
     #module-list-side-bar
         overflow: auto
-        height: calc(100% - 166px)
+        flex-grow: 1
     .resource-list
         display: none
     .time
@@ -256,14 +258,11 @@ body.index
                     font-size: 3em
     .breaks
         text-align: center
-        position: absolute
-        bottom: 75px
         background-color: #fff
         width: 100%
         .timebreak,
         .daybreak
             background: #fff
-            position: relative
             display: block
             padding: 10px 0
             margin: 0
@@ -278,10 +277,6 @@ body.index
             border-top: 1px $color-general-borders solid
             border-bottom: none
     .footer
-        position: absolute
-        bottom: 0
-        left: 0
-        margin-top: -100px
         border-top: 1px $color-general-borders solid
         background-color: #fff
         width: 100%
@@ -667,3 +662,31 @@ a.help
         ul
             li
                 width: 50%
+
+#search-bar
+    margin-bottom: 0.5rem
+    margin-right: 1rem
+    h4
+        margin-block-start: 0.5rem
+        margin-block-end: 0.5rem
+    form
+        .input-container
+            display: flex
+            align-items: center
+            gap: 10px
+            width: 100%
+            background: $color-element-background
+            border-radius: 5px
+            padding-right: 10px
+            input
+                width: 100%
+                height: 1.5rem
+                border: 1px $color-general-borders solid
+                border-radius: 5px 0 0 5px
+            a
+                cursor: pointer
+
+#show-tags-button
+    float: right
+    cursor: pointer
+    font-weight: 100

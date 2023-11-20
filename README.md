@@ -32,6 +32,7 @@ All information on how to use the training plan, install it or create additional
 
 Here you can see the [concept paper](https://md.bmen.cc/training-generator)
 
+
 ### Folder structure
 
 ```markdown
@@ -61,6 +62,17 @@ Here you can see the [concept paper](https://md.bmen.cc/training-generator)
 ├── training.html
 └── training.yml
 ```
+
+### Editor Settings
+
+The settings for [VSCode](https://code.visualstudio.com/) and [VSCodium](https://vscodium.com/) can be found in the [.vscode](/.vscode) directory.
+
+VSCode and VSCodium users will get a recommendation to install the [Live Sass Compiler](https://marketplace.visualstudio.com/items?itemName=glenn2223.live-sass) when they open the repository for the first time in their editor. The extension will use the editor settings to compile any `SASS` files that you edit.
+
+Users of other editors will need to get an alternative `SASS` compiler and to adapt their settings to the ones in `.vscode > settings.json` to work on the `SASS` files. Check [here](#styling-css-sass-etc) for more info.
+
+### Run local
+
 
 ### Requirements
 
@@ -92,10 +104,12 @@ To stop the app:
 docker compose stop
 ```
 
+
 To run the app in detached mode(run in the background):
 
 ```bash
 docker compose up -d
+
 ```
 
 After the initial start, you can start with the following command without an internet connection:
@@ -103,6 +117,7 @@ After the initial start, you can start with the following command without an int
 ```bash
 docker compose start
 ```
+
 
 Docker Compose manual:
 
@@ -116,6 +131,7 @@ docker compose up --help # to get additional information on the `up` command
 ### Styling
 
 All styling changes are made in the **Sass files** in the [_sass](/_sass/) folder. The `min.css` and `min.css.map` files (target) will be compiled automaticly from the Sass files (source). You can find more information about the Sass syntax [here](https://sass-lang.com/documentation/syntax/).
+
 
 #### Compiling CSS from Sass
 
@@ -147,6 +163,7 @@ The library must then be integrated either in a layout file in the [/_layouts](/
 
 ### Contributing
 
+
 Contributions are more than welcome! Please check out the [contributing guide](CONTRIBUTING.md).
 
 ## Partners and Funder
@@ -162,6 +179,8 @@ Contributions are more than welcome! Please check out the [contributing guide](C
 
 The Configurator Software is licensed under a GPLv3 License (see LICENSE.md File)
 
+
 First prototype developed by [NanoLogika](https://www.nanologika.de)
+
 
 [![nanoLogika Logo](assets/img/partner-nanologika-logo.png)](https://www.nanologika.de)
