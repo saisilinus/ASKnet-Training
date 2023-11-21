@@ -449,9 +449,20 @@ function runDynamicCalculationsOnUpdate(evt) {
 }
 
 function runDynamicCalculationsOnAdd(evt) {
-    let mod = evt.item;
-    insertTimeBreaks(mod);
-    insertIntroductionDuration(mod);
+    let mod;
+    // In case a user selects multiple modules before dragging
+    if (evt.items.length) {
+        for (let i in evt.items) {
+            mod = evt.items[i];
+            insertTimeBreaks(mod);
+            insertIntroductionDuration(mod);
+        }
+    } else {
+        // for cases where only one module is selected
+        mod = evt.item;
+        insertTimeBreaks(mod);
+        insertIntroductionDuration(mod);
+    }
     calculateTime();
     calculateSummary();
     updateAuthorList();
@@ -508,15 +519,6 @@ function calculateTime() {
             }
 
             let moduleDurationEl = getChildByClassName(mod, CLASS_MODULEDURATION);
-
-            if (moduleDurationEl) {
-                const durationSplit = getDurationSplit(moduleEndTime - moduleStartTime);
-                if(durationSplit.days != undefined ){
-                    moduleDurationEl.innerHTML = `<i class="fas fa-hourglass-half"></i>${durationSplit.days} days ${durationSplit.hours} hours ${durationSplit.minutes} minutes`;
-                } else {
-                    moduleDurationEl.innerHTML = `<i class="fas fa-hourglass-half"></i>${durationSplit.hours} hours ${durationSplit.minutes} minutes`;
-                }
-            }
 
             const durationSplit = getDurationSplit(moduleEndTime - moduleStartTime);
             let durationHtml = '<i class="fas fa-hourglass-half"></i>';
