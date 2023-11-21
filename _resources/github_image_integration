@@ -8,6 +8,6 @@ resource:
     difficulty: 2    #1-3, 1 is easyest
     cost: 0      #in $ (dont leave empty, but type 0 instead)
     license: CC BY-SA 4.0
-    author: "[#ASKnet](https://asknet.community/)"
+    author: "[Walthierer](https://github.com/walthierer/)"
     # marker
 ---
