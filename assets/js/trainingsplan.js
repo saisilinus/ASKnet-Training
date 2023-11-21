@@ -449,9 +449,20 @@ function runDynamicCalculationsOnUpdate(evt) {
 }
 
 function runDynamicCalculationsOnAdd(evt) {
-    let mod = evt.item;
-    insertTimeBreaks(mod);
-    insertIntroductionDuration(mod);
+    let mod;
+    // In case a user selects multiple modules before dragging
+    if (evt.items.length) {
+        for (let i in evt.items) {
+            mod = evt.items[i];
+            insertTimeBreaks(mod);
+            insertIntroductionDuration(mod);
+        }
+    } else {
+        // for cases where only one module is selected
+        mod = evt.item;
+        insertTimeBreaks(mod);
+        insertIntroductionDuration(mod);
+    }
     calculateTime();
     calculateSummary();
     updateAuthorList();
