@@ -791,12 +791,6 @@ function updateWordcloudFilter() {
             this.className = this.className.concat(CLASS_SELECTED);
             showAllModules();
             return;
-        } else {
-            const thisClasses = this.className.split(' ');
-            const thisClassesWithoutSelected = thisClasses.filter(className => className != CLASS_SELECTED);
-            this.className = thisClassesWithoutSelected.join(' ');
-            hideAllModules();
-            return;
         }
     }
     if (!this.className.includes(CLASS_SELECTED)) {
