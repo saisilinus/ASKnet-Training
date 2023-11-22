@@ -868,6 +868,8 @@ function initiateSearchButton() {
     button.onclick = updateModulesBySearch;
     let form = document.getElementById('search-bar-form');
     clickButtonOnEnter(form, '#search-bar-input', '#search-bar-button');
+    let input = document.getElementById('search-bar-input');
+    input.oninput = updateModulesBySearch;
 }
 
 /**
