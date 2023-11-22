@@ -1042,7 +1042,7 @@ function initiateAuthorListToggleButton(){
  */
 function expandAuthorList(){
     let referenceListEl = document.getElementById('reference-list');
-    referenceListEl.style.display = 'block';
+    referenceListEl.style.transform = 'scale(1, 1)';
     this.innerHTML = '<i class="fas fa-angle-up"></i>';
     this.onclick = contractAuthorList;
 }
@@ -1052,7 +1052,7 @@ function expandAuthorList(){
  */
 function contractAuthorList(){
     let referenceListEl = document.getElementById('reference-list');
-    referenceListEl.style.display = 'none';
+    referenceListEl.style.transform = 'scale(0, 0)';
     this.innerHTML = '<i class="fas fa-angle-down"></i>';
     this.onclick = expandAuthorList;
 }
