@@ -508,9 +508,13 @@ function calculateTime() {
 
             let resources = document.querySelectorAll(`#${mod.id} li`);
             let moduleEndTime = clockTime;
+            let timeBetweenDayBreaks = 0;
             for(let el of resources){
                 if(el.className.includes(CLASS_DAYBREAK)){
+                    clockTime = addDays(clockTime, 1);
                     clockTime = parseDatefromString(clockTime, el.dataset.start);
+                    timeBetweenDayBreaks = clockTime - moduleEndTime;
+                    days += 1;
                 }
                 const duration = parseInt(el.dataset.duration);
                 clockTime = insertClockTime(clockTime, duration, el);
@@ -520,7 +524,7 @@ function calculateTime() {
 
             let moduleDurationEl = getChildByClassName(mod, CLASS_MODULEDURATION);
 
-            const durationSplit = getDurationSplit(moduleEndTime - moduleStartTime);
+            const durationSplit = getDurationSplit(moduleEndTime - moduleStartTime - timeBetweenDayBreaks);
             let durationHtml = '<i class="fas fa-hourglass-half"></i>';
             Object.keys(durationSplit).forEach((key, index) => {
                 if (durationSplit[key]) {
