@@ -12,14 +12,16 @@ permalink: /training/
             <h3><i class="fas fa-filter"></i> Filter modules by tags <a id="show-tags-button" data-tooltip="hide tags" data-tooltip-location="right"><i class="fas fa-angle-down"></i></a></h3>
             <ul id="wordcloud" style="display: none;">
                 <li id="show-all-modules" class="selected" data-tag="all">all</li>
-                <li data-tag="Web&Software">Web & Software</li>
-                <li data-tag="Hardware&Repair">Hardware & Repair</li>
-                <li data-tag="Community&Moderation">Community & Moderation</li>
-                <li data-tag="Organizational_Development">Organizational Development</li>
-                <li data-tag="Media&Art">Media & Art</li>
-                <li data-tag="Data_Security&Research">Data Security & Research</li>
-                <li data-tag="Open_Source&Knowledge">Open Source & Knowledge</li>
-                <li data-tag="Sustainability">Sustainability</li>
+                {% assign tag_list = '' | split: ',' %}
+                {% for module in site.modules %}
+                    {% assign module_tags = module.module.tag | split: ' ' %}
+                    {% for tag in module_tags %}
+                        {% unless tag_list contains tag %}
+                            <li>{{ tag }}</li>
+                            {%- assign tag_list = tag_list | push: tag -%}
+                        {% endunless %}
+                    {% endfor %}
+                {% endfor %}
             </ul>
             <div class="clearer"></div>
             <div id="search-bar">

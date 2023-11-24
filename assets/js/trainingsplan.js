@@ -908,7 +908,7 @@ function hideAllModules() {
 function updateSelectableModulesList() {
     const wordcloud = Array.from(document.getElementById(ID_WORDCLOUD).getElementsByTagName('li'));
     const wordcloudSelectedCategories = wordcloud.filter(li => li.className.includes(CLASS_SELECTED));
-    const selectedCategories = wordcloudSelectedCategories.map(li => li.dataset.tag);
+    const selectedCategories = wordcloudSelectedCategories.map(li => li.innerText);
 
     const sideBarModules = Array.from(document.getElementById(ID_MODULE_LIST_SIDE_BAR).getElementsByClassName(CLASS_MODULE));
 
