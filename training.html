@@ -118,7 +118,7 @@ permalink: /training/
                     <div class="thumbnail"><img src="/assets/img/modules/{{ module.module.pic-url }}" class="thumbnail"></div>
                     <div class="module-meta">
                         <div class="module-meta">
-                            <p class="module-duration"><i class="fas fa-hourglass-half"></i>
+                            <p class="module-duration"><i class="far fa-clock"></i>
                                 {% if module_duration > 0 %}
                                     {% if module_duration_hours > 0 %}
                                         {{ module_duration_hours | append: ' ' }} h
@@ -130,7 +130,7 @@ permalink: /training/
                                     15 min
                                 {% endif %}
                             </p>
-                            <p class="difficulty-level"><i class="fas fa-graduation-cap"></i>{{ module_diff_text }}</p>
+                            <p class="difficulty-level"><i class="fas fa-tachometer-alt"></i>{{ module_diff_text }}</p>
                             <p class="material-costs"><i class="fas fa-dollar-sign"></i>{{ module_cost }} $ material costs</p>
                         </div>
                     </div>
