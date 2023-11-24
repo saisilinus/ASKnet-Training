@@ -328,7 +328,7 @@ function updateClonedBreaks(evt){
 }
 
 /**
- * Activates the event listeners on a cloned timebreak
+ * Activates the event listeners on a cloned timebreak/daybreak
  * @param {Element} timebreak Timebreak element
  */
 function activateTimeBreak(timebreak){
@@ -464,6 +464,7 @@ function runDynamicCalculationsOnAdd(evt) {
         insertIntroductionDuration(mod);
     }
     calculateTime();
+    insertDayBreaks();
     calculateSummary();
     updateAuthorList();
 }
@@ -513,7 +514,7 @@ function calculateTime() {
                 if(el.className.includes(CLASS_DAYBREAK)){
                     clockTime = addDays(clockTime, 1);
                     clockTime = parseDatefromString(clockTime, el.dataset.start);
-                    timeBetweenDayBreaks = clockTime - moduleEndTime;
+                    timeBetweenDayBreaks += clockTime - moduleEndTime;
                     days += 1;
                 }
                 const duration = parseInt(el.dataset.duration);
@@ -771,6 +772,80 @@ function addTimeBreakAfter(resource) {
     const MODULE_TIME_BREAK = document.getElementsByClassName(CLASS_TIMEBREAK)[0].cloneNode(true);
     activateTimeBreak(MODULE_TIME_BREAK);
     resource.parentNode.insertBefore(MODULE_TIME_BREAK, resource.nextSibling);
+}
+
+/**
+ * Day Breaks
+ */
+
+const FINAL_HOUR = 17;
+
+/**
+ * Inserts a daybreak after 5pm and the end of the last resource
+ */
+function insertDayBreaks() {
+    let resources = document.getElementById(ID_MODULE_LIST_TRAINING).querySelectorAll(`.${CLASS_RESOURCE}`);
+    for (let resource of resources) {
+        const clockTimeString = resource.querySelector('.clock-time').innerText;
+        let { start, end } = convertStringTimeToDate(clockTimeString);
+        const isLastResource = resources[resources.length - 1] === resource;
+        let hasBreakAfter = false;
+        let searchBreak = true;
+        let currentElement = resource;
+        while (searchBreak) { // we do it this way of some strange html (nodeName: '#text') siblings appear on the rendered side inbetween the list elems
+            currentElement = currentElement.nextSibling;
+            if (currentElement != null && currentElement.nodeName === 'LI' && currentElement.className.includes(CLASS_DAYBREAK)) {
+                hasBreakAfter = true;
+                searchBreak = false;
+            }
+            if (currentElement != null && currentElement.nodeName === 'LI' && currentElement.className.includes(CLASS_TIMEBREAK)) {
+                currentElement.remove();
+                searchBreak = false;
+            }
+            if (currentElement === null) {
+                searchBreak = false;
+            }
+        }
+
+        if (end.getHours() >= FINAL_HOUR && !isLastResource && !hasBreakAfter) {
+            addDayBreakAfter(resource);
+        }
+    }
+}
+
+/**
+ * Inserts a DayBreak after a resource
+ * @param {Node} resource Resource element
+ */
+function addDayBreakAfter(resource) {
+    const MODULE_DAY_BREAK = document.getElementsByClassName(CLASS_DAYBREAK)[0].cloneNode(true);
+    activateTimeBreak(MODULE_DAY_BREAK);
+    resource.parentNode.insertBefore(MODULE_DAY_BREAK, resource.nextSibling);
+    calculateTime();
+}
+
+/**
+ * Converts a string clocktime to start and end JS Dates
+ * @param {String} time clock time of a given module/resource/timebreak/daybreak
+ * @returns {{ start: Date, end: Date }} start and end clocktimes as JS Dates
+ */
+function convertStringTimeToDate(time){
+    let start = new Date(), end = new Date();
+    let [startTime, endTime] = time.split('-').map((t) => t.trim()).map((t) => {
+        if (/p/.test(t)) {
+            let digits = t.replace(/[a-z]+/g, '');
+            let [hours, minutes] = digits.split(':').map((d) => Number(d));
+            hours += 12;
+            return { hours, minutes };
+        } else {
+            let digits = t.replace(/[a-z]+/g, '');
+            let [hours, minutes] = digits.split(':').map((d) => Number(d));
+            return { hours, minutes };
+        }
+    });;
+    start.setHours(startTime.hours, startTime.minutes);
+    end.setHours(endTime.hours, endTime.minutes);
+    return { start, end };
 }
 
 /**
