@@ -673,10 +673,6 @@ function calculateSummary() {
         }
     }
     updateResourceCostList(materialCost);
-    document.querySelector('#training-space').innerText = space + 'm2';
-    document.querySelector('#internet-needed').innerText = internet;
-    document.querySelector('#power-needed').innerText = power;
-    document.querySelector('#number-of-resources').innerText = resourceList.length;
 }
 
 function alreadyInCostList(l, name){
