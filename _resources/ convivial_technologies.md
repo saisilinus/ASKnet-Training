@@ -8,6 +8,6 @@ resource:
     difficulty: 2
     cost: 0      #in $ (dont leave empty, but type 0 instead)
     license: CC BY-SA 4.0
-    author: [Agnese Trocchi](https://www.disruptionlab.org/team), [Walthierer](https://github.com/walthierer)
+    author: '[Agnese Trocchi](https://www.disruptionlab.org/team), [Walthierer](https://github.com/walthierer)'
     # marker
 ---

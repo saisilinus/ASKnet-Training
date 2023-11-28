@@ -8,5 +8,5 @@ resource:
     difficulty: 1
     cost: 0      #in $ (dont leave empty, but type 0 instead)
     license: CC BY-SA 4.0
-    author: [Sabina Barcucci](https://www.disruptionlab.org/team), [Walthierer](https://github.com/walthierer)
+    author: '[Sabina Barcucci](https://www.disruptionlab.org/team), [Walthierer](https://github.com/walthierer)'
 ---
