@@ -8,7 +8,8 @@ resource:
     difficulty: 2
     cost: 0 
     license: CC BY-SA 4.0
-    author: #add the author/organisation name in here, use [markdown](URL) formatting to link to website/reference. You can add also multiple authors via '[author 1](link1), [author 2](link2)'
+    author: '[Kudzai M. Mubaiwa](https://www.linkedin.com/in/kudzaimmubaiwa/?originalSubdomain=ke), [Soneni Mafu](https://www.linkedin.com/in/soneni-mafu-55447210b/?originalSubdomain=zw)'
+
     # marker
 ---
 
