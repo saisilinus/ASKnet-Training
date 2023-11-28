@@ -530,7 +530,7 @@ function calculateTime() {
             Object.keys(durationSplit).forEach((key, index) => {
                 if (durationSplit[key]) {
                     durationHtml += index === 0 ? '' : ' ';
-                    durationHtml += `${durationSplit[key]}${key[0]}`;
+                    durationHtml += `${durationSplit[key]} ${key[0] === 'm' ? 'min' : key[0]}`;
                 }
             });
             moduleDurationEl.innerHTML = durationHtml;
