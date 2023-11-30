@@ -11,6 +11,6 @@ module:
     min-trainers: 1
     difficulty: 3   #1-3, 1 is easyest
     license: '[CC-BY-SA 4.0 International](https://choosealicense.com/licenses/cc-by-sa-4.0/)'
-    res: ['']       #IDs of the resources. e.g. ['askotec'], or if more: ['askotec', 'ohg']
+    res: ['github_repository', 'modules&resources', 'module&resource_intergration', 'template_code']       #IDs of the resources. e.g. ['askotec'], or if more: ['askotec', 'ohg']
     # marker
 ---
