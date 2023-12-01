@@ -780,31 +780,38 @@ const FINAL_HOUR = 17;
  * Inserts a daybreak after 5pm and the end of the last resource
  */
 function insertDayBreaks() {
-    let resources = document.getElementById(ID_MODULE_LIST_TRAINING).querySelectorAll(`.${CLASS_RESOURCE}`);
-    for (let resource of resources) {
-        const clockTimeString = resource.querySelector('.clock-time').innerText;
-        let { start, end } = convertStringTimeToDate(clockTimeString);
-        const isLastResource = resources[resources.length - 1] === resource;
-        let hasBreakAfter = false;
-        let searchBreak = true;
-        let currentElement = resource;
-        while (searchBreak) { // we do it this way of some strange html (nodeName: '#text') siblings appear on the rendered side inbetween the list elems
-            currentElement = currentElement.nextSibling;
-            if (currentElement != null && currentElement.nodeName === 'LI' && currentElement.className.includes(CLASS_DAYBREAK)) {
-                hasBreakAfter = true;
-                searchBreak = false;
+    let modules = document.getElementById(ID_MODULE_LIST_TRAINING).querySelectorAll(`.${CLASS_MODULE}`);
+    for (let module of modules) {
+        const isLastModule = modules[modules.length - 1] === module;
+        let resources = module.querySelectorAll(`.${CLASS_RESOURCE}`);
+        for (let resource of resources) {
+            const clockTimeString = resource.querySelector('.clock-time').innerText;
+            let { start, end } = convertStringTimeToDate(clockTimeString);
+            const isLastResource = resources[resources.length - 1] === resource;
+            let hasBreakAfter = false;
+            let searchBreak = true;
+            let currentElement = resource;
+            while (searchBreak) { // we do it this way of some strange html (nodeName: '#text') siblings appear on the rendered side inbetween the list elems
+                currentElement = currentElement.nextSibling;
+                if (currentElement != null && currentElement.nodeName === 'LI' && currentElement.className.includes(CLASS_DAYBREAK)) {
+                    hasBreakAfter = true;
+                    searchBreak = false;
+                }
+                if (currentElement != null && currentElement.nodeName === 'LI' && currentElement.className.includes(CLASS_TIMEBREAK)) {
+                    currentElement.remove();
+                    searchBreak = false;
+                }
+                if (currentElement === null) {
+                    searchBreak = false;
+                }
             }
-            if (currentElement != null && currentElement.nodeName === 'LI' && currentElement.className.includes(CLASS_TIMEBREAK)) {
-                currentElement.remove();
-                searchBreak = false;
+    
+            if (end.getHours() >= FINAL_HOUR && !isLastResource && !isLastModule && !hasBreakAfter) {
+                addDayBreakAfter(resource);
             }
-            if (currentElement === null) {
-                searchBreak = false;
+            if (end.getHours() >= FINAL_HOUR && isLastResource && !isLastModule && !hasBreakAfter) {
+                addDayBreakAfter(module);
             }
-        }
-
-        if (end.getHours() >= FINAL_HOUR && !isLastResource && !hasBreakAfter) {
-            addDayBreakAfter(resource);
         }
     }
 }
