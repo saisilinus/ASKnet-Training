@@ -1,9 +1,9 @@
 ---
 module:
-    name: 'Antifraud OERTraining'
+    name: 'Antifraud'
     id: 'antifraud_oer_training'     
-    url: 'https://github.com/ijokua/Antifraud-Bootcamp'    
-    tag: 'Antifraud OER Training'    
+    url: 'https://github.com/ASKnetCommunity/Antifraud-Bootcamp'    
+    tag: 'Data_Security&Research Web&Software'    
     description: "Seeks to avail and equip individuals with knowledgeand insight of online and offline fraud"
     pic-url: Types_of_fraud.jpg
     duration: 45
