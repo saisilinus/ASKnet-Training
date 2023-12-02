@@ -783,6 +783,7 @@ function insertDayBreaks() {
     let modules = document.getElementById(ID_MODULE_LIST_TRAINING).querySelectorAll(`.${CLASS_MODULE}`);
     for (let module of modules) {
         const isLastModule = modules[modules.length - 1] === module;
+        const nextModule = module.nextSibling;
         let resources = module.querySelectorAll(`.${CLASS_RESOURCE}`);
         for (let resource of resources) {
             const clockTimeString = resource.querySelector('.clock-time').innerText;
@@ -804,6 +805,10 @@ function insertDayBreaks() {
                 if (currentElement === null) {
                     searchBreak = false;
                 }
+            }
+
+            if (nextModule != null && nextModule.nodeName === 'LI' && nextModule.className.includes(CLASS_DAYBREAK)) {
+                hasBreakAfter = true;
             }
     
             if (end.getHours() >= FINAL_HOUR && !isLastResource && !isLastModule && !hasBreakAfter) {
