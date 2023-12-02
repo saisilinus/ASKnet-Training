@@ -328,7 +328,7 @@ function updateClonedBreaks(evt){
 }
 
 /**
- * Activates the event listeners on a cloned timebreak
+ * Activates the event listeners on a cloned timebreak/daybreak
  * @param {Element} timebreak Timebreak element
  */
 function activateTimeBreak(timebreak){
@@ -464,6 +464,7 @@ function runDynamicCalculationsOnAdd(evt) {
         insertIntroductionDuration(mod);
     }
     calculateTime();
+    insertDayBreaks();
     calculateSummary();
     updateAuthorList();
 }
@@ -508,9 +509,13 @@ function calculateTime() {
 
             let resources = document.querySelectorAll(`#${mod.id} li`);
             let moduleEndTime = clockTime;
+            let timeBetweenDayBreaks = 0;
             for(let el of resources){
                 if(el.className.includes(CLASS_DAYBREAK)){
+                    clockTime = addDays(clockTime, 1);
                     clockTime = parseDatefromString(clockTime, el.dataset.start);
+                    timeBetweenDayBreaks += clockTime - moduleEndTime;
+                    days += 1;
                 }
                 const duration = parseInt(el.dataset.duration);
                 clockTime = insertClockTime(clockTime, duration, el);
@@ -520,12 +525,12 @@ function calculateTime() {
 
             let moduleDurationEl = getChildByClassName(mod, CLASS_MODULEDURATION);
 
-            const durationSplit = getDurationSplit(moduleEndTime - moduleStartTime);
+            const durationSplit = getDurationSplit(moduleEndTime - moduleStartTime - timeBetweenDayBreaks);
             let durationHtml = '<i class="fas fa-hourglass-half"></i>';
             Object.keys(durationSplit).forEach((key, index) => {
                 if (durationSplit[key]) {
                     durationHtml += index === 0 ? '' : ' ';
-                    durationHtml += `${durationSplit[key]}${key[0]}`;
+                    durationHtml += `${durationSplit[key]} ${key[0] === 'm' ? 'min' : key[0]}`;
                 }
             });
             moduleDurationEl.innerHTML = durationHtml;
@@ -668,10 +673,6 @@ function calculateSummary() {
         }
     }
     updateResourceCostList(materialCost);
-    document.querySelector('#training-space').innerText = space + 'm2';
-    document.querySelector('#internet-needed').innerText = internet;
-    document.querySelector('#power-needed').innerText = power;
-    document.querySelector('#number-of-resources').innerText = resourceList.length;
 }
 
 function alreadyInCostList(l, name){
@@ -770,6 +771,87 @@ function addTimeBreakAfter(resource) {
 }
 
 /**
+ * Day Breaks
+ */
+
+const FINAL_HOUR = 17;
+
+/**
+ * Inserts a daybreak after 5pm and the end of the last resource
+ */
+function insertDayBreaks() {
+    let modules = document.getElementById(ID_MODULE_LIST_TRAINING).querySelectorAll(`.${CLASS_MODULE}`);
+    for (let module of modules) {
+        const isLastModule = modules[modules.length - 1] === module;
+        let resources = module.querySelectorAll(`.${CLASS_RESOURCE}`);
+        for (let resource of resources) {
+            const clockTimeString = resource.querySelector('.clock-time').innerText;
+            let { start, end } = convertStringTimeToDate(clockTimeString);
+            const isLastResource = resources[resources.length - 1] === resource;
+            let hasBreakAfter = false;
+            let searchBreak = true;
+            let currentElement = resource;
+            while (searchBreak) { // we do it this way of some strange html (nodeName: '#text') siblings appear on the rendered side inbetween the list elems
+                currentElement = currentElement.nextSibling;
+                if (currentElement != null && currentElement.nodeName === 'LI' && currentElement.className.includes(CLASS_DAYBREAK)) {
+                    hasBreakAfter = true;
+                    searchBreak = false;
+                }
+                if (currentElement != null && currentElement.nodeName === 'LI' && currentElement.className.includes(CLASS_TIMEBREAK)) {
+                    currentElement.remove();
+                    searchBreak = false;
+                }
+                if (currentElement === null) {
+                    searchBreak = false;
+                }
+            }
+    
+            if (end.getHours() >= FINAL_HOUR && !isLastResource && !isLastModule && !hasBreakAfter) {
+                addDayBreakAfter(resource);
+            }
+            if (end.getHours() >= FINAL_HOUR && isLastResource && !isLastModule && !hasBreakAfter) {
+                addDayBreakAfter(module);
+            }
+        }
+    }
+}
+
+/**
+ * Inserts a DayBreak after a resource
+ * @param {Node} resource Resource element
+ */
+function addDayBreakAfter(resource) {
+    const MODULE_DAY_BREAK = document.getElementsByClassName(CLASS_DAYBREAK)[0].cloneNode(true);
+    activateTimeBreak(MODULE_DAY_BREAK);
+    resource.parentNode.insertBefore(MODULE_DAY_BREAK, resource.nextSibling);
+    calculateTime();
+}
+
+/**
+ * Converts a string clocktime to start and end JS Dates
+ * @param {String} time clock time of a given module/resource/timebreak/daybreak
+ * @returns {{ start: Date, end: Date }} start and end clocktimes as JS Dates
+ */
+function convertStringTimeToDate(time){
+    let start = new Date(), end = new Date();
+    let [startTime, endTime] = time.split('-').map((t) => t.trim()).map((t) => {
+        if (/p/.test(t)) {
+            let digits = t.replace(/[a-z]+/g, '');
+            let [hours, minutes] = digits.split(':').map((d) => Number(d));
+            hours += 12;
+            return { hours, minutes };
+        } else {
+            let digits = t.replace(/[a-z]+/g, '');
+            let [hours, minutes] = digits.split(':').map((d) => Number(d));
+            return { hours, minutes };
+        }
+    });;
+    start.setHours(startTime.hours, startTime.minutes);
+    end.setHours(endTime.hours, endTime.minutes);
+    return { start, end };
+}
+
+/**
  * Word Cloud Filter
  */
 
@@ -790,12 +872,6 @@ function updateWordcloudFilter() {
         if (!this.className.includes(CLASS_SELECTED)) {
             this.className = this.className.concat(CLASS_SELECTED);
             showAllModules();
-            return;
-        } else {
-            const thisClasses = this.className.split(' ');
-            const thisClassesWithoutSelected = thisClasses.filter(className => className != CLASS_SELECTED);
-            this.className = thisClassesWithoutSelected.join(' ');
-            hideAllModules();
             return;
         }
     }
@@ -839,7 +915,7 @@ function hideAllModules() {
 function updateSelectableModulesList() {
     const wordcloud = Array.from(document.getElementById(ID_WORDCLOUD).getElementsByTagName('li'));
     const wordcloudSelectedCategories = wordcloud.filter(li => li.className.includes(CLASS_SELECTED));
-    const selectedCategories = wordcloudSelectedCategories.map(li => li.dataset.tag);
+    const selectedCategories = wordcloudSelectedCategories.map(li => li.innerText);
 
     const sideBarModules = Array.from(document.getElementById(ID_MODULE_LIST_SIDE_BAR).getElementsByClassName(CLASS_MODULE));
 
@@ -874,6 +950,8 @@ function initiateSearchButton() {
     button.onclick = updateModulesBySearch;
     let form = document.getElementById('search-bar-form');
     clickButtonOnEnter(form, '#search-bar-input', '#search-bar-button');
+    let input = document.getElementById('search-bar-input');
+    input.oninput = updateModulesBySearch;
 }
 
 /**
@@ -1046,7 +1124,7 @@ function initiateAuthorListToggleButton(){
  */
 function expandAuthorList(){
     let referenceListEl = document.getElementById('reference-list');
-    referenceListEl.style.transform = 'scale(1, 1)';
+    referenceListEl.style.display = 'block';
     this.innerHTML = '<i class="fas fa-angle-up"></i>';
     this.onclick = contractAuthorList;
 }
@@ -1056,7 +1134,7 @@ function expandAuthorList(){
  */
 function contractAuthorList(){
     let referenceListEl = document.getElementById('reference-list');
-    referenceListEl.style.transform = 'scale(0, 0)';
+    referenceListEl.style.display = 'none';
     this.innerHTML = '<i class="fas fa-angle-down"></i>';
     this.onclick = expandAuthorList;
 }

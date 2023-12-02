@@ -224,6 +224,7 @@ body.index
             border: 1px $color-general-borders solid
             border-radius: 5px
             padding-left: 10px
+            padding-right: 10px
             margin: 0 auto
             transition: 0.2s ease
             .intro
@@ -444,6 +445,7 @@ a.help
     h2
         font-size: 1.1em
         margin: 6px 0
+        padding-right: 65px
     h4
         margin: 20px 0 0 160px
     .time
@@ -451,7 +453,7 @@ a.help
     .content
         position: relative
         width: calc(100% - 172px)
-        float: left
+        float: right
         display: block
         border: 1px $color-general-borders solid
         padding: 0 0 10px 10px
@@ -698,4 +700,20 @@ a.help
     float: right
     cursor: pointer
     font-weight: 100
+
+#reference-list
+    display: none
+    ul
+        list-style-position: inside
+        margin-left: 30px
+
+.flex-start-center
+    display: flex
+    justify-content: start
+    align-items: center
+    gap: 5px
+
+.reset-notes
+    i
+        font-size: 0.6rem
 
