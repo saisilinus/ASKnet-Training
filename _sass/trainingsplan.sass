@@ -63,14 +63,18 @@ body.index
     margin: 0 auto
     padding: 0 20px 0 370px
     z-index: 1
+    .logo
+        float: right
+        width: 240px
+        text-align: center
     .edit
-        display: inline
+        display: inline-block
         background: $color-element-background-inactive
         color: $color-element-font
         font-size: 0.5em
         padding: 5px
         border-radius: 5px
-        margin-left: 10px
+        margin: 0 0 15px 0
     .edit:hover
         background: $color-element-background
     #training-plan
@@ -88,6 +92,8 @@ body.index
             color: $color-general-borders
         #training-description
             margin-bottom: 30px
+            width: 60%
+            min-height: 50px
         .training-list
             min-height:200px
     #edit-title-and-description,
