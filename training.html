@@ -14,10 +14,10 @@ permalink: /training/
                 <li id="show-all-modules" class="selected" data-tag="all">all</li>
                 {% assign tag_list = '' | split: ',' %}
                 {% for module in site.modules %}
-                    {% assign module_tags = module.module.tag | split: ' ' %}
+                    {% assign module_tags = module.module.tag | split: ',' %}
                     {% for tag in module_tags %}
                         {% unless tag_list contains tag %}
-                            <li>{{ tag }}</li>
+                            <li>{{ tag | strip }}</li>
                             {%- assign tag_list = tag_list | push: tag -%}
                         {% endunless %}
                     {% endfor %}
