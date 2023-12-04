@@ -6,7 +6,7 @@ module:
     tag: 'Open_Source&Knowledge'     #list, just separated by blank space, e.g. 'Web&Software Open_Source&Knowledge'
     description: "**What are the Steps to Open Source and grow your project?** - Wording, Basics and Examples for Open Source Documentation and why it matters."
     pic-url: ODG-front.png
-    duration: 0 #put to 0, introduction time in minutes no function currently, the resources have their own time blocks
+    duration: 15
     max-participants: 15
     min-trainers: 1
     difficulty: 1   #1-3, 1 is easyest

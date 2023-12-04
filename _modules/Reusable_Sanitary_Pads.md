@@ -6,7 +6,7 @@ module:
     tag: 'Production&Supply Open_Source&Knowledge Sustainability Hardware&Repair Health'    #list, just separated by blank space, e.g. 'Web Open_Source'
     description: "Reusable Sanitary Pads are cloth pads that can be used several times. They absorb the menstrual blood and the pad should stay for about 4-5 hours depending on your menstrual flow. After use, you need to wash the cloth really well and remove every stain of blood and then you can reuse the same pad. These cloth pads are usually made in several layers."
     pic-url: reusable_sanitary_pad.jpg
-    duration: 0 #48 but put to 0, introduction time in minutes no function currently, the resources have their own time blocks
+    duration: 15
     max-participants: 30
     min-trainers: 2
     difficulty: 2

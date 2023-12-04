@@ -6,7 +6,7 @@ module:
     tag: 'Community&Moderation Organizational_Development Sustainability'
     description: "The overall goal of this webinar series is to equip participants with useful insights, practical skills, and tools for creating more inclusive spaces for women in tech and media."
     pic-url: inclusive_space_women.png
-    duration: 0
+    duration: 15
     max-participants: 25
     min-trainers: 1
     difficulty: 1

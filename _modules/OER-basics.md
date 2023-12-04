@@ -6,7 +6,7 @@ module:
     tag: 'OpenSource&Knowledge'     #list, just separated by blank space, e.g. 'Web Open_Source'
     description: "Webinar on the basics of Open Educational Resources (OERs), where you will learn about the basic concepts, benefits and challenges of creating and sharing OERs. This webinar consists of two sessions of two hours each, with a day of homework in between so that you can reflect on your own OER project. ([Image CC-BY](https://en.wikipedia.org/wiki/Open_educational_resources))"
     pic-url: oer-basics.png
-    duration: 0 #put to 0, introduction time in minutes no function currently, the resources have their own time blocks
+    duration: 15
     max-participants: 20
     min-trainers: 1
     difficulty: 1   #1-3, 1 is easyest
