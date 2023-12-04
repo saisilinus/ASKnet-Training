@@ -23,3 +23,15 @@ a.edit,
             display: none
 .actions
     display: none
+
+@media print
+    .pagebreak
+        page-break-before: always
+    .dont-print, #reference-button
+        visibility: hidden
+    .print-display-none
+        display: none !important
+    #reference-list
+        display: block
+    .display-print
+        display: inline !important

@@ -9,6 +9,8 @@ const CLASS_SUBMITTIME = 'submit';
 const CLASS_CLOSETIME = 'close'
 const CLASS_EDITTIME = 'edit-time';
 const CLASS_MODULEDURATION = 'module-duration';
+const CLASS_MULTIDRAGSELECTED = 'multidrag-selected';
+const GROUP_MODULELIST = 'module-list-group';
 
 /**
  * Drag & Drop
@@ -20,26 +22,35 @@ function initiateSortable() {
     Sortable.create(moduleListTraining, {
         filter: '.trainingstart',
         group: {
-            name: 'module_list_training',
+            name: GROUP_MODULELIST,
             put: true
         },
         fallbackOnBody: true,
         swapThreshold: 0.2,
         animation: ANIMATION_SPEED,
+        multiDrag: true,
+        avoidImplicitDeselect: true,
         onAdd: runDynamicCalculationsOnAdd,
-        onUpdate: runDynamicCalculationsOnUpdate
+        onUpdate: runDynamicCalculationsOnUpdate,
     });
 
     let moduleListSideBar = document.getElementById(ID_MODULE_LIST_SIDE_BAR);
     Sortable.create(moduleListSideBar, {
-        group: ID_MODULE_LIST_SIDE_BAR,
-        animation: ANIMATION_SPEED
+        group: GROUP_MODULELIST,
+        animation: ANIMATION_SPEED,
+        multiDrag: true,
+        avoidImplicitDeselect: true,
+        fallbackTolerance: 3,
+        selectedClass: CLASS_MULTIDRAGSELECTED,
+        onSelect: onModuleSelect,
+        onDeselect: onModuleDeselect,
+        onEnd: onModuleDrag,
     });
 
     let breakListSideBar = document.getElementById('break-list-side-bar');
     Sortable.create(breakListSideBar, {
         group: {
-            name: 'break-list-side-bar',
+            name: GROUP_MODULELIST,
             pull: 'clone'
         },
         sort: false,
@@ -72,6 +83,39 @@ function initiateSortable() {
             onUpdate: calculateTime
         });
         index++;
+    }
+}
+
+/**
+ * Performs actions when a module is selected
+ * @param {Event} evt Selection event
+ */
+function onModuleSelect(evt){
+    let module = evt.item;
+    let checkBox = module.querySelector('.select-check');
+    checkBox.innerHTML = '<i class="far fa-check-circle"></i>';
+    checkBox.dataset.tooltip = 'deselect module';
+}
+
+/**
+ * Performs actions when a module is deselected
+ * @param {Event} evt Selection event
+ */
+function onModuleDeselect(evt){
+    let module = evt.item;
+    let checkBox = module.querySelector('.select-check');
+    checkBox.innerHTML = '<i class="far fa-circle"></i>';
+    checkBox.dataset.tooltip = 'select module';
+}
+
+/**
+ * Performs actions after a module is dragged
+ * @param {Event} evt Dragging event
+ */
+function onModuleDrag(evt){
+    for (let i in evt.items) {
+        Sortable.utils.deselect(evt.items[i]); // this is the ideal solution but doesn't work for now
+        evt.items[i].className = evt.items[i].className.split(' ').filter(clazz => clazz != CLASS_MULTIDRAGSELECTED).join(' ');
     }
 }
 
@@ -190,7 +234,7 @@ function initiateSubmitTimeButton(){
     for(let button of submitTimeButtons){
         button.onclick = submitTime;
         let form = button.parentNode;
-        activateButtonOnEnter(form, `.duration`, `.${CLASS_SUBMITTIME}`);
+        clickButtonOnEnter(form, `.duration`, `.${CLASS_SUBMITTIME}`);
     }
 }
 
@@ -280,6 +324,14 @@ function closeTime(){
  */
 function updateClonedBreaks(evt){
     let timebreak = evt.item;
+    activateTimeBreak(timebreak);
+}
+
+/**
+ * Activates the event listeners on a cloned timebreak/daybreak
+ * @param {Element} timebreak Timebreak element
+ */
+function activateTimeBreak(timebreak){
     let iconButton = timebreak.querySelector('.fa-edit');
     iconButton.onclick = toggleTimeEditWindow;
     let submitButton = timebreak.querySelector('.submit');
@@ -365,8 +417,8 @@ function initiateAddTimebreak(){
 function addTimebreak(){
     const timeBreak = document.getElementsByClassName(CLASS_TIMEBREAK)[0].cloneNode(true);
     let moduleList = document.getElementById(ID_MODULE_LIST_TRAINING);
+    activateTimeBreak(timeBreak);
     moduleList.appendChild(timeBreak);
-    initiateTrashButton();
     calculateTime();
     calculateSummary();
 }
@@ -397,11 +449,40 @@ function runDynamicCalculationsOnUpdate(evt) {
 }
 
 function runDynamicCalculationsOnAdd(evt) {
-    let mod = evt.item;
-    insertTimeBreaks(mod);
+    let mod;
+    // In case a user selects multiple modules before dragging
+    if (evt.items.length) {
+        for (let i in evt.items) {
+            mod = evt.items[i];
+            insertTimeBreaks(mod);
+            insertIntroductionDuration(mod);
+        }
+    } else {
+        // for cases where only one module is selected
+        mod = evt.item;
+        insertTimeBreaks(mod);
+        insertIntroductionDuration(mod);
+    }
     calculateTime();
+    insertDayBreaks();
     calculateSummary();
     updateAuthorList();
+}
+
+/**
+ * Inserts an introduction break based on the module's duration
+ * @param {Node} mod Module node
+ */
+function insertIntroductionDuration(mod) {
+    if (mod.className.includes(CLASS_MODULE)) {
+        let resourceList = mod.querySelector('.resource-list');
+        let MODULE_TIME_BREAK = document.getElementsByClassName(CLASS_TIMEBREAK)[0].cloneNode(true);
+        MODULE_TIME_BREAK.dataset.duration = mod.dataset.duration > 0 ? mod.dataset.duration : 15;
+        let title = MODULE_TIME_BREAK.querySelector('.break-title');
+        title.innerText = 'Introduction';
+        activateTimeBreak(MODULE_TIME_BREAK);
+        resourceList.prepend(MODULE_TIME_BREAK);
+    }
 }
 
 function calculateTime() {
@@ -421,16 +502,20 @@ function calculateTime() {
     moduleList = moduleList.filter(el => el.nodeName.includes('LI'));
     for (mod of moduleList) {
         if (mod.className.includes(CLASS_MODULE)) {
-            const duration = parseInt(mod.dataset.duration);
+            const duration = 0;
             let moduleStartTime = clockTime;
             clockTime = insertClockTime(clockTime, duration, mod);
             totalTime+=duration;
 
             let resources = document.querySelectorAll(`#${mod.id} li`);
-            let moduleEndTime = null;
+            let moduleEndTime = clockTime;
+            let timeBetweenDayBreaks = 0;
             for(let el of resources){
                 if(el.className.includes(CLASS_DAYBREAK)){
+                    clockTime = addDays(clockTime, 1);
                     clockTime = parseDatefromString(clockTime, el.dataset.start);
+                    timeBetweenDayBreaks += clockTime - moduleEndTime;
+                    days += 1;
                 }
                 const duration = parseInt(el.dataset.duration);
                 clockTime = insertClockTime(clockTime, duration, el);
@@ -439,12 +524,17 @@ function calculateTime() {
             }
 
             let moduleDurationEl = getChildByClassName(mod, CLASS_MODULEDURATION);
-            const durationSplit = getDurationSplit(moduleEndTime - moduleStartTime)
-            if(durationSplit.days != undefined ){
-                moduleDurationEl.innerHTML = `<i class="fas fa-hourglass-half"></i>${durationSplit.days} days ${durationSplit.hours} hours ${durationSplit.minutes} minutes`;
-            } else {
-                moduleDurationEl.innerHTML = `<i class="fas fa-hourglass-half"></i>${durationSplit.hours} hours ${durationSplit.minutes} minutes`;
-            }
+
+            const durationSplit = getDurationSplit(moduleEndTime - moduleStartTime - timeBetweenDayBreaks);
+            let durationHtml = '<i class="fas fa-hourglass-half"></i>';
+            Object.keys(durationSplit).forEach((key, index) => {
+                if (durationSplit[key]) {
+                    durationHtml += index === 0 ? '' : ' ';
+                    durationHtml += `${durationSplit[key]} ${key[0] === 'm' ? 'min' : key[0]}`;
+                }
+            });
+            moduleDurationEl.innerHTML = durationHtml;
+
 
         } else if (mod.className.includes(CLASS_TIMEBREAK)) {
             const duration = parseInt(mod.dataset.duration);
@@ -583,10 +673,6 @@ function calculateSummary() {
         }
     }
     updateResourceCostList(materialCost);
-    document.querySelector('#training-space').innerText = space + 'm2';
-    document.querySelector('#internet-needed').innerText = internet;
-    document.querySelector('#power-needed').innerText = power;
-    document.querySelector('#number-of-resources').innerText = resourceList.length;
 }
 
 function alreadyInCostList(l, name){
@@ -680,9 +766,94 @@ function insertTimeBreaks(mod) {
 
 function addTimeBreakAfter(resource) {
     const MODULE_TIME_BREAK = document.getElementsByClassName(CLASS_TIMEBREAK)[0].cloneNode(true);
+    activateTimeBreak(MODULE_TIME_BREAK);
     resource.parentNode.insertBefore(MODULE_TIME_BREAK, resource.nextSibling);
-    initiateTrashButton();
-    initiateTimeEdit();
+}
+
+/**
+ * Day Breaks
+ */
+
+const FINAL_HOUR = 17;
+
+/**
+ * Inserts a daybreak after 5pm and the end of the last resource
+ */
+function insertDayBreaks() {
+    let modules = document.getElementById(ID_MODULE_LIST_TRAINING).querySelectorAll(`.${CLASS_MODULE}`);
+    for (let module of modules) {
+        const isLastModule = modules[modules.length - 1] === module;
+        const nextModule = module.nextSibling;
+        let resources = module.querySelectorAll(`.${CLASS_RESOURCE}`);
+        for (let resource of resources) {
+            const clockTimeString = resource.querySelector('.clock-time').innerText;
+            let { start, end } = convertStringTimeToDate(clockTimeString);
+            const isLastResource = resources[resources.length - 1] === resource;
+            let hasBreakAfter = false;
+            let searchBreak = true;
+            let currentElement = resource;
+            while (searchBreak) { // we do it this way of some strange html (nodeName: '#text') siblings appear on the rendered side inbetween the list elems
+                currentElement = currentElement.nextSibling;
+                if (currentElement != null && currentElement.nodeName === 'LI' && currentElement.className.includes(CLASS_DAYBREAK)) {
+                    hasBreakAfter = true;
+                    searchBreak = false;
+                }
+                if (currentElement != null && currentElement.nodeName === 'LI' && currentElement.className.includes(CLASS_TIMEBREAK)) {
+                    currentElement.remove();
+                    searchBreak = false;
+                }
+                if (currentElement === null) {
+                    searchBreak = false;
+                }
+            }
+
+            if (nextModule != null && nextModule.nodeName === 'LI' && nextModule.className.includes(CLASS_DAYBREAK)) {
+                hasBreakAfter = true;
+            }
+    
+            if (end.getHours() >= FINAL_HOUR && !isLastResource && !isLastModule && !hasBreakAfter) {
+                addDayBreakAfter(resource);
+            }
+            if (end.getHours() >= FINAL_HOUR && isLastResource && !isLastModule && !hasBreakAfter) {
+                addDayBreakAfter(module);
+            }
+        }
+    }
+}
+
+/**
+ * Inserts a DayBreak after a resource
+ * @param {Node} resource Resource element
+ */
+function addDayBreakAfter(resource) {
+    const MODULE_DAY_BREAK = document.getElementsByClassName(CLASS_DAYBREAK)[0].cloneNode(true);
+    activateTimeBreak(MODULE_DAY_BREAK);
+    resource.parentNode.insertBefore(MODULE_DAY_BREAK, resource.nextSibling);
+    calculateTime();
+}
+
+/**
+ * Converts a string clocktime to start and end JS Dates
+ * @param {String} time clock time of a given module/resource/timebreak/daybreak
+ * @returns {{ start: Date, end: Date }} start and end clocktimes as JS Dates
+ */
+function convertStringTimeToDate(time){
+    let start = new Date(), end = new Date();
+    let [startTime, endTime] = time.split('-').map((t) => t.trim()).map((t) => {
+        if (/p/.test(t)) {
+            let digits = t.replace(/[a-z]+/g, '');
+            let [hours, minutes] = digits.split(':').map((d) => Number(d));
+            hours += 12;
+            return { hours, minutes };
+        } else {
+            let digits = t.replace(/[a-z]+/g, '');
+            let [hours, minutes] = digits.split(':').map((d) => Number(d));
+            return { hours, minutes };
+        }
+    });;
+    start.setHours(startTime.hours, startTime.minutes);
+    end.setHours(endTime.hours, endTime.minutes);
+    return { start, end };
 }
 
 /**
@@ -692,6 +863,7 @@ function addTimeBreakAfter(resource) {
 const CLASS_SELECTED = 'selected';
 const ID_WORDCLOUD = 'wordcloud';
 const ID_SHOW_ALL_CATEGORIES = 'show-all-modules';
+const ID_SHOW_TAGS_BUTTON = 'show-tags-button';
 
 function initiateWordcloudFilter() {
     const wordcloud = document.getElementById(ID_WORDCLOUD).getElementsByTagName('li');
@@ -705,12 +877,6 @@ function updateWordcloudFilter() {
         if (!this.className.includes(CLASS_SELECTED)) {
             this.className = this.className.concat(CLASS_SELECTED);
             showAllModules();
-            return;
-        } else {
-            const thisClasses = this.className.split(' ');
-            const thisClassesWithoutSelected = thisClasses.filter(className => className != CLASS_SELECTED);
-            this.className = thisClassesWithoutSelected.join(' ');
-            hideAllModules();
             return;
         }
     }
@@ -754,7 +920,7 @@ function hideAllModules() {
 function updateSelectableModulesList() {
     const wordcloud = Array.from(document.getElementById(ID_WORDCLOUD).getElementsByTagName('li'));
     const wordcloudSelectedCategories = wordcloud.filter(li => li.className.includes(CLASS_SELECTED));
-    const selectedCategories = wordcloudSelectedCategories.map(li => li.textContent);
+    const selectedCategories = wordcloudSelectedCategories.map(li => li.innerText);
 
     const sideBarModules = Array.from(document.getElementById(ID_MODULE_LIST_SIDE_BAR).getElementsByClassName(CLASS_MODULE));
 
@@ -781,6 +947,65 @@ function updateSelectableModulesList() {
                 mod.style.display = 'none';
             }
         }
+    }
+}
+
+function initiateSearchButton() {
+    let button = document.getElementById('search-bar-button');
+    button.onclick = updateModulesBySearch;
+    let form = document.getElementById('search-bar-form');
+    clickButtonOnEnter(form, '#search-bar-input', '#search-bar-button');
+    let input = document.getElementById('search-bar-input');
+    input.oninput = updateModulesBySearch;
+}
+
+/**
+ * filters modules based on user input
+ * @returns 
+ */
+function updateModulesBySearch(){
+    const searchWord = document.getElementById('search-bar-input').value.toLowerCase().trim();
+    const sideBarModules = Array.from(document.getElementById(ID_MODULE_LIST_SIDE_BAR).getElementsByClassName(CLASS_MODULE));
+    if (searchWord.length > 0) {
+        for (mod of sideBarModules) {
+            const modName = mod.dataset.name.toLowerCase();
+            const modDescription = mod.dataset.description.toLowerCase();
+            if (modName.includes(searchWord) || modDescription.includes(searchWord)) {
+                mod.style.display = '';
+            } else {
+                mod.style.display = 'none';
+            }
+        }
+    } else {
+        showAllModules();
+        let all = document.getElementById('show-all-modules');
+        all.className = all.className.concat(CLASS_SELECTED);
+        return;
+    }
+}
+
+/**
+ * Activates the button for showing/hiding filter tags
+ */
+function initiateShowTagsButton() {
+    let button = document.getElementById(ID_SHOW_TAGS_BUTTON);
+    button.onclick = toggleShowTags;
+}
+
+/**
+ * Shows/hides filter tags
+ */
+function toggleShowTags () {
+    let tags = document.getElementById(ID_WORDCLOUD);
+    let button = document.getElementById(ID_SHOW_TAGS_BUTTON);
+    if (tags.style.display == 'block') {
+        tags.style.display = 'none';
+        button.innerHTML = `<i class="fas fa-angle-down"></i>`;
+        button.dataset.tooltip = 'show tags';
+    } else {
+        tags.style.display = 'block';
+        button.innerHTML = `<i class="fas fa-angle-up"></i>`;
+        button.dataset.tooltip = 'hide tags';
     }
 }
 
@@ -904,7 +1129,7 @@ function initiateAuthorListToggleButton(){
  */
 function expandAuthorList(){
     let referenceListEl = document.getElementById('reference-list');
-    referenceListEl.style.transform = 'scale(1, 1)';
+    referenceListEl.style.display = 'block';
     this.innerHTML = '<i class="fas fa-angle-up"></i>';
     this.onclick = contractAuthorList;
 }
@@ -914,7 +1139,7 @@ function expandAuthorList(){
  */
 function contractAuthorList(){
     let referenceListEl = document.getElementById('reference-list');
-    referenceListEl.style.transform = 'scale(0, 0)';
+    referenceListEl.style.display = 'none';
     this.innerHTML = '<i class="fas fa-angle-down"></i>';
     this.onclick = expandAuthorList;
 }
@@ -995,7 +1220,7 @@ function clearNote(){
  * @param {String} inputSelector query selector for the input
  * @param {String} buttonSelector query selector for the button
  */
-function activateButtonOnEnter(form, inputSelector, buttonSelector){
+function clickButtonOnEnter(form, inputSelector, buttonSelector){
     let input = form.querySelector(inputSelector);
     input.addEventListener("keypress", function(event) {
         // If the user presses the "Enter" key on the keyboard
@@ -1023,4 +1248,6 @@ window.onload = function () {
     calculateSummary();
     initiateAuthorListToggleButton();
     initiateEditNotes();
+    initiateSearchButton();
+    initiateShowTagsButton();
 }
