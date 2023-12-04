@@ -186,6 +186,7 @@ function onClickDeleteOrMoveListElement() {
         currentElement = currentElement.parentNode;
     }
     if (currentElement.className.includes(CLASS_MODULE)) {
+        deleteIntroductionDuration(currentElement);
         let moduleListSideBar = document.getElementById(ID_MODULE_LIST_SIDE_BAR);
         moduleListSideBar.appendChild(currentElement);
         calculateTime();
@@ -469,6 +470,8 @@ function runDynamicCalculationsOnAdd(evt) {
     updateAuthorList();
 }
 
+const INTRODUCTION_TEXT = 'Introduction';
+
 /**
  * Inserts an introduction break based on the module's duration
  * @param {Node} mod Module node
@@ -479,9 +482,23 @@ function insertIntroductionDuration(mod) {
         let MODULE_TIME_BREAK = document.getElementsByClassName(CLASS_TIMEBREAK)[0].cloneNode(true);
         MODULE_TIME_BREAK.dataset.duration = mod.dataset.duration > 0 ? mod.dataset.duration : 15;
         let title = MODULE_TIME_BREAK.querySelector('.break-title');
-        title.innerText = 'Introduction';
+        title.innerText = INTRODUCTION_TEXT;
         activateTimeBreak(MODULE_TIME_BREAK);
         resourceList.prepend(MODULE_TIME_BREAK);
+    }
+}
+
+/**
+ * Deletes the introduction duration of a module
+ * @param {Element} mod module element
+ */
+function deleteIntroductionDuration(mod){
+    let MODULE_DURATION = mod.querySelector('.resource-list').firstChild;
+    if (MODULE_DURATION.className.includes(CLASS_TIMEBREAK)) {
+        let title = MODULE_DURATION.querySelector('.break-title');
+        if (title.innerText === INTRODUCTION_TEXT) {
+            MODULE_DURATION.remove();
+        }
     }
 }
 
