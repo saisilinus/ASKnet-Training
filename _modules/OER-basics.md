@@ -10,7 +10,7 @@ module:
     max-participants: 20
     min-trainers: 1
     difficulty: 1   #1-3, 1 is easyest
-    license: '[CC-BY 4.0 International](https://choosealicense.com/licenses/cc-by-4.0/)'
-    res:        #IDs of the resources. e.g. ['askotec'], or if more: ['askotec', 'ohg']
+    license: '[CC-BY-SA 4.0](https://choosealicense.com/licenses/cc-by-4.0/)'
+    res: ['']       #IDs of the resources. e.g. ['askotec'], or if more: ['askotec', 'ohg']
     # marker
 ---  
