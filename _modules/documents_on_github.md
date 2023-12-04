@@ -3,7 +3,7 @@ module:
     name: 'Creating Documents on GitHub'
     id: 'documents_on_github'
     url: 'https://github.com/ASKnetCommunity/OER_documents_template'
-    tag: 'Web&Software,Open_Source&Knowledge'
+    tag: 'Web&Software,OpenSource&Knowledge'
     description: "This module is about creating documents in the environment of GitHub. It explains especially how to upload and link images into your document. Use the linked template repository for creating your own documents and repositories."
     pic-url: GitHub-logo.png
     duration: 0
