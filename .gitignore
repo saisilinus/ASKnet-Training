@@ -30,3 +30,7 @@ vendor/
 
 # Local editors
 .vscode
+
+# NodeJS
+node_modules
+package-lock.json
