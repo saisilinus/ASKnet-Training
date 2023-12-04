@@ -828,7 +828,7 @@ function insertDayBreaks() {
                 hasBreakAfter = true;
             }
     
-            if (end.getHours() >= FINAL_HOUR && !isLastResource && !isLastModule && !hasBreakAfter) {
+            if (end.getHours() >= FINAL_HOUR && !isLastResource && !hasBreakAfter) {
                 addDayBreakAfter(resource);
             }
             if (end.getHours() >= FINAL_HOUR && isLastResource && !isLastModule && !hasBreakAfter) {
