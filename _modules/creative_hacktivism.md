@@ -1,7 +1,7 @@
 ---
 module:
     name: 'Creative Hacktivism'
-    id: 'creative_hacktivism.md'
+    id: 'creative_hacktivism'
     url: 'https://github.com/ASKnetCommunity/Creative_Hacktivism/blob/main/README.md#creative-hacktivism'
     tag: 'Media&Art Web&Software'
     description: "The Disruption Network Lab is presenting a two-day remote learning program on Creative Hacktivism."

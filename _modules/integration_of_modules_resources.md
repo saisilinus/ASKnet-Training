@@ -6,7 +6,7 @@ module:
     tag: 'Web&Software'
     description: "This module guides users through the process of integrating modules and resources on #ASKtraining, providing step-by-step instructions on how to seamlessly incorporate content into the platform."
     pic-url: asktraining_integration.png
-    duration: 0 #put to 0, introduction time in minutes no function currently, the resources have their own time blocks
+    duration: 15 
     max-participants: 5
     min-trainers: 1
     difficulty: 3   #1-3, 1 is easyest

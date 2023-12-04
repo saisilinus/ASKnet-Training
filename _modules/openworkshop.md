@@ -6,7 +6,7 @@ module:
     tag: 'Hardware&Repair'     #list, just separated by blank space, e.g. 'Web Open_Source'
     description: "Gain skills in setting up a first simple workspace with tools and materials, learn to organise your workshop, introduction into #OpenTech and more to get started"
     pic-url: workshop.jpg
-    duration: 0 #put to 0, introduction time in minutes no function currently, the resources have their own time blocks
+    duration: 15
     max-participants: 10
     min-trainers: 1
     difficulty: 2   #1-3, 1 is easyest
