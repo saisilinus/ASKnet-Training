@@ -3,7 +3,7 @@ module:
     name: 'DIY water filter'
     id: 'DIY_water_filter'
     url: 'https://wikifab.org/wiki/DIY_Water_Filter' 
-    tag: 'Open_Source&Knowledge,Sustainability,Hardware&Repair'
+    tag: 'OpenSource&Knowledge,Sustainability,Hardware&Repair'
     description: "Drinking water is a valuable resource! This module tells about the dangers of drinking polluted water and shows how to set up a lowcost DIY water filter."
     pic-url: diy_water_filter.png
     duration: 0 # 0    #introduction time in minutes, the resources have their own time blocks
