@@ -1,0 +1,91 @@
+---
+layout: default
+---
+<section class="section bg-beige pb-4">
+  <div class="container">
+    <div class="row pl-3">
+      <h1 class="mb-4">{{ page.module.name | escape }}</h1>
+    </div>
+    <div class="row">
+      <div class="col-lg-5 col-sm-12">
+        {% if page.gallery %}
+        <div class="profile-gallery-slider">
+            {% for gallery in page.gallery %}
+              <img src="{{ site.baseurl }}/{{ gallery.url }}" alt="" />
+            {% endfor %}
+        </div>
+        
+        {% else %}
+        <img src="{{ base.url }}/assets/img/modules/{{page.module.pic-url }}" class="img-fluid img-portrait mr-lg-5 mb-4" alt="{{page.module.name}}">
+        {% endif %}
+      </div>
+      <div class="col-lg-7 col-sm-12">
+        {% if page.country %} 
+        <h4>Country:</h4>
+        <p>{{ page.country }}</p>
+        {% endif %}
+        {% if page.region %} 
+        <h4>Region:</h4>
+        <p>{{ page.region }}</p>
+        {% endif %}
+        {% if page.hub %} 
+        <h4>Hub:</h4>
+        <p><a href="https://asknet.community/#hubs" target="_blank">{{ page.hub }}</a></p>
+        {% endif %}
+        {% if page.languages %} 
+        <h4>Language(s):</h4>
+        <p>{{ page.languages }}</p>
+        {% endif %}
+        {% if page.skills %}              
+        <div class="panel-group mb-4" style="clear:both; margin-top:20px;" id="accordion" role="tablist" aria-multiselectable="true">
+          <h4>Skills:</h4>
+          {% for skill in page.skills %}
+          <div class="panel panel-default rounded">
+            <div class="panel-heading" role="tab" id="heading{{ skill.number }}">
+                <h4 class="panel-title">
+                    <a class="collapsed rounded" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ skill.number }}" aria-expanded="false" aria-controls="collapse{{ skill.number }}">
+                      {{ skill.name }}
+                        <span> </span>
+                    </a>
+                </h4>
+            </div>
+            <div id="collapse{{ skill.number }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                <div class="panel-body">
+                    <p>{{ skill.qualification | markdownify }}</p>
+                </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+        <h4>Contact:</h4>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section pt-4">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 mt-4">
+        <div class="content fs-3">
+          {{ content }}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- other profiles -->
+<section class="section bg-beige">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center">
+        <h2 class="section-title">Other Modules</h2>
+      </div>
+      {% for module in site.modules offset:0 limit:3 %}
+      {% include module.html %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+<!-- /other profiles -->

@@ -1,9 +1,8 @@
 main.progressbar-button
     position: relative
     height: 120px
-    margin-top: 100px
+    margin-top: 80px
     .button
-        background: #2B2D2F
         height: 80px
         width: 100%
         text-align: center
@@ -15,12 +14,9 @@ main.progressbar-button
         margin: 0 auto
         cursor: pointer
         border-radius: 100px
-        color:#fff
-    .button:hover
-        background: #DFAF5F
     .text
         font-family: "Poppins", sans-serif
-        color: #fff
+        color: $white
         position: absolute
         top: 50%
         transform: translateY(-52%)
@@ -36,7 +32,7 @@ main.progressbar-button
         left: 50%
         border-radius: 200px
         transform: translateY(-50%) translateX(-50%)
-        background: #DFAF5F
+        background: $secondary-color
     svg
         width: 30px
         position: absolute
@@ -46,7 +42,7 @@ main.progressbar-button
         right: 0
     .check
         fill: none
-        stroke: #FFFFFF
+        stroke: $white
         stroke-width: 3
         stroke-linecap: round
         stroke-linejoin: round

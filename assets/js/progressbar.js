@@ -41,7 +41,7 @@ height: 80,
 delay: 500,
 duration: 750,
 borderRadius: 80,
-backgroundColor: "#DFAF5F"
+backgroundColor: "#7B8C37"
 })
 .add({
 targets: pathEl,
