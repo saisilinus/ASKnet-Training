@@ -1,0 +1,56 @@
+@import 'variables'
+@import 'progressbar'
+@import 'buttons'
+@import 'tooltip'
+@import 'bootstrap-5.3.2.min.css'
+
+body
+    font-family: $primary-font
+    background-color: $primary-color
+
+a
+    text-decoration: none
+    color: $primary-color
+a:hover,
+a:focus,
+a:active
+    color: $secondary-color
+
+.container
+    .title
+        font-family: "Josefin Sans"
+        font-size: 4em
+        font-weight: bold
+    .introduction
+        font-size: 130%
+        margin-top: 125px
+    .counter
+        background-color: $beige
+        width: 250px
+        .title
+            font-size: 120%
+        .icon
+            margin-top: -5px
+        .integer
+            font-size:250%
+            font-weight: bold
+            line-height: 100%
+    .module-item
+        color: #000
+        position: relative
+        .card-title
+            font-size: 120%
+        .resources
+            border: 1px $primary-color solid
+            position: relative
+            margin-bottom: 10px
+            h4
+                background: $primary-color
+                color: $text-color-light
+                display: inline-block
+                margin: -1px 0 2px -1px
+                padding: 3px 10px
+                font-size: 100%
+
+#filters
+    margin-top:-38px

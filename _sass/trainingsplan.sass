@@ -1,0 +1,725 @@
+$color-body-background: #e2e2e2
+$color-body-sidebar: rgba(255,255,255,0.7)
+$color-general-borders: #DFAF5F
+$color-element-background: rgba(223, 175, 95, 0.7)
+$color-element-background-inactive: rgba(223, 175, 95, 0.3)
+$color-element-font: #212121
+$color-element-font-invert: #fff
+
+$breakpoint-tablet: 768px
+$breakpoint-smartphone: 600px
+
+body
+    font-family: Noto Sans JP
+    font-weight: 100
+    font-size: 1em
+    margin: 0
+    background: $color-body-background
+
+a:link,
+a:visited
+    text-decoration: none
+
+p
+    line-height: 1.3em
+    margin: 0 0 7px 0
+
+ul
+    list-style: none
+    margin: 0
+    padding: 0
+
+.clearer
+    clear: both
+    height: 0
+    width: 0
+    line-height: 0
+
+.float-left
+    float: left
+
+.float-right
+    float: right
+
+body.index
+    #content
+        padding-left: 20px
+        text-align: center
+        .title
+            margin-top:150px
+            font-family: 'Josefin Sans'
+            font-size: 6em
+            font-weight: bold
+        .introduction
+            font-size: 1.9em
+        .button
+            margin: 60px auto
+            font-size: 1.9em
+            width: auto
+
+#content
+    position: relative
+    max-width: 900px
+    margin: 0 auto
+    padding: 0 20px 0 370px
+    z-index: 1
+    .logo
+        float: right
+        width: 240px
+        text-align: center
+    .edit
+        display: inline-block
+        background: $color-element-background-inactive
+        color: $color-element-font
+        font-size: 0.5em
+        padding: 5px
+        border-radius: 5px
+        margin: 0 0 15px 0
+    .edit:hover
+        background: $color-element-background
+    #training-plan
+        position: relative
+        background: $color-body-sidebar
+        padding: 20px
+        border: 10px $color-general-borders solid
+        border-raodius: 10px
+        margin-top: 80px
+        .training-plan-icon
+            position: absolute
+            top: -129px
+            right: -80px
+            font-size: 10em
+            color: $color-general-borders
+        #training-description
+            margin-bottom: 30px
+            width: 60%
+            min-height: 50px
+        .training-list
+            min-height:200px
+    #edit-title-and-description,
+    #lightbox-solar-charger
+        position: fixed
+        top: 0
+        left: 0
+        width: 100vw
+        height: 100vh
+        background: rgba(0,0,0,0.5)
+        display: flex
+        align-items: center
+        justify-content: center
+        z-index: 3
+        transform: scale(0,0)
+        transform-origin: top right
+        transition: transform ease-in-out 100ms
+    #edit-title-and-description:target,
+    #lightbox-solar-charger:target
+        transform: scale(1,1)
+    .edit-title-and-description-body,
+    .lightbox-body
+        width: 75%
+        max-width: 400px
+        background: white
+        position: relative
+        .edit-title-and-description-header
+            background-color: rgb(246 248 250)
+            border: 1px solid rgb(225 228 232)
+            text-align: right
+            padding: 10px
+            p
+                float: left
+                font-weight: 600
+                font-size: 0.8em
+                margin-top: 4px
+            .close
+                text-decoration: none
+                display: inline
+            .close::after
+                clear: both
+        .edit-title-and-description-content
+            padding: 20px 20px 20px 20px
+            display: flow-root
+            input.title
+                width: 95%
+                font-size: 1.1em
+                border: 1px solid #333
+                border-radius: 3px
+                margin-bottom: 20px
+                padding: 10px
+                background-color: rgb(250 251 252)
+                color: rgb(36 41 46)
+            textarea
+                width: 95%
+                font-family: Noto Sans JP
+                border: 1px solid #333
+                padding: 10px
+                border-radius: 3px
+                min-height: 250px
+            input#submit-title
+                position: relative
+                display: inline-block
+                padding: 5px 16px
+                margin-top: 10px
+                font-size: 14px
+                font-weight: 500
+                line-height: 20px
+                white-space: nowrap
+                vertical-align: middle
+                cursor: pointer
+                user-select: none
+                appearance: none
+                background: $color-element-background
+                box-shadow: inset 0 1px 0 $color-element-background
+                border: 1px solid
+                border-radius: 6px
+                border-color: rgba(27,31,35,0.15)
+                color: rgb(255 255 255)
+                float: right
+            input#submit-title::after
+                clear: both
+    .resources
+        .sidebar
+            display: none
+    .actions
+        display: block
+        .button
+            float: right
+            display: block
+            padding: 10px 50px
+            margin: 40px 0 40px 15px
+            font-size: 1.5em
+            cursor: pointer
+            width: auto
+            border: 1px $color-element-font solid
+            font-weight: 400
+            &:hover
+                background: $color-element-background-inactive
+        .print
+            padding: 14px 50px
+
+#sidebar
+    max-width:350px
+    position: fixed
+    top: 0
+    left: 0
+    height: 100%
+    background: $color-body-sidebar
+    z-index: 2
+    box-shadow: 0 0 1em 0.5em $color-body-sidebar
+    border-right: 1px $color-general-borders solid
+    display: flex
+    flex-direction: column
+    .header
+        background: #999999
+        border-bottom: 1px #000 solid
+        text-align: right
+        padding: 10px
+        display: none
+    #module-list-side-bar
+        overflow: auto
+        flex-grow: 1
+    .resource-list
+        display: none
+    .time
+        display: none
+    .module
+        margin: 15px 0
+        .content
+            width: 90%
+            float: none
+            display: block
+            border: 1px $color-general-borders solid
+            border-radius: 5px
+            padding-left: 10px
+            padding-right: 10px
+            margin: 0 auto
+            transition: 0.2s ease
+            .intro
+                display: none
+            h4
+                display: none
+            .options
+                a.trash
+                    display: none
+                .button
+                    display: none
+                a.select-check
+                    display: inline
+        .content:hover
+            -webkit-transform: scale(1.04)
+            -ms-transform: scale(1.04)
+            transform: scale(1.04)
+            transition: 0.2s ease
+            position: relative
+            .overlay
+                position: absolute
+                top: 0
+                left: 0
+                width: 100%
+                height: 100%
+                display: block
+                background: $color-element-background
+                text-align: center
+                display: flex
+                justify-content: center
+                align-items: center
+                i
+                    color: $color-element-font
+                    font-size: 3em
+    .breaks
+        text-align: center
+        background-color: #fff
+        width: 100%
+        .timebreak,
+        .daybreak
+            background: #fff
+            display: block
+            padding: 10px 0
+            margin: 0
+            cursor: pointer
+            .options
+                display: none
+        .timebreak
+            border-top: 1px $color-general-borders solid
+            border-bottom: none
+            border-right: none
+        .daybreak
+            border-top: 1px $color-general-borders solid
+            border-bottom: none
+    .footer
+        border-top: 1px $color-general-borders solid
+        background-color: #fff
+        width: 100%
+
+.tags 
+    border-bottom: 1px $color-general-borders solid
+    padding: 0 10px 10px 10px
+    h3
+        i
+            background: $color-element-background
+            padding: 8px
+            margin-right: 10px
+            border-radius: 2px
+            color: $color-element-font-invert
+    ul 
+        li
+            margin-right: 6px
+            margin-bottom: 6px
+            padding: 8px
+            float: left
+            display: block
+            cursor: pointer
+            font-size: 0.8em
+            background: $color-element-background-inactive
+
+        li.selected,
+        li:hover,
+        li:focus,
+        li:active
+            background: $color-element-background
+            color: $color-element-font
+            border-radius: 5px
+
+.thumbnail
+    width: 75px
+    height: 75px
+    background: $color-element-background
+    display: block
+    float: left
+    margin-right: 10px
+    object-fit: cover
+
+.button
+    display: block
+    width: 150px
+    text-align: center
+    background: $color-element-background
+    color: $color-element-font
+
+.btn-inactive
+    background: #bababa
+    color: #575757
+
+a.help
+    padding: 5px 17px
+    border-radius: 100%
+    background: $color-element-background
+    color: $color-element-font
+    font-size: 1.3em
+    cursor: pointer
+    font-weight: bold
+    float: left
+    margin: 10px 20px 0 0
+
+.time
+    width: 150px
+    position: relative
+    float: left
+    font-size: 0.8em
+    padding: 3px 0
+    i
+        font-size: 1.4em
+    span
+        margin-top: -2px
+        font-weight: bold
+    .edit-time
+        position: absolute
+        top: 25px
+        left: 20px
+        display: none
+        width: 241px
+        border-radius: 6px
+        background-color: rgba(223, 175, 95, 0.9)
+        border: 1px $color-general-borders solid
+        box-shadow: 0px 0px 24px $color-element-background
+        z-index: 10000
+        padding: 10px 18px
+        color: #000
+        font-size: 1.4em
+        &:before
+            content: ''
+            position: absolute
+            left: 50%
+            bottom: calc(100% + 5px)
+            border-style: solid
+            border-width: 5px 5px 0px 5px
+            border-color: rgba(223, 175, 95, 0.9) transparent transparent transparent
+            transition-duration: 0s
+            transform-origin: top
+            transform: translateX(-50%) scaleY(0)
+            pointer-events: none
+            transition: 0.2s
+            will-change: transform
+        span,
+        label
+            float: left
+            margin: 6px
+            font-weight: normal
+        input,
+        select
+            display: inline
+            padding: 5px 5px 4px 5px
+            text-align: center
+            font-size: 1em
+            float: left
+            border: 0
+            margin-top: 6px
+            background: #fff
+        select
+            margin-left: 10px
+            padding: 4px 5px
+        input.hours,
+        input.minutes
+            width: 40px
+        input.duration
+            width: 60px
+        input.title
+            width: 100%
+            padding: 10px 0
+        input.submit
+            width: 100%
+            font-size: 1em
+            margin:3px 0 0 0
+            border: 1px $color-element-background solid
+            background: $color-element-font
+            color: #fff
+            cursor: pointer
+            display: block
+            padding: 10px 0
+            margin: 20px 0 10px 0
+        input.close
+            border: none
+            position: absolute
+            top: -20px
+            right: -14px
+            padding: 3px 9px
+            border-radius: 100%
+            background: $color-general-borders
+            cursor: pointer
+.options
+    position: absolute
+    top: 0px
+    right: 0px
+    font-size: 1.2em
+    a
+        color: $color-element-background
+        margin-left: 5px
+
+.module 
+    clear: both
+    margin: 20px 0
+    cursor: pointer
+    h2
+        font-size: 1.1em
+        margin: 6px 0
+        padding-right: 65px
+    h4
+        margin: 20px 0 0 160px
+    .time
+        padding-top: 39px
+    .content
+        position: relative
+        width: calc(100% - 172px)
+        float: right
+        display: block
+        border: 1px $color-general-borders solid
+        padding: 0 0 10px 10px
+        .options
+            top: 3px
+            right: 10px
+            text-align: right
+            a.add-module
+                display: none
+                color: #fff
+                font-size: 0.8em
+            .button
+                padding: 3px 0
+                width: 80px
+                font-size: 0.7em
+                margin: 0
+                color: $color-element-font
+            a.select-check
+                display: none
+        .intro
+            margin-bottom: 15px
+        .module-meta
+            i 
+                width: 25px
+            .duration,
+            .material-costs
+                i
+                    padding-left: 5px
+                    width: 20px
+        .overlay
+            display: none
+
+.resource-list
+    clear: both
+    margin-left: -160px
+    .resource
+        clear: both
+        padding: 8px 0
+        display: block
+    .time
+        padding-top: 3px
+        .edit-time
+            top: -19px
+    .content
+        border: 0
+        padding: 0 0 0 10px
+        .button
+            float: right
+            padding: 3px 0
+            width: 80px
+            font-size: 0.8em
+            margin: 0
+    .timebreak
+        .options
+            top: -3px
+            right: -3px
+.timebreak,
+.daybreak,
+.trainingstart
+    background: #fff
+    position: relative
+    display: block
+    padding: 12px 0 10px 0
+    margin: 10px -1px 10px 0
+    p
+        text-align: center
+        font-weight: bold
+    .options
+        top: 8px
+        right: 20px
+    .time
+        .edit-time
+            width: 287px
+            top: -11px
+.timebreak
+    border-top: 1px $color-general-borders dotted
+    border-bottom: 1px $color-general-borders dotted
+    border-right: 1px #fff solid
+.daybreak,
+.trainingstart
+    border-top: 3px $color-general-borders solid
+    border-bottom: 3px $color-general-borders solid
+
+.add-modules-breaks
+    display: block
+    clear: both
+    width: 100%
+    padding: 0 0
+    margin: 10px 0 20px 0
+    text-align: center
+    a.button
+        display: none
+
+.summary
+    background: $color-element-background
+    color: $color-element-font
+    padding: 20px
+    margin: 50px 0
+    h2
+        text-align: center
+        margin-top: 0
+    ul
+        font-size: 2em
+        padding: 10px 0
+        li
+            float: left
+            text-align: center
+            width: 25%
+            margin-bottom: 20px
+            display: block
+            .label
+                font-size: 0.5em
+                display: block
+            i
+                display: block
+        li.time-icon
+            padding-top: 17px
+            font-size: 1.3em
+    .duration
+        padding-bottom: 0
+        li
+            margin-bottom: 0
+    p
+        font-size: 1em
+        text-align: center
+        margin: 0
+    .separator
+            clear: both
+            border-bottom: 1px #fff solid
+            margin: 10px 0 30px 0
+.resource-overview
+    table
+        width: 100%
+        th
+            text-align: left
+        .quantity
+            width: 10%
+            input
+                width: 70%
+                padding: 3px 0
+                text-align: center
+        .resource-name
+            width: 70%
+        .material-costs
+            width: 20%
+            text-align: right
+        .result
+            text-align: right
+            font-weight: bold
+
+.attachments
+    position: relative
+    .overlay
+        position: absolute
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+        background: $color-element-background
+        opacity: 0
+        text-align: center
+        display: flex
+        justify-content: center
+        align-items: center
+        cursor: pointer
+        font-size: 1.9em
+    &:hover
+        .overlay
+            opacity: 1
+
+
+@media only screen and (max-width: 900px)
+    #sidebar
+        position: absolute
+        max-width: 100%
+        appearance: none
+        left: 0
+        top: -100%
+        height: 100%
+        display: block
+        transition: all 500ms ease
+        border-right: none
+        .header
+            display: block
+        .breaks,
+        .footer
+            display: none
+    .module
+        .content
+            .options
+                a.add-module
+                    display: inline
+    .open-sidebar 
+        #sidebar
+            top: 0
+            left: 0
+            transition: all 500ms ease
+        #content
+            display: none
+            transition: all 500ms ease
+
+    #content
+        padding: 0 10px
+        transition: all 500ms ease
+    .add-modules-breaks
+        p
+            display: none
+        a.button
+            display: inline
+@media only screen and (max-width: 600px)
+    .summary 
+        ul
+            li
+                width: 50%
+
+.multidrag-selected
+    .module-content
+        background: $color-element-background-inactive
+
+#search-bar
+    margin-bottom: 0.5rem
+    margin-right: 1rem
+    h4
+        margin-block-start: 0.5rem
+        margin-block-end: 0.5rem
+    form
+        .input-container
+            display: flex
+            align-items: center
+            gap: 10px
+            width: 100%
+            background: $color-element-background
+            border-radius: 5px
+            padding-right: 10px
+            input
+                width: 100%
+                height: 1.5rem
+                border: 1px $color-general-borders solid
+                border-radius: 5px 0 0 5px
+            a
+                cursor: pointer
+
+#show-tags-button
+    float: right
+    cursor: pointer
+    font-weight: 100
+
+#reference-list
+    display: none
+    ul
+        list-style-position: inside
+        margin-left: 30px
+
+.flex-start-center
+    display: flex
+    justify-content: start
+    align-items: center
+    gap: 5px
+
+.reset-notes
+    i
+        font-size: 0.6rem
+

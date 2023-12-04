@@ -1,86 +1,234 @@
 ---
-layout: index
+layout: default
 title: 'Start training plan'
 permalink: /
 ---
-<div id="content">
-    <div class="title">Create your own training</div>
-    <p class="introduction">Here you can easily create your own training plan for your workshop.</p>
-    <p class="introduction">Choose a training module you want to use in the workshop and set the order. The training configurator automatically calculates the times at which each module or its associated resources will start. You can also customize the times for your sessions. At the end, you can print your training plan. Good luck for your training.</p>
-    <main>
-        
-        <div class="button" name="submit_button" onclick="redirectCustom();"><span class="text">Start training plan</span></div>
-        
+
+<section class="section container">
+  <div class="row row-cols-2 row-cols-sm-1">
+    <div class="col-lg-9 col-sm-12 mt-4">
+      <h2 class="title pt-3">#ASKtraining</h2>
+      <h3>Create your custom training plan effortlessly.</h3>
+      <p class="introduction">Browse modules, assemble your training sequence, and easily adjust settings.<br />Print your plan. Ready for a successful training!</p>
+      <div class="row row-cols-2 row-cols-sm-1">
+        <div class="col-lg-5 col-sm-12 p-2 m-3 rounded counter">
+            <div class="row">
+              <div class="col-6">
+                <span class="title"><strong>Modules</strong></span>
+              </div>
+              <div class="col-6 icon text-end">
+                <span><i class="fas fa-cubes"></i></span>
+              </div>
+            </div>
+            <span class="integer">{{ site.modules | size }}</span>
+          </div>
+        <div class="col-lg-5 col-sm-12 p-2 m-3 rounded counter">
+          <div class="row">
+            <div class="col-6">
+              <span class="title"><strong>Resources</strong></span>
+            </div>
+            <div class="col-6 icon text-end">
+              <span><i class="fas fa-cube"></i>
+            </div>
+          </div>
+          <span class="integer">{{ site.resources | size }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-sm-12 mt-5">
+      <div class="text-center px-5 pb-5"><a class="brand" href="{{ site.baseurl }}/"><img src="{{ base.url }}/assets/img/asknet-logo_transp.png" alt="#ASKnet Logo" width="100%"></a></div>
+      <div class="text-center"><img class="" src="{{ base.url }}/assets/img/screenshot.png" width="100%"></div>
+      <main class="progressbar-button">
+        <div class="button btn-secondary" name="submit_button" onclick="redirectCustom();"><span class="text">Start training planner</span></div>
         <div class="progress-bar"></div>
         <svg x="0px" y="0px" viewBox="0 0 25 30" style="enable-background:new 0 0 25 30;">
             <path class="check" class="st0" d="M2,19.2C5.9,23.6,9.4,28,9.4,28L23,2"/>
         </svg>
-    </main>
-</div>
+      </main>
+    </div>
+  </div>
+</section>
+<section class="section bg-secondary p-2" id="filters">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        {% assign difficulty-array = "" | split: ',' %}
+        {% assign participant-array = "" | split: ',' %}
+        {% assign tag-array = "" | split: ',' %}
+        {% for module in site.modules %}
+          {% unless difficulty-array contains module.module.difficulty %}
+            {% if module.module.difficulty == nil %}
+              {% assign difficulty-array = difficulty-array | push: "Unknown" %}
+            {% else %}
+              {% assign difficulty-array = difficulty-array | push: module.module.difficulty %}
+            {% endif %}
+          {% endunless %}
+          {% unless participant-array contains module.module.max-participants %}
+            {% if module.module.max-participants == nil %}
+              {% assign participant-array = participant-array | push: "Unknown" %}
+            {% else %}
+              {% assign participant-array = participant-array | push: module.module.max-participants %}
+            {% endif %}
+          {% endunless %}
+          {% unless tag-array contains module.module.tag %}
+            {% if module.module.tag == nil %}
+              {% assign tag-array = tag-array | push: "Unknown" %}
+            {% else %}
+              {% assign tag-array = tag-array | push: module.module.tag %}
+            {% endif %}
+          {% endunless %}
+        {% endfor %}
+
+        {% assign difficulty-array = difficulty-array | sort | uniq %}
+        {% comment %} {% if difficulty-array contains "Unknown" %}
+          {% assign difficulty-array = difficulty-array | join: "|" | replace: "|Unknown|","|" | split: "|" | reverse | unshift: "Unknown" | reverse %}
+        {% endif %} {% endcomment %}
+        {% assign participant-array = participant-array | sort | uniq %}
+        {% comment %} {% if participant-array contains "Unknown" %}
+          {% assign participant-array = participant-array | join: "|" | replace: "|Unknown|","|" | split: "|" | reverse | unshift: "Unknown" | reverse %}
+        {% endif %} {% endcomment %}
+        {% assign tag-array = tag-array | sort | uniq %}
+        {% comment %} {% if tag-array contains "Unknown" %}
+          {% assign tag-array = tag-array | join: "|" | replace: "|Unknown|","|" | split: "|" | reverse | unshift: "Unknown" | reverse %}
+        {% endif %} {% endcomment %}
+        <div class="d-flex bd-highlight">
+          <div class="dropdown bd-highlight p-2">
+            <button class="btn btn-sm btn-primary dropdown-toggle" data-flip="false" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Difficulty-Level</button>
+            <div class="dropdown-menu sm mr-2 mb-2 filter-difficulty">
+              <button class="dropdown-item all" type="button" data-difficulty="All">All</button>
+              <div class="dropdown-divider"></div>
+              {% for difficulty in difficulty-array %}
+                {% case difficulty %}
+                  {% when 1 %}
+                      {% assign module_diff_text = 'easy' %}
+                  {% when 2 %}
+                      {% assign module_diff_text = 'medium' %}
+                  {% when 3 %}
+                      {% assign module_diff_text = 'advanced' %}
+                  {% else %}
+                      {% assign module_diff_text = difficulty %}
+                {% endcase %}
+                <button class="dropdown-item" type="button" data-difficulty="{{ difficulty }}">{{ module_diff_text }}</button>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="dropdown p-2">
+            <button class="btn btn-sm btn-primary dropdown-toggle" data-flip="false" type="button" id="dropdownMenu3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Max. Participants</button>
+            <div class="dropdown-menu mr-2 mb-2 filter-participant">
+              <button class="dropdown-item all" type="button" data-participant="All">All</button>
+              <div class="dropdown-divider"></div>
+              {% for participant in participant-array %}
+                <button class="dropdown-item" type="button" data-participant="{{ participant }}">{{ participant }}</button>
+              {% endfor %}
+            </div>
+          </div>
+          <!--
+          <div class="dropdown p-2">
+            <button class="btn btn-sm btn-primary dropdown-toggle" data-flip="false" type="button" id="dropdownMenu3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tags</button>
+            <div class="dropdown-menu mr-2 mb-2 filter-tag">
+              <button class="dropdown-item all" type="button" data-tag="All">All</button>
+              <div class="dropdown-divider"></div>
+              {% for tag in tag-array %}
+                <button class="dropdown-item" type="button" data-tag="{{ tag }}">{{ tag }}</button>
+              {% endfor %}
+            </div>
+          </div>
+          -->
+          <div class="p-2 flex-grow-1">
+            <input type="search" class="form-control col-6 js-shuffle-search" id="filters-search-input" placeholder="search by module title">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section album py-5 bg-light" id="module-list">
+  <div class="container">
+    <div class="row row-cols-3 row-cols-sm-2 g-3 my-shuffle-container">
+      {% for module in site.modules %}
+        {% if module.module.difficulty == nil or module.module.difficulty == "Unknown" %}
+          {% assign difficulty = "Unknown" %}
+        {% else %}
+          {% assign difficulty = module.module.difficulty %}
+        {% endif %}
+        {% if module.module.max-participants == nil or module.module.max-participants == "Unknown" %}
+          {% assign participant = "Unknown" %}
+        {% else %}
+          {% assign participant = module.module.max-participants %}
+        {% endif %}
+        {% if module.module.tag == nil or module.module.tag == "Unknown" %}
+          {% assign tag = "Unknown" %}
+        {% else %}
+          {% assign tag = module.module.tag %}
+        {% endif %}
+              {% case module.module.difficulty %}
+                {% when 1 %}
+                    {% assign module_diff_text2 = 'easy' %}
+                {% when 2 %}
+                    {% assign module_diff_text2 = 'medium' %}
+                {% when 3 %}
+                    {% assign module_diff_text2 = 'advanced' %}
+                {% else %}
+                    {% assign module_diff_text2 = difficulty %}
+              {% endcase %}
+        <div class="module-item col-lg-4 col-md-6 p-2" data-difficulties="[&quot;{{ difficulty }}&quot;]" data-participants="[&quot;{{ participant }}&quot;]">
+          <div class="col-12 card shadow-sm">
+            <div class="module-img">
+              <!--<a href="{{ module.url }}">--><img src="{{ site.baseurl }}/assets/img/modules/{{ module.module.pic-url }}" class="img-fluid d-block mx-auto"><!--</a>-->
+            </div>
+            <div class="card-body module-content">
+              <h3 class="card-title module-item__name"><!--<a class="card-link" href="{{ module.url }}">-->{{ module.module.name }}<!--</a>--></h3>
+              {% if module.module.description %}
+                <p class="card-text">{{ module.module.description | markdownify }}</p>
+              {% endif %}
+              {% if module.module.res %}
+              <div class="resources">
+                <h4>Resources</h4>
+                <ul class="list-group list-group-flush">
+                  {% for actual_res in module.module.res %}
+                    {% for res in site.resources %}
+                        {% if res.resource.id == actual_res %}
+                            <li class="list-group-item"><a href="{{ res.resource.url }}" target="_blank">{{ res.resource.name }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                  {% endfor  %}
+                </ul>
+              </div>
+              {% endif %}
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <div class="filter-participant">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-tooltip="Max. Participants" data-tooltip-location="right" data-participant="{{ participant }}"><i class="fas fa-users-viewfinder"></i> {{ participant }}</button>
+                  </div>
+                  <div class="filter-difficulty">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-tooltip="Difficulty-Level" data-tooltip-location="top" data-difficulty="{{ difficulty }}"><i class="fas fa-tachometer-alt"></i> {{ module_diff_text2 }}</button>
+                  </div>
+                  <button type="button" class="btn btn-sm btn-outline-secondary" data-tooltip="Min. Trainers" data-tooltip-location="top"><i class="fas fa-chalkboard-teacher"></i> {{ module.module.min-trainers }}</button>
+                </div>
+                <small class="text-muted text-end mt-2">{{ module.module.license | markdownify }}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="col-1@sm col-1@xs my-sizer-element"></div>
+  </div>
+</section>
+
+<!-- Progressbar to load traininsplan-->
 <script>
-    function toPage() 
-    {  
-    window.location="training/"; 
-    } 
-    function redirectCustom(){ 
-    //redirect after 5 seconds for i min pass 60000
-    setTimeout('toPage()', 5000);
-    }
+  function toPage() 
+  {  
+  window.location="/training/";
+  } 
+  function redirectCustom(){ 
+  //redirect after 5 seconds for i min pass 60000
+  setTimeout('toPage()', 5000);
+  }
 </script>
-<script>
-    var basicTimeline = anime.timeline({
-  autoplay: false
-});
-
-var pathEls = $(".check");
-for (var i = 0; i < pathEls.length; i++) {
-  var pathEl = pathEls[i];
-  var offset = anime.setDashoffset(pathEl);
-  pathEl.setAttribute("stroke-dashoffset", offset);
-}
-
-basicTimeline
-  .add({
-    targets: ".text",
-    duration: 1,
-    opacity: "0"
-  })
-  .add({
-    targets: ".button",
-    duration: 1300,
-    height: 10,
-    width: 300,
-    border: "0",
-    borderRadius: 100
-  })
-  .add({
-    targets: ".progress-bar",
-    duration: 2000,
-    width: 300,
-    easing: "linear"
-  })
-  .add({
-    targets: ".button",
-    duration: 1,
-    opacity: "0"
-  })
-  .add({
-    targets: ".progress-bar",
-    width: 80,
-    height: 80,
-    delay: 500,
-    duration: 750,
-    borderRadius: 80,
-    backgroundColor: "#DFAF5F"
-  })
-  .add({
-    targets: pathEl,
-    strokeDashoffset: [offset, 0],
-    duration: 200,
-    easing: "easeInOutSine"
-  });
-
-$(".button").click(function() {
-  basicTimeline.play();
-});
-</script>
+<script src="{{ site.baseurl }}/assets/js/progressbar.js"></script>
+<script src="{{ site.baseurl }}/assets/js/counter.js"></script>
+<script src="{{ site.baseurl }}/assets/js/modules.js"></script>

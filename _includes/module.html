@@ -1,0 +1,12 @@
+<div class="col-lg-4 col-sm-6 mb-4">
+    <article class="card shadow">
+      <img class="rounded card-img-top" src="{{ page.module.image | relative_url }}" alt="{{ page.module.name }}">
+      <div class="card-body">
+        <h4 class="card-title">
+          <a class="text-dark" href="{{ module.url | relative_url }}">{{ page.module.name }}</a>
+        </h4>
+        <p class="card-text">{% assign curlyend = '}' %}{{ page.module.description | markdownify | strip_html | replace: "{% include JB/setup %", "" | replace: curlyend, "" | truncatewords: 30 }}</p>
+        <a href="{{ module.url | relative_url }}" class="btn btn-xs btn-primary">Read More</a>
+      </div>
+    </article>
+  </div>

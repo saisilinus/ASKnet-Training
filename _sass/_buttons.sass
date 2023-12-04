@@ -1,0 +1,104 @@
+/* Button style */
+.btn
+  font-size: 22px
+  font-family: $secondary-font
+  text-transform: capitalize
+  padding: 16px 44px
+  border-radius: 5px
+  font-weight: 600
+  border: 0
+  position: relative
+  z-index: 1
+  transition: .2s ease
+  &:focus
+    outline: 0
+    box-shadow: none !important
+  &:active
+    box-shadow: none
+  &-sm
+    font-size: 15px
+    padding: 10px 30px
+  &-xs
+    padding: 5px 10px
+    font-size: 15px
+.active
+  // box-shadow: 0px 0px 12px white inset
+.btn-primary
+  background: $primary-color
+  color: $white
+  &:active
+    background: lighten($color: $primary-color, $amount: 10) !important
+  &:hover
+    background: lighten($color: $primary-color, $amount: 10)
+  &.focus,
+  &.active
+    background: lighten($color: $primary-color, $amount: 10) !important
+    box-shadow: none !important
+.btn-secondary
+  background: $black
+  color: $white
+  &:active
+    background: lighten($color: $secondary-color, $amount: 10) !important
+  &:hover
+    background: lighten($color: $secondary-color, $amount: 10)
+  &.focus,
+  &.active
+    background: lighten($color: $secondary-color, $amount: 10) !important
+    box-shadow: none !important
+.btn-transparent
+  background: transparent
+  color: $primary-color
+  font-weight: bold
+  &:active,
+  &:hover
+    color: $primary-color
+.btn-group .btn
+  margin-right: 3px
+
+//* Bootstrap Dropdowns for filter
+
+.btn-primary.dropdown-toggle,
+.dropdown-item:focus,
+.dropdown-item:hover
+  background: $primary-color //#e8c48a
+  color: $text-color-light
+.dropdown-item.active,
+.dropdown-item:active
+  background: $primary-color
+  color: $text-color-light
+.dropdown-item
+  padding: 4px 10px
+.dropdown-item:before 
+  font-family: "Font Awesome 5 Free"
+  content: "\f0c8"
+  display: inline-block
+  padding-right: 10px
+  vertical-align: middle
+  font-weight: 400
+.dropdown-item.all:before,
+.dropdown-item.all.active:before,
+.dropdown-item.all:active:before
+  content: "\f021"
+  font-weight: 900
+.dropdown-item.active:hover:before 
+  content: "\f14a"
+.dropdown-item.active:before,
+.dropdown-item:active:before,
+.dropdown-item:focus:before,
+.dropdown-item:hover:before
+  color:$white !important
+  content: "\f14a"
+.dropdown-item:focus:before,
+.dropdown-item:hover:before
+  content: "\f0c8"
+.filter-country .dropdown-item:before
+  content: "\f111"
+  font-weight:400
+.filter-country .dropdown-item.active:before
+  content: "\f192"
+  font-weight:400
+.dropdown-item.all:before,
+.dropdown-item.all.active:before,
+.dropdown-item.all:active:before
+  content: "\f021"
+  font-weight: 900

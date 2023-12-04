@@ -1,5 +1,29 @@
-baseurl: ""
+title      : "ASKTraining"
+description: "Create your own trainingsplan"
+author     : '#ASKnet'
+screenshot : 
 
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "" # the base hostname & protocol for your site, e.g. http://example.com
+
+# Build settings
+markdown: kramdown
+permalink: pretty
+plugins:
+  - jekyll-sitemap
+compress_html:
+  clippings: all
+  comments: all
+  startings: [html, head, body]
+
+sass:
+  sass_dir: assets/css
+  style: compressed
+
+include:
+  - _modules
+
+# Collections
 collections:
   modules:
     output: true
@@ -9,3 +33,11 @@ collections:
     output: true
     output_ext: .html
     permalink: /resources/:path/
+
+# Exclude from processing.
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - LICENSE.md
+  - README.md
+  - SECURITY.md

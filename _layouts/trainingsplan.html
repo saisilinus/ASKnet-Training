@@ -3,17 +3,14 @@
   <head>
     <meta charset="utf-8">
     <title>{{ page.title }}</title>
-    <link rel="stylesheet" href="../assets/css/style.min.css">
-    <link rel="stylesheet" type="text/css" media="print" href="../assets/css/print.min.css">
-    <link rel="stylesheet" href="../assets/css/fontawesome.min.css">
-    <link rel="stylesheet" href="../assets/css/regular.min.css">
-    <link rel="stylesheet" href="../assets/css/brands.min.css">
-    <link rel="stylesheet" href="../assets/css/solid.min.css">
-    <link rel="stylesheet" href="../assets/css/josefin-sans.min.css">
-    <link rel="stylesheet" href="../assets/css/v4-shims.min.css">
-    <script src="../assets/js/angular.js"></script>
-    <script src="../assets/js/sortable.js"></script>
-    <script src="../assets/js/index.js"></script>
+    <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/trainingsplan.min.css">
+    <link rel="stylesheet" type="text/css" media="print" href="{{ site.baseurl }}/assets/css/trainingsplan-print.min.css">
+    <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/fontawesome-6.4.2-all.min.css">
+    <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/font-josefin-sans.min.css">
+    <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/font-noto-sans-jp.min.css">
+    <script src="{{ site.baseurl }}/assets/js/angular-1.3.2.min.js"></script>
+    <script src="{{ site.baseurl }}/assets/js/sortable-1.15.0.js"></script>
+    <script src="{{ site.baseurl }}/assets/js/trainingsplan.js"></script>
     <style>
       /* https://codepen.io/reiinii1/pen/aPGXEa */
       [data-tooltip] {
@@ -192,20 +189,6 @@
   align-items: center;
 }
 
-#reference-list {
-  transform: scale(0, 0);
-  transition: transform ease-in-out 100ms;
-}
-
-#reference-list h4 {
-  margin-bottom: 0.5rem;
-}
-
-#reference-list ul {
-  list-style-position: inside;
-  margin-left: 30px;
-}
-
 .author-info {
   margin-bottom: 1rem;
 }
@@ -218,25 +201,8 @@
   font-size: 1.5rem;
 }
 
-#sidebar .breaks {
-  bottom: 50px !important;
-}
-
 .display-print {
   display: none;
-}
-
-@media print {
-    .pagebreak { page-break-before: always; } /* page-break-after works, as well */
-    .dont-print, #reference-button {
-      visibility: hidden;
-    }
-    #reference-list {
-      transform: scale(1, 1) !important;
-    }
-    .display-print {
-      display: inline;
-    }
 }
 
 .edit-trainer-notes-button {
@@ -263,17 +229,6 @@
 
 .edit-trainer-notes-popup:target {
   transform: scale(1, 1);
-}
-
-.flex-start-center {
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  gap: 5px;
-}
-
-.reset-notes i {
-  font-size: 0.6rem;
 }
 
 /* #sidebar .edit-trainer-notes-popup {
