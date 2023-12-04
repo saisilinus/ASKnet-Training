@@ -3,7 +3,7 @@ module:
     name: 'Social Media Code of Conduct'
     id: 'social_media_code_of_conduct' 
     url: 'https://defyhatenow.org/social-media-hate-speech-mitigation-field-guide-v2-cameroon/'
-    tag: 'Community&Moderation, Media&Art'
+    tag: 'Community&Moderation,Media&Art'
     description: "This module is about the code of conduct for the use of social media."
     pic-url: code_of_conduct.png
     duration: 30

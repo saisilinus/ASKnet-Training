@@ -3,7 +3,7 @@ module:
     name: 'Counter hate speech online'
     id: 'hate_speech_online' 
     url: 'https://defyhatenow.org/social-media-hate-speech-mitigation-field-guide-v2-cameroon/'
-    tag: 'Community&Moderation, Media&Art'
+    tag: 'Community&Moderation,Media&Art'
     description: "What is hate speech and what measures are there to counter it?"
     pic-url: hate_speech_online.png
     duration: 0 # 30    #introduction time in minutes, the resources have their own time blocks
