@@ -12,17 +12,22 @@ You can also add helpful attachments to your training plan, such as a timetable,
 
 ## Table of Contents
 
-- [Documentation](#documentation)
-- [Developer](#developer)
-  - [Folder structure](#folder-structure)
-  - [Requirements](#requirements)
-  - [Setting up locally](#setting-up-and-running-locally)
-  - [Styling](#styling)
-    - [Compiling CSS from SASS](#compiling-css-from-sass)
-    - [Other CSS libraries](#other-css-libraries)
-  - [Contributing](#contributing)
-- [Partners and Funder](#partners-and-funder)
-- [License](#license)
+- [#ASKtraining training plan](#asktraining-training-plan)
+  - [--===\<({   Demo   })\>===--](#-----demo-----)
+  - [Table of Contents](#table-of-contents)
+  - [Documentation](#documentation)
+  - [Developer](#developer)
+    - [Folder structure](#folder-structure)
+    - [Editor Settings](#editor-settings)
+    - [Run local](#run-local)
+    - [Requirements](#requirements)
+    - [Setting up and running locally](#setting-up-and-running-locally)
+    - [Styling](#styling)
+      - [Compiling CSS from Sass](#compiling-css-from-sass)
+      - [Other CSS libraries](#other-css-libraries)
+    - [Contributing](#contributing)
+  - [Partners and Funder](#partners-and-funder)
+  - [License Note](#license-note)
 
 ## Documentation
 
@@ -173,7 +178,7 @@ Contributions are more than welcome! Please check out the [contributing guide](C
 |[![r0g Logo](assets/img/r0g_logo.png)](https://openculture.agency/)|[![#ASKnet Logo](assets/img/asknet-logo.png)](https://github.com/ASKnet-Open-Training)|  [![BMZ Logo](assets/img/founder_BMZ.jpg)](https://www.bmz.de/en/) |
 | [Official Website](https://openculture.agency/) | [Official Website](https://github.com/ASKnet-Open-Training) | [Official Website](https://www.bmz.de/en/) |
 
-## License
+## License Note
 
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />All content is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
 
@@ -184,3 +189,10 @@ First prototype developed by [NanoLogika](https://www.nanologika.de)
 
 
 [![nanoLogika Logo](assets/img/partner-nanologika-logo.png)](https://www.nanologika.de)
+
+
+**Software used:**
+- Bootstrap [CSS](assets/css/), [JavaScript](assets/js/)
+- Jekyll Theme and other external resources via [Gemfile](/Gemfile)
+- Fonts: [Font-Awesome](https://fontawesome.com/v4/license/), [Poppins](https://github.com/itfoundry/Poppins), [Noto-Sans](https://www.google.com/get/noto/), [Josfin-Sans](https://www.fontsquirrel.com/license/josefin-sans) 
+- JavaScript Libraries: [MIT Licensed see JS files (header)](assets/js)
