@@ -63,14 +63,18 @@ body.index
     margin: 0 auto
     padding: 0 20px 0 370px
     z-index: 1
+    .logo
+        float: right
+        width: 240px
+        text-align: center
     .edit
-        display: inline
+        display: inline-block
         background: $color-element-background-inactive
         color: $color-element-font
         font-size: 0.5em
         padding: 5px
         border-radius: 5px
-        margin-left: 10px
+        margin: 0 0 15px 0
     .edit:hover
         background: $color-element-background
     #training-plan
@@ -88,6 +92,8 @@ body.index
             color: $color-general-borders
         #training-description
             margin-bottom: 30px
+            width: 60%
+            min-height: 50px
         .training-list
             min-height:200px
     #edit-title-and-description,
@@ -200,6 +206,8 @@ body.index
     z-index: 2
     box-shadow: 0 0 1em 0.5em $color-body-sidebar
     border-right: 1px $color-general-borders solid
+    display: flex
+    flex-direction: column
     .header
         background: #999999
         border-bottom: 1px #000 solid
@@ -208,7 +216,7 @@ body.index
         display: none
     #module-list-side-bar
         overflow: auto
-        height: calc(100% - 166px)
+        flex-grow: 1
     .resource-list
         display: none
     .time
@@ -222,6 +230,7 @@ body.index
             border: 1px $color-general-borders solid
             border-radius: 5px
             padding-left: 10px
+            padding-right: 10px
             margin: 0 auto
             transition: 0.2s ease
             .intro
@@ -233,6 +242,8 @@ body.index
                     display: none
                 .button
                     display: none
+                a.select-check
+                    display: inline
         .content:hover
             -webkit-transform: scale(1.04)
             -ms-transform: scale(1.04)
@@ -256,14 +267,11 @@ body.index
                     font-size: 3em
     .breaks
         text-align: center
-        position: absolute
-        bottom: 75px
         background-color: #fff
         width: 100%
         .timebreak,
         .daybreak
             background: #fff
-            position: relative
             display: block
             padding: 10px 0
             margin: 0
@@ -278,10 +286,6 @@ body.index
             border-top: 1px $color-general-borders solid
             border-bottom: none
     .footer
-        position: absolute
-        bottom: 0
-        left: 0
-        margin-top: -100px
         border-top: 1px $color-general-borders solid
         background-color: #fff
         width: 100%
@@ -447,6 +451,7 @@ a.help
     h2
         font-size: 1.1em
         margin: 6px 0
+        padding-right: 65px
     h4
         margin: 20px 0 0 160px
     .time
@@ -454,7 +459,7 @@ a.help
     .content
         position: relative
         width: calc(100% - 172px)
-        float: left
+        float: right
         display: block
         border: 1px $color-general-borders solid
         padding: 0 0 10px 10px
@@ -472,6 +477,8 @@ a.help
                 font-size: 0.7em
                 margin: 0
                 color: $color-element-font
+            a.select-check
+                display: none
         .intro
             margin-bottom: 15px
         .module-meta
@@ -667,3 +674,52 @@ a.help
         ul
             li
                 width: 50%
+
+.multidrag-selected
+    .module-content
+        background: $color-element-background-inactive
+
+#search-bar
+    margin-bottom: 0.5rem
+    margin-right: 1rem
+    h4
+        margin-block-start: 0.5rem
+        margin-block-end: 0.5rem
+    form
+        .input-container
+            display: flex
+            align-items: center
+            gap: 10px
+            width: 100%
+            background: $color-element-background
+            border-radius: 5px
+            padding-right: 10px
+            input
+                width: 100%
+                height: 1.5rem
+                border: 1px $color-general-borders solid
+                border-radius: 5px 0 0 5px
+            a
+                cursor: pointer
+
+#show-tags-button
+    float: right
+    cursor: pointer
+    font-weight: 100
+
+#reference-list
+    display: none
+    ul
+        list-style-position: inside
+        margin-left: 30px
+
+.flex-start-center
+    display: flex
+    justify-content: start
+    align-items: center
+    gap: 5px
+
+.reset-notes
+    i
+        font-size: 0.6rem
+

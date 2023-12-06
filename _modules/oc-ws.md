@@ -5,11 +5,11 @@ module:
     tag: 'Organizational_Development'     #list, just separated by blank space, e.g. 'Web Open_Source'
     description: "The Orbit Chart is a strategic planning tool to guide decision-making around the priority areas of your hub. You can plan for 12 months or three years – whatever makes sense for your hub. Every hub will emphasise different components which may change over time. The Orbit Chart visualises the key drivers for your hub to guide decision-making and help you keep on track to achieving your goals." #Make a rough strategic plan for the future.
     pic-url: oc-ws.jpg
-    duration: 0 # 15    #introduction time in minutes, the resources have their own time blocks
+    duration: 15    #introduction time in minutes, the resources have their own time blocks
     max-participants: 12
     min-trainers: 1
     difficulty: 1   #1-3, 1 is easyest
-    license: '[CC-BY-SA 4.0 International](https://choosealicense.com/licenses/cc-by-sa-4.0/)'
+    license: '[CC-BY-SA 4.0](https://choosealicense.com/licenses/cc-by-sa-4.0/)'
     res: ['oc']       #IDs of the resources. e.g. ['askotec'], or if more: ['askotec', 'ohg']
     # marker
 ---  
