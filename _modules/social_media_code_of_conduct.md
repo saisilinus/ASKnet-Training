@@ -1,4 +1,5 @@
 ---
+layout: module
 module:
     name: 'Social Media Code of Conduct'
     id: 'social_media_code_of_conduct' 

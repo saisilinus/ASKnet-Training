@@ -1,4 +1,5 @@
 ---
+layout: module
 module:
     name: '#defyhatenow boardgame Cameroon (english version)'
     id: 'defyhatenow_boardgame'

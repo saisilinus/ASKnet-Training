@@ -1,4 +1,5 @@
 ---
+layout: module
 module:
     name: 'Antifraud'
     id: 'antifraud_oer_training'     

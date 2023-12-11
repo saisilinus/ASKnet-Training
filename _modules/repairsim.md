@@ -1,4 +1,5 @@
 ---
+layout: module
 module:
     name: 'Community Repair Café - Simulation'
     id: repairsim

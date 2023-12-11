@@ -1,4 +1,5 @@
 ---
+layout: module
 module:
     name: 'Creating Documents on GitHub'
     id: 'documents_on_github'

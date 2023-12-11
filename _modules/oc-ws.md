@@ -1,4 +1,5 @@
 ---
+layout: module
 module:
     name: 'Orbit Chart Workshop'
     id: 'oc-ws'      #can only contain small letters, numbers, minus and underscore. needs to be the same as the file name

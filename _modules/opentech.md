@@ -1,4 +1,5 @@
 ---
+layout: module
 module:
     name: '#OpenTech Basics'
     id: opentech
