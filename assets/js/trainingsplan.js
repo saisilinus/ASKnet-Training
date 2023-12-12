@@ -815,10 +815,6 @@ function insertDayBreaks() {
                     hasBreakAfter = true;
                     searchBreak = false;
                 }
-                if (currentElement != null && currentElement.nodeName === 'LI' && currentElement.className.includes(CLASS_TIMEBREAK)) {
-                    currentElement.remove();
-                    searchBreak = false;
-                }
                 if (currentElement === null) {
                     searchBreak = false;
                 }
