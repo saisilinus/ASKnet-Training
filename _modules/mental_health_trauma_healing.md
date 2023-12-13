@@ -1,4 +1,5 @@
 ---
+layout: module
 module:
     name: 'Mental Health, Trauma and Healing'
     id: 'mental_health_trauma_healing'

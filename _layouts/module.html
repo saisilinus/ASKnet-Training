@@ -1,66 +1,78 @@
 ---
 layout: default
 ---
-<section class="section bg-beige pb-4">
+<section class="section p-4">
   <div class="container">
     <div class="row pl-3">
-      <h1 class="mb-4">{{ page.module.name | escape }}</h1>
+      <h1 class="m-4">{{ page.module.name | escape }}</h1>
     </div>
+    
     <div class="row">
-      <div class="col-lg-5 col-sm-12">
+      <div class="col-lg-6 col-sm-12">
         {% if page.gallery %}
         <div class="profile-gallery-slider">
             {% for gallery in page.gallery %}
               <img src="{{ site.baseurl }}/{{ gallery.url }}" alt="" />
             {% endfor %}
         </div>
-        
         {% else %}
         <img src="{{ base.url }}/assets/img/modules/{{page.module.pic-url }}" class="img-fluid img-portrait mr-lg-5 mb-4" alt="{{page.module.name}}">
         {% endif %}
       </div>
-      <div class="col-lg-7 col-sm-12">
-        {% if page.country %} 
-        <h4>Country:</h4>
-        <p>{{ page.country }}</p>
+      <div class="col-lg-5 col-sm-12 bg-light shadow p-4 module-details">
+        {% if page.module.description %}
+          {{ page.module.description | markdownify }}
         {% endif %}
-        {% if page.region %} 
-        <h4>Region:</h4>
-        <p>{{ page.region }}</p>
+        {% if page.module.license %} 
+          {{ page.module.license | markdownify }}
         {% endif %}
-        {% if page.hub %} 
-        <h4>Hub:</h4>
-        <p><a href="https://asknet.community/#hubs" target="_blank">{{ page.hub }}</a></p>
-        {% endif %}
-        {% if page.languages %} 
-        <h4>Language(s):</h4>
-        <p>{{ page.languages }}</p>
-        {% endif %}
-        {% if page.skills %}              
-        <div class="panel-group mb-4" style="clear:both; margin-top:20px;" id="accordion" role="tablist" aria-multiselectable="true">
-          <h4>Skills:</h4>
-          {% for skill in page.skills %}
-          <div class="panel panel-default rounded">
-            <div class="panel-heading" role="tab" id="heading{{ skill.number }}">
-                <h4 class="panel-title">
-                    <a class="collapsed rounded" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ skill.number }}" aria-expanded="false" aria-controls="collapse{{ skill.number }}">
-                      {{ skill.name }}
-                        <span> </span>
-                    </a>
-                </h4>
-            </div>
-            <div id="collapse{{ skill.number }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                <div class="panel-body">
-                    <p>{{ skill.qualification | markdownify }}</p>
-                </div>
-            </div>
-          </div>
-          {% endfor %}
+        <div class="module-icons">
+          {% if page.module.duration %}
+            <p class="btn btn-sm btn-outline-secondary" data-tooltip="Introduction time"><i class="fa-solid fa-hourglass-half"></i> {{ page.module.duration }} <span class="unit">Minutes</span></p>
+          {% endif %}
+          {% if page.module.max-participants %} 
+            <p class="btn btn-sm btn-outline-secondary" data-tooltip="Max. Participants"><i class="fas fa-users-viewfinder"></i> {{ page.module.max-participants }}</p>
+          {% endif %}
+          
+          {% if page.module.difficulty %} 
+            
+            {% case page.module.difficulty %}
+              {% when 1 %}
+                {% assign module_diff_text = 'easy' %}
+              {% when 2 %}
+                {% assign module_diff_text = 'medium' %}
+              {% when 3 %}
+                {% assign module_diff_text = 'advanced' %}
+              {% else %}
+                {% assign module_diff_text = difficulty %}
+            {% endcase %}
+            <p class="btn btn-sm btn-outline-secondary" data-tooltip="Difficulty-Level"><i class="fas fa-tachometer-alt"></i> {{ module_diff_text }}</p>
+          {% endif %}
+          {% if page.module.url %} 
+            <a class="btn btn-sm btn-outline-secondary" data-tooltip="Manual" href="{{ page.module.url }}" target="_blank"><i class="fa-solid fa-book-open"></i></a>
+          {% endif %}
+          {% if page.module.min-trainers %} 
+            <p class="btn btn-sm btn-outline-secondary" data-tooltip="Min. Trainers"><i class="fas fa-chalkboard-teacher"></i> {{ page.module.min-trainers }}</p>
+          {% endif %}
         </div>
+        <div class="clearfix"></div>
+        
+        {% if page.module.res %}
+          <div class="resources">
+            <h4>Resources:</h4>
+            <ul class="list-group list-group-flush">
+              {% for actual_res in page.module.res %}
+                {% for res in site.resources %}
+                    {% if res.resource.id == actual_res %}
+                        <li class="list-group-item"><a href="{{ res.resource.url }}" target="_blank">{{ res.resource.name }}</a></li>
+                    {% endif %}
+                {% endfor %}
+              {% endfor %}
+            </ul>
+          </div>
         {% endif %}
-        <h4>Contact:</h4>
       </div>
-    </div>
+   </div>
   </div>
 </section>
 <section class="section pt-4">
@@ -75,7 +87,7 @@ layout: default
   </div>
 </section>
 
-<!-- other profiles -->
+<!-- other profiles
 <section class="section bg-beige">
   <div class="container">
     <div class="row">
@@ -88,4 +100,4 @@ layout: default
     </div>
   </div>
 </section>
-<!-- /other profiles -->
+ /other profiles -->

@@ -1,4 +1,5 @@
 ---
+layout: module
 module:
     name: 'DIY Power Bank'
     id: 'diy_power_bank'      #can only contain small letters, numbers, minus and underscore. needs to be the same as the file name

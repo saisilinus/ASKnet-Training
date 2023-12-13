@@ -1,4 +1,5 @@
 ---
+layout: module
 module:
     name: 'Theory of Change Workshop'
     id: 'toc-ws'      #can only contain small letters, numbers, minus and underscore. needs to be the same as the file name

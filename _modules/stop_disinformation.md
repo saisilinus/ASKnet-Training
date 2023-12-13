@@ -1,4 +1,5 @@
 ---
+layout: module
 module:
     name: 'Stop Disinformation'
     id: 'stop_disinformation' 

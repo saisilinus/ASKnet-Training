@@ -1,4 +1,5 @@
 ---
+layout: module
 module:
     name: 'Reusable Sanitary Pads'
     id: 'reusable_sanitary_pads'

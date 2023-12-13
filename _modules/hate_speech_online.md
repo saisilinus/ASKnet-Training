@@ -1,4 +1,5 @@
 ---
+layout: module
 module:
     name: 'Counter hate speech online'
     id: 'hate_speech_online' 

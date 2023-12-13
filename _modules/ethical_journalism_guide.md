@@ -1,4 +1,5 @@
 ---
+layout: module
 module:
     name: 'Ethical Journalism Guide'
     id: 'ethical_journalism_guide' 

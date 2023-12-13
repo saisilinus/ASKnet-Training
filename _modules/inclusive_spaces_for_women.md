@@ -1,4 +1,5 @@
 ---
+layout: module
 module:
     name: 'Creating Inclusive Spaces for Women in Tech and Media'
     id: 'inclusive_spaces_for_women'

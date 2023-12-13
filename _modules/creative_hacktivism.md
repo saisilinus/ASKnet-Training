@@ -1,4 +1,5 @@
 ---
+layout: module
 module:
     name: 'Creative Hacktivism'
     id: 'creative_hacktivism'

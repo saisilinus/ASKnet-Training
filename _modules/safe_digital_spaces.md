@@ -1,4 +1,5 @@
 ---
+layout: module
 module:
     name: 'Safe Digital Spaces'
     id: 'safe_digital_spaces' 

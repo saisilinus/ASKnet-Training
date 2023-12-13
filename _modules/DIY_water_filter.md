@@ -1,4 +1,5 @@
 ---
+layout: module
 module:
     name: 'DIY water filter'
     id: 'DIY_water_filter'
@@ -14,3 +15,7 @@ module:
     res: ['drinking_contaminated_water', 'diy_water_filter_setup', 'diy_water_filter_tools&materials']
     # marker
 ---  
+
+## DIY water filter
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.

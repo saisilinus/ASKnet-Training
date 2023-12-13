@@ -1,4 +1,5 @@
 ---
+layout: module
 module:
     name: '#Migrant Media Network - Game'
     id: 'mmn_boardgame' 
