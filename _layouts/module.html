@@ -35,7 +35,18 @@ layout: default
           {% endif %}
           
           {% if page.module.difficulty %} 
-            <p class="btn btn-sm btn-outline-secondary" data-tooltip="Difficulty-Level"><i class="fas fa-tachometer-alt"></i> {{ page.module.difficulty }}</p>
+            
+            {% case page.module.difficulty %}
+              {% when 1 %}
+                {% assign module_diff_text = 'easy' %}
+              {% when 2 %}
+                {% assign module_diff_text = 'medium' %}
+              {% when 3 %}
+                {% assign module_diff_text = 'advanced' %}
+              {% else %}
+                {% assign module_diff_text = difficulty %}
+            {% endcase %}
+            <p class="btn btn-sm btn-outline-secondary" data-tooltip="Difficulty-Level"><i class="fas fa-tachometer-alt"></i> {{ module_diff_text }}</p>
           {% endif %}
           {% if page.module.url %} 
             <a class="btn btn-sm btn-outline-secondary" data-tooltip="Manual" href="{{ page.module.url }}" target="_blank"><i class="fa-solid fa-book-open"></i></a>
