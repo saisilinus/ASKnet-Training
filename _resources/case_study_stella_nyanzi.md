@@ -9,5 +9,4 @@ resource:
     cost: 0
     license: CC BY-SA 4.0
     author: '[Stella Nyanzi](https://en.wikipedia.org/wiki/Stella_Nyanzi)'
-    # marker
 ---

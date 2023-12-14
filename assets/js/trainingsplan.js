@@ -950,10 +950,10 @@ function updateSelectableModulesList() {
     }
 
     for (mod of sideBarModules) {
-        const modClasses = mod.className.split(' ');
+        const modTags = mod.dataset.tags;
         
         for (category of selectedCategories) {
-            if (modClasses.includes(category)) {
+            if (modTags.includes(category)) {
                 mod.style.display = '';
                 break; // --> change around here to implement "AND" filter style. bahaves atm like "OR"
             } else {
@@ -1093,7 +1093,7 @@ function updateAuthorList(){
 /**
  * Creates an object with the name and url from a markdown link
  * @param {String} link markdown link
- * @returns {Object}
+ * @returns {{ name: String, url: String }}
  */
 function convertMDLinkToObject(link){
     let result = { name: '', url: '' };
@@ -1112,7 +1112,7 @@ function convertMDLinkToObject(link){
 /**
  * Converts multiple Markdown links separated by commas to array of { name, url } objects
  * @param {String} links
- * @returns {Array<Object>} 
+ * @returns {Array<{ name: String, url: String }>} 
  */
 function convertMultipleMDLinksToArray(links){
     let result = [];
