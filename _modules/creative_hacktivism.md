@@ -13,5 +13,4 @@ module:
     difficulty: 2   #1-3, 1 is easyest
     license: '[CC-BY-SA 4.0](https://choosealicense.com/licenses/cc-by-sa-4.0/)'
     res: 'creative_hacktivist_term, hacktivism_examples, media_investigations_literacy, convivial_technologies, case_study_stella_nyanzi, alternative_tools, creative_hacktivism_slides'
-    # marker
 ---  

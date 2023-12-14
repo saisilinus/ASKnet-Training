@@ -13,5 +13,4 @@ module:
     difficulty: 2
     license: '[CC-BY-SA 4.0](https://choosealicense.com/licenses/cc-by-sa-4.0/)'
     res: 'reusable_sanitary_pads'   #comma-separated list e.g. 'askotec', or if more than 1: 'askotec, ohg'
-    # marker
 ---  

@@ -8,5 +8,4 @@ resource:
     cost: 1000
     license: 
     author: '[Dawa Edina Hillary](https://wikifab.org/wiki/Utilisateur:Dawa_Edina)'
-    # marker
 ---

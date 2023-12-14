@@ -8,5 +8,4 @@ resource:
     cost: 20
     license: 
     author: "[r0g_agency](https://openculture.agency/)"
-    # marker
 ---

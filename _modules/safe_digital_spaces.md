@@ -13,5 +13,4 @@ module:
     difficulty: 1
     license: '[CC-BY-SA 4.0](https://choosealicense.com/licenses/cc-by-sa-4.0/)'
     res: 'SafeDigitasSpaces, defyhatenow_facilitator_notes'
-    # marker
 ---  

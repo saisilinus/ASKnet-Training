@@ -12,6 +12,5 @@ module:
     min-trainers: 1
     difficulty: 1   #1-3, 1 is easyest
     license: '[CC-BY-SA 4.0](https://choosealicense.com/licenses/cc-by-sa-4.0/)'
-    res: 'odg, os-spiral, os-licensing, open-file-formats, why-open, os-glossary'   #comma-separated list e.g. 'askotec', or if more than 1: 'askotec, 
-    # marker
+    res: 'odg, os-spiral, os-licensing, open-file-formats, why-open, os-glossary'   #comma-separated list e.g. 'askotec', or if more than 1: 'askotec, ohg'
 ---  

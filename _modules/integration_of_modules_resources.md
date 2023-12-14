@@ -12,6 +12,5 @@ module:
     min-trainers: 1
     difficulty: 3   #1-3, 1 is easyest
     license: '[CC-BY-SA 4.0](https://choosealicense.com/licenses/cc-by-sa-4.0/)'
-    res: 'github_repository, modules&resources, module&resource_intergration, template_code'   #comma-separated list e.g. 'askotec', or if more than 1: 'askotec, ohg'
-    # marker
+    res: 'github_repository, modules&resources, module&resource_intergration, template_code'  #comma-separated list e.g. 'askotec', or if more than 1: 'askotec, ohg'
 ---

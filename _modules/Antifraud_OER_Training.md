@@ -13,5 +13,4 @@ module:
     difficulty: 1 
     license: '[CC-BY-SA 4.0](https://choosealicense.com/licenses/cc-by-sa-4.0/)'
     res: 'chain_and_aveunes_of_fraud_migitaion, effective_utilization_of_media_spaces, measures_against_fraud, types_of_fraud'
-    # marker
 ---  

@@ -8,6 +8,5 @@ resource:
     difficulty: 3     #1-3, 1 is easyest
     cost: 0      #in $
     author: "[#ASKnet](https://asknet.community/)"
-    # marker
 ---
 

@@ -9,5 +9,4 @@ resource:
     cost: 0      #in $ (dont leave empty, but type 0 instead)
     license: #e.g. CC BY-SA 4.0
     author: '[health & fitness](https://www.youtube.com/@healthfitness1196)'
-    # marker
 ---
