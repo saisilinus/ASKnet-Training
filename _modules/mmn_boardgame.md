@@ -12,6 +12,6 @@ module:
     min-trainers: 1
     difficulty: 2
     license: '[CC-BY-SA 4.0](https://choosealicense.com/licenses/cc-by-sa-4.0/)'
-    res: ['mmn_boardgame', 'mmn_rumour_cards']   
+    res: 'mmn_boardgame, mmn_rumour_cards'   
     # marker
 ---  

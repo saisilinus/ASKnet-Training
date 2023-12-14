@@ -12,7 +12,7 @@ module:
     min-trainers: 2
     difficulty: 3
     license: '[CC-BY-SA 4.0](https://choosealicense.com/licenses/cc-by-sa-4.0/)'
-    res: ['askotecintro', 'ledlight', 'solarcharger', 'openguides', 'ohg', 'odg']
+    res: 'askotecintro, ledlight, solarcharger, openguides, ohg, odg'
     # marker
 --- 
 

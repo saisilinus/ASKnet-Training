@@ -1093,7 +1093,7 @@ function updateAuthorList(){
 /**
  * Creates an object with the name and url from a markdown link
  * @param {String} link markdown link
- * @returns {Object}
+ * @returns {{ name: String, url: String }}
  */
 function convertMDLinkToObject(link){
     let result = { name: '', url: '' };
@@ -1112,7 +1112,7 @@ function convertMDLinkToObject(link){
 /**
  * Converts multiple Markdown links separated by commas to array of { name, url } objects
  * @param {String} links
- * @returns {Array<Object>} 
+ * @returns {Array<{ name: String, url: String }>} 
  */
 function convertMultipleMDLinksToArray(links){
     let result = [];

@@ -12,6 +12,6 @@ module:
     min-trainers: 1
     difficulty: 1  
     license: '[CC-BY-SA 4.0](https://choosealicense.com/licenses/cc-by-sa-4.0/)'
-    res: ['ethical_journalism_guide', 'EJN_5_Point_test_for_hate_speech_video', 'defyhatenow_field_guide_c2', 'defyhatenow_facilitator_notes']
+    res: 'ethical_journalism_guide, EJN_5_Point_test_for_hate_speech_video, defyhatenow_field_guide_c2, defyhatenow_facilitator_notes'
     # marker
 ---  

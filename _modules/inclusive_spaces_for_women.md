@@ -12,6 +12,6 @@ module:
     min-trainers: 1
     difficulty: 1
     license: '[CC-BY-SA 4.0](https://choosealicense.com/licenses/cc-by-sa-4.0/)'
-    res: ['strategies_discussions_co-creation', 'inclusive_spaces_for_women-exercise', 'case_study_owilla_abiro_mercy', 'inclusive_spaces_for_women-slides']
+    res: 'strategies_discussions_co-creation, inclusive_spaces_for_women-exercise, case_study_owilla_abiro_mercy, inclusive_spaces_for_women-slides'
     # marker
 ---
