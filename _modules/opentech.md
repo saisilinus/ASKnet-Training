@@ -4,7 +4,7 @@ module:
     name: '#OpenTech Basics'
     id: opentech
     url: 
-    tag: 'Hardware&Repair,OpenSource&Knowledge'
+    tag: 'Hardware & Repair, Open Source & Knowledge'
     description: 'This Training Module is dedicated to transfer the basic knowledge of #OpenTech understanding for tools, skills and maker experience'
     pic-url: opentech.jpg
     duration: 30 #introduction

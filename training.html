@@ -16,9 +16,10 @@ permalink: /training/
                 {% for module in site.modules %}
                     {% assign module_tags = module.module.tag | split: ',' %}
                     {% for tag in module_tags %}
-                        {% unless tag_list contains tag %}
-                            <li>{{ tag | strip }}</li>
-                            {%- assign tag_list = tag_list | push: tag -%}
+                        {%- assign striped_tag = tag | strip -%}
+                        {% unless tag_list contains striped_tag %}
+                            <li>{{ striped_tag }}</li>
+                            {%- assign tag_list = tag_list | push: striped_tag -%}
                         {% endunless %}
                     {% endfor %}
                 {% endfor %}
@@ -64,7 +65,7 @@ permalink: /training/
                 {% assign module_duration_minutes = module_duration | modulo:60 %}
 
             
-            <li id="{{ module.module.id }}" class="module {{ module.module.tag }} pagebreak" data-duration="{{ module.module.duration }}" data-participants="{{ module.module.max-participants }}" data-trainer="{{ module.module.min-trainers }}" data-difficulty="{{ module.module.difficulty }}" data-name="{{ module.module.name }}" data-description="{{ module.module.description }}">
+            <li id="{{ module.module.id }}" class="module pagebreak" data-tags="{{ module.module.tag }}" data-duration="{{ module.module.duration }}" data-participants="{{ module.module.max-participants }}" data-trainer="{{ module.module.min-trainers }}" data-difficulty="{{ module.module.difficulty }}" data-name="{{ module.module.name }}" data-description="{{ module.module.description }}">
                 <div class="time dont-print">
                     <div style="display:inline;" data-tooltip="move module" data-tooltip-location="right">
                         <i class="fas fa-sort"></i>

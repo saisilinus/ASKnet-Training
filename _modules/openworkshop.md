@@ -4,7 +4,7 @@ module:
     name: 'Open Workshop Hardware Setup'
     id: 'openworkshop'      #can only contain small letters, numbers, minus and underscore. needs to be the same as the file name
     url: 'https://wikifab.org/wiki/Open_Workshop_Setup'     #url that is linked in the table view, can be empty
-    tag: 'Hardware&Repair'     #list, just separated by blank space, e.g. 'Web Open_Source'
+    tag: 'Hardware & Repair'     #list, just separated by blank space, e.g. 'Web Open_Source'
     description: "Gain skills in setting up a first simple workspace with tools and materials, learn to organise your workshop, introduction into #OpenTech and more to get started"
     pic-url: workshop.jpg
     duration: 15

@@ -4,7 +4,7 @@ module:
     name: 'Stop Disinformation'
     id: 'stop_disinformation' 
     url: 'https://defyhatenow.org/social-media-hate-speech-mitigation-field-guide-v2-cameroon/'
-    tag: 'Community&Moderation,Media&Art'
+    tag: 'Community & Moderation, Media & Art'
     description: "What is Mis-, Dis-, and Mal-Information and who can it be detected?"
     pic-url: thinkb4uclick.png
     duration: 30    #introduction time in minutes, the resources have their own time blocks

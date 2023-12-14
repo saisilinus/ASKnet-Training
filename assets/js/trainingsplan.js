@@ -950,10 +950,10 @@ function updateSelectableModulesList() {
     }
 
     for (mod of sideBarModules) {
-        const modClasses = mod.className.split(' ');
+        const modTags = mod.dataset.tags;
         
         for (category of selectedCategories) {
-            if (modClasses.includes(category)) {
+            if (modTags.includes(category)) {
                 mod.style.display = '';
                 break; // --> change around here to implement "AND" filter style. bahaves atm like "OR"
             } else {
