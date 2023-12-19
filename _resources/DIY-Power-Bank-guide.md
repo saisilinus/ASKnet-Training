@@ -9,5 +9,4 @@ resource:
     cost: 5      #in $ (dont leave empty, but type 0 instead)
     license: '[CC-BY-SA 4.0](https://choosealicense.com/licenses/cc-by-sa-4.0/)'
     author: "[Maliamungu Richard](https://github.com/maliarich)"
-    # marker
 ---

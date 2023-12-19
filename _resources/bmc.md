@@ -9,6 +9,5 @@ resource:
     cost: 0      #in $
     license: '[CC-BY-SA 4.0 International](https://choosealicense.com/licenses/cc-by-sa-4.0/) '
     author: "[#ASKnet](https://asknet.community/)"
-    # marker
 ---
 

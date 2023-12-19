@@ -9,6 +9,5 @@ resource:
     cost: 0
     license: CC BY-SA 4.0
     author: '[Bastian Walthierer](https://www.linkedin.com/in/bastian-walthierer-0416b5112/)'
-    # marker
 ---
 

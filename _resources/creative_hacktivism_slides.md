@@ -9,5 +9,4 @@ resource:
     cost: 0
     license: CC BY-SA 4.0
     author: '[Sabina Barcucci](https://www.disruptionlab.org/team), [Agnese Trocchi](https://www.disruptionlab.org/team)'
-    # marker
 ---
