@@ -647,7 +647,7 @@ function calculateTime() {
 
     updateSummaryDuration(days, totalTime);
     let startEndTimeDisplay = document.getElementById('start-end-time');
-    startEndTimeDisplay.innerText = `Day 1 ${convertTimeToString(startTime)} - Day ${days} ${convertTimeToString(clockTime)}`;
+    startEndTimeDisplay.innerText = `Day 1 ${convertTimeToString(startTime)} -${days > 1 ? ' Day ' + days : ''} ${convertTimeToString(clockTime)}`;
 }
 
 function updateSummaryDuration(days, totalTime){
