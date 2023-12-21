@@ -689,7 +689,8 @@ a.help
         a:visited
             color: $color-element-background-inactive
             
-    .timebreak
+    .timebreak,
+    .daybreak
         .options
             top: -3px
             right: -3px
@@ -812,6 +813,17 @@ a.help
         cursor: pointer
         i
             font-size: 1.5rem
+
+#summary-text
+    font-weight: 400
+
+#table-of-contents
+    ul
+        li
+            display: flex
+            justify-content: space-between
+            align-items: center
+            font-weight: 400
 
 @media only screen and (max-width: 900px)
     #sidebar

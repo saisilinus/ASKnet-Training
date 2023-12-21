@@ -246,12 +246,17 @@ function onClickDeleteOrMoveListElement() {
         let moduleListSideBar = document.getElementById(ID_MODULE_LIST_SIDE_BAR);
         moduleListSideBar.appendChild(currentElement);
         calculateTime();
+        insertDayBreaks();
         calculateSummary();
+        updateTableOfContents();
+        updateAuthorList();
         return;
     }
     currentElement.remove();
     calculateTime();
+    insertDayBreaks();
     calculateSummary();
+    updateTableOfContents();
 }
 
 function initiateTimeEdit(){
@@ -514,6 +519,7 @@ function runDynamicCalculationsOnUpdate(evt) {
     calculateSummary();
     updateAuthorList();
     initiateEditNotes();
+    updateTableOfContents();
 }
 
 function runDynamicCalculationsOnAdd(evt) {
@@ -536,6 +542,7 @@ function runDynamicCalculationsOnAdd(evt) {
     calculateSummary();
     updateAuthorList();
     initiateEditNotes();
+    updateTableOfContents();
 }
 
 const INTRODUCTION_TEXT = 'Introduction';
@@ -680,6 +687,7 @@ function insertClockTime(clockTime, duration, mod) {
     clockTime = new Date(clockTime.getTime() + duration * 60 * 1000);
     const clockTimeString = `${convertTimeToString(oldClockTime)} - ${convertTimeToString(clockTime)}`;
     clockTimeSpan.innerText = clockTimeString;
+    mod.dataset.clock = clockTimeString;
     return clockTime;
 }
 
@@ -873,8 +881,7 @@ function insertDayBreaks() {
         const nextModule = module.nextSibling;
         let resources = module.querySelectorAll(`.${CLASS_RESOURCE}`);
         for (let resource of resources) {
-            const clockTimeString = resource.querySelector('.clock-time').innerText;
-            let { start, end } = convertStringTimeToDate(clockTimeString);
+            let { start, end } = convertStringTimeToDate(resource.dataset.clock);
             const isLastResource = resources[resources.length - 1] === resource;
             let hasBreakAfter = false;
             let searchBreak = true;
@@ -1313,6 +1320,36 @@ function clickButtonOnEnter(form, inputSelector, buttonSelector){
           form.querySelector(buttonSelector).click();
         }
     });
+}
+
+/**
+ * Updates the table of contents when a module is added or deleted in the main area
+ */
+function updateTableOfContents(){
+    let items = document.querySelectorAll(`#${ID_MODULE_LIST_TRAINING} li`);
+    let modules = document.querySelectorAll(`#${ID_MODULE_LIST_TRAINING} .${CLASS_MODULE}`);
+    let tableOfContents = document.getElementById('table-of-contents'); 
+    if (modules.length > 0) {
+        let contentList = '<h4>Day 1</h4>';
+        let day = 1;
+        for (let item of items) {
+            if (item.classList.contains(CLASS_DAYBREAK)){
+                const isLastItem = items[items.length - 1] === item;
+                if (!isLastItem) {
+                    day++;
+                    contentList += `<h4>Day ${day}</h4>`;
+                }
+            }
+            if (item.classList.contains(CLASS_MODULE)){
+                let { name, clock } = item.dataset;
+                let { start, end } = convertStringTimeToDate(clock);
+                contentList += `<li><span>${name}</span><span>${convertTimeToString(start)}</span></li>`;
+            }
+        }
+        tableOfContents.innerHTML = '<h3>Table Of Contents</h3>' + '<ul>' + contentList + '</ul>';
+    } else {
+        tableOfContents.innerHTML = '';
+    }
 }
 
 /**
