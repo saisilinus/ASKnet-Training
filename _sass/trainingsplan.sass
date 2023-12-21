@@ -735,7 +735,7 @@ a.help
     background: $color-element-background
     color: $color-element-font
     padding: 20px
-    margin: 50px 0
+    margin: 50px 0 20px 0
     h2
         text-align: center
         margin-top: 0
@@ -808,11 +808,11 @@ a.help
         .overlay
             opacity: 1
 
-.references
-    #reference-button
-        cursor: pointer
-        i
-            font-size: 1.5rem
+#reference-button,toc-list
+#toc-button
+    cursor: pointer
+    i
+        font-size: 1.5rem
 
 #summary-text
     font-weight: 400
@@ -907,6 +907,15 @@ a.help
         list-style-position: inside
         margin-left: 30px
 
+#toc-list-wrapper
+    display: none
+
+.display-print
+    display: none !important
+
+#edit-summary-button
+    margin-bottom: 20px !important
+
 .flex-start-center
     display: flex
     justify-content: flex-start
@@ -924,4 +933,7 @@ a.help
 
 .hide
     opacity: 0
+
+.font-weight-normal
+    font-weight: 400
 

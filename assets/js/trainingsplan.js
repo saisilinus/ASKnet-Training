@@ -188,15 +188,15 @@ function submitSummary(){
     editSummary.style.transform = 'scale(0,0)';
 
     let form = this.parentNode.parentNode;
-    let summaryEl = document.getElementById('summary-text');   
+    let summaryEl = document.querySelectorAll('.summary-text');   
     let editButton = document.getElementById('edit-summary-button'); 
     let newSummary = form.querySelector('#summary-text-input').value;
     if(newSummary != '') {
-        summaryEl.innerHTML = `<h3>Summary</h3><p>${newSummary}</p>`;
-        editButton.innerText = 'Edit Summary';
+        summaryEl.forEach((el) => el.innerHTML = `<p>${newSummary}</p>`);
+        editButton.innerText = 'Edit summary notes';
     } else {
-        summaryEl.innerHTML = '';
-        editButton.innerText = 'Add Summary';
+        summaryEl.forEach((el) => el.innerHTML = ``);
+        editButton.innerText = 'Add summary notes';
     }
 }
 
@@ -581,7 +581,7 @@ function deleteIntroductionDuration(mod){
 
 function calculateTime() {
     let totalTime = 0;
-    let clockTime = new Date();
+    let clockTime = new Date(), startTime;
     let days = 0;
 
     let trainingstart = document.getElementById(CLASS_TRAININGSTART);
@@ -645,14 +645,16 @@ function calculateTime() {
         } 
     }
 
-    updateSummaryDuration(days, totalTime)
+    updateSummaryDuration(days, totalTime);
+    let startEndTimeDisplay = document.getElementById('start-end-time');
+    startEndTimeDisplay.innerText = `Day 1 ${convertTimeToString(startTime)} - Day ${days} ${convertTimeToString(clockTime)}`;
 }
 
 function updateSummaryDuration(days, totalTime){
     let summaryDuration = getDurationSplit(totalTime*60*1000);
-    document.querySelector('#summary-days').innerText = days;
-    document.querySelector('#summary-hours').innerText = summaryDuration.hours;
-    document.querySelector('#summary-minutes').innerText = summaryDuration.minutes;
+    document.querySelectorAll('.summary .summary-days').forEach((el) => el.innerText = days);
+    document.querySelectorAll('.summary .summary-hours').forEach((el) => el.innerText = summaryDuration.hours);
+    document.querySelectorAll('.summary .summary-minutes').forEach((el) => el.innerText = summaryDuration.minutes);
 }
 
 function addDays(date, days) {
@@ -686,7 +688,7 @@ function insertClockTime(clockTime, duration, mod) {
     const oldClockTime = new Date(clockTime);
     clockTime = new Date(clockTime.getTime() + duration * 60 * 1000);
     const clockTimeString = `${convertTimeToString(oldClockTime)} - ${convertTimeToString(clockTime)}`;
-    clockTimeSpan.innerText = clockTimeString;
+    clockTimeSpan.innerText = convertTimeToString(oldClockTime);
     mod.dataset.clock = clockTimeString;
     return clockTime;
 }
@@ -744,10 +746,10 @@ function calculateSummary() {
         participants = 0;
         trainer = 0;
     }
-    document.querySelector('#number-of-modules').innerText = moduleListTraining.length;
-    document.querySelector('#max-participants').innerText = participants;
-    document.querySelector('#min-trainers').innerText = trainer;
-    document.querySelector('#difficulty').innerText = difficultyLevels[difficulty];
+    document.querySelectorAll('.summary .number-of-modules').forEach((el) => el.innerText = moduleListTraining.length);
+    document.querySelectorAll('.summary .max-participants').forEach((el) => el.innerText = participants);
+    document.querySelectorAll('.summary .min-trainers').forEach((el) => el.innerText = trainer);
+    document.querySelectorAll('.summary .difficulty').forEach((el) => el.innerText = difficultyLevels[difficulty]);
 
     let resourceList = document.querySelectorAll(`#${ID_MODULE_LIST_TRAINING} .${CLASS_MODULE} .${CLASS_RESOURCE}`);
     let space = 0;
@@ -1288,9 +1290,10 @@ function submitNotes(){
     displayEl.innerText = newNote;
     let addNotesButton = parentEl.querySelector('.edit-trainer-notes-button');
     if (newNote != '') {
-        addNotesButton.innerHTML = '<i class="far fa-edit"></i> Edit your notes';
+        addNotesButton.dataset.tooltip = 'Edit notes';
+        addNotesButton.innerHTML = '<i class="far fa-edit"></i>';
     } else {
-        addNotesButton.innerHTML = 'Add trainer notes';
+        addNotesButton.innerHTML = '+';
     }
 }
 
@@ -1328,28 +1331,58 @@ function clickButtonOnEnter(form, inputSelector, buttonSelector){
 function updateTableOfContents(){
     let items = document.querySelectorAll(`#${ID_MODULE_LIST_TRAINING} li`);
     let modules = document.querySelectorAll(`#${ID_MODULE_LIST_TRAINING} .${CLASS_MODULE}`);
-    let tableOfContents = document.getElementById('table-of-contents'); 
+    let tocList = document.getElementById('toc-list'); 
     if (modules.length > 0) {
         let contentList = '<h4>Day 1</h4>';
-        let day = 1;
+        let day = 1, name;
         for (let item of items) {
             if (item.classList.contains(CLASS_DAYBREAK)){
                 const isLastItem = items[items.length - 1] === item;
                 if (!isLastItem) {
                     day++;
                     contentList += `<h4>Day ${day}</h4>`;
+                    const clockTime = parseDatefromString(new Date(), item.dataset.start);
+                    contentList += `<li><span>${name}</span><span>${convertTimeToString(clockTime)}</span></li>`;
                 }
             }
-            if (item.classList.contains(CLASS_MODULE)){
-                let { name, clock } = item.dataset;
-                let { start, end } = convertStringTimeToDate(clock);
+            if (item.classList.contains(CLASS_MODULE)){;
+                name = item.dataset.name;
+                let { start, end } = convertStringTimeToDate(item.dataset.clock);
                 contentList += `<li><span>${name}</span><span>${convertTimeToString(start)}</span></li>`;
             }
         }
-        tableOfContents.innerHTML = '<h3>Table Of Contents</h3>' + '<ul>' + contentList + '</ul>';
+        tocList.innerHTML = contentList;
     } else {
-        tableOfContents.innerHTML = '';
+        tocList.innerHTML = '';
     }
+}
+
+/**
+ * Initiates the button for expanding/contracting the table of contents
+ */
+function initiateTableOfContentsToggleButton(){
+    let button = document.getElementById('toc-button');
+    button.onclick = expandTableOfContents;
+}
+
+/**
+* Expands the table of contents
+*/
+function expandTableOfContents(){
+   let listEl = document.getElementById('toc-list-wrapper');
+   listEl.style.display = 'block';
+   this.innerHTML = '<i class="fas fa-angle-up"></i>';
+   this.onclick = contractTableOfContents;
+}
+
+/**
+* Contracts the table of contents
+*/
+function contractTableOfContents(){
+   let listEl = document.getElementById('toc-list-wrapper');
+   listEl.style.display = 'none';
+   this.innerHTML = '<i class="fas fa-angle-down"></i>';
+   this.onclick = expandTableOfContents;
 }
 
 /**
@@ -1369,4 +1402,5 @@ window.onload = function () {
     initiateSearchButton();
     initiateShowTagsButton();
     initiateEditSummary();
+    initiateTableOfContentsToggleButton();
 }
