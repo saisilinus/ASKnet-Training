@@ -123,7 +123,7 @@ permalink: /training/
                     </div>
                     <div class="module-header">
                         <h2 class="module-name">
-                            <a class="card-link" target="_blank" href="{{ module.url }}">{{ module.module.name }}</a>
+                            <a class="card-link pointer-none" target="_blank" href="{{ module.url }}">{{ module.module.name }}</a>
                         </h2>
                         <div class="icons print-display-none">
                             <a class="button add-module" src="#">Add Module</a>
@@ -133,13 +133,13 @@ permalink: /training/
                         </div>
                     </div>
                     <div class="module-img">
-                        <a href="{{ module.url }}" target="_blank">
+                        <a class="pointer-none" href="{{ module.url }}" target="_blank">
                             <img src="{{ site.baseurl }}/assets/img/modules/{{ module.module.pic-url }}" class="img-fluid d-block mx-auto">
                         </a>
                     </div>
                     <div class="module-info">
                         <h3 class="module-item__name">
-                            <a class="card-link" href="{{ module.url }}" target="_blank">{{ module.module.name }}</a>
+                            <a class="card-link pointer-none" href="{{ module.url }}" target="_blank">{{ module.module.name }}</a>
                         </h3>
                         <p class="intro">Learning Objective:</p>
                         {% if module.module.description %}
@@ -565,6 +565,7 @@ permalink: /training/
             <ul id="reference-list"></ul>
         </div>
         <div class="actions dont-print">
+            <div id="print-info"><a class="icon"><i class="fas fa-info"></i></a><span>The print view works best in Chromium based browsers (Brave, Chromium etc.) currently</span></div>
             <button class="button print noPrint" onclick="window.print();"><i class="fas fa-print"></i> Print</button>
             <!-- <span class="btn-inactive button" data-tooltip="this feature is coming" data-tooltip-location="top"><i class="fas fa-save"></i> Save</span>
             <span class="btn-inactive button" data-tooltip="this feature is coming" data-tooltip-location="top"><i class="fas fa-file-download"></i> Download</span> -->
