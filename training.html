@@ -123,7 +123,7 @@ permalink: /training/
                     </div>
                     <div class="module-header">
                         <h2 class="module-name">
-                            <a class="card-link" href="{{ module.url }}">{{ module.module.name }}</a>
+                            <a class="card-link" target="_blank" href="{{ module.url }}">{{ module.module.name }}</a>
                         </h2>
                         <div class="icons print-display-none">
                             <a class="button add-module" src="#">Add Module</a>
@@ -133,13 +133,13 @@ permalink: /training/
                         </div>
                     </div>
                     <div class="module-img">
-                        <a href="{{ module.url }}">
+                        <a href="{{ module.url }}" target="_blank">
                             <img src="{{ site.baseurl }}/assets/img/modules/{{ module.module.pic-url }}" class="img-fluid d-block mx-auto">
                         </a>
                     </div>
                     <div class="module-info">
                         <h3 class="module-item__name">
-                            <a class="card-link" href="{{ module.url }}">{{ module.module.name }}</a>
+                            <a class="card-link" href="{{ module.url }}" target="_blank">{{ module.module.name }}</a>
                         </h3>
                         <p class="intro">Learning Objective:</p>
                         {% if module.module.description %}
@@ -274,7 +274,7 @@ permalink: /training/
                                                             {% endif %}
                                                         </button>
                                                     {%- else -%}
-                                                        <button type="button" class="resource-tool" data-tooltip="Tool" data-tooltip-location="top"><i class="fas fa-tools"></i></button>
+                                                        <button type="button" class="resource-tool" data-tooltip="Toolkit" data-tooltip-location="top"><i class="fas fa-tools"></i></button>
                                                     {% endif %}
                                                     <button type="button" data-tooltip="Difficulty-Level" data-tooltip-location="top" data-difficulty="{{ difficulty }}"><i class="fas fa-tachometer-alt"></i> {{ diff_text }}</button>
                                                     <button type="button" class="intro" data-tooltip="Cost" data-tooltip-location="top"><i class="fas fa-dollar-sign"></i> {{ res.resource.cost }}</button>
@@ -334,7 +334,7 @@ permalink: /training/
                 </div>
                 <div class="clearer"></div>
             </li>
-            <li class="daybreak" data-duration="15" data-start="09:00">
+            <li class="daybreak pagebreak" data-duration="15" data-start="09:00">
                 <div class="time">
                     <div style="display:inline;" data-tooltip="edit duration" data-tooltip-location="right"><i class="far fa-edit print-display-none"></i></div> <span class='clock-time'>10:00am</span></a>
                     <div class="edit-time">
@@ -481,7 +481,7 @@ permalink: /training/
                 <div class="clearer page-break"></div>
             </ul>
         
-            <div class="clearer page-break"></div>
+            <div class="clearer "></div>
             <div class="add-modules-breaks">
                 <p style="font-size:45px;"><i class="fas fa-arrow-up"></i></p>
                 <p>Drag and drop more modules to add</p>
@@ -571,7 +571,12 @@ permalink: /training/
         </div>
     </div>
 </div>
-
+<div id="scroll-down" class="scroll-button print-display-none" data-tooltip="Scroll to bottom" data-tooltip-location="left" onclick="window.scrollTo({ top: document.body.scrollHeight, left: 0, behavior: 'smooth' })">
+    <i class="fas fa-angle-down"></i>
+</div>
+<div id="scroll-up" class="scroll-button print-display-none" data-tooltip="Scroll to top" data-tooltip-location="left" onclick="window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })">
+    <i class="fas fa-angle-up"></i>
+</div>
 
 
 <script>
