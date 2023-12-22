@@ -9,5 +9,4 @@ resource:
     cost: 0      #in $ (dont leave empty, but type 0 instead)
     license: CC BY-SA 4.0
     author: '[Kudzai M. Mubaiwa](https://www.linkedin.com/in/kudzaimmubaiwa/?originalSubdomain=ke), [Soneni Mafu](https://www.linkedin.com/in/soneni-mafu-55447210b/?originalSubdomain=zw)'
-    # marker
 ---

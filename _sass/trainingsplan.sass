@@ -5,6 +5,8 @@ $color-element-background: rgba(223, 175, 95, 0.7)
 $color-element-background-inactive: rgba(223, 175, 95, 0.3)
 $color-element-font: #212121
 $color-element-font-invert: #fff
+$primary-color: #d8b06b
+$text-color-light: #fff
 
 $breakpoint-tablet: 768px
 $breakpoint-smartphone: 600px
@@ -96,91 +98,13 @@ body.index
             min-height: 50px
         .training-list
             min-height:200px
-    #edit-title-and-description,
-    #lightbox-solar-charger
-        position: fixed
-        top: 0
-        left: 0
-        width: 100vw
-        height: 100vh
-        background: rgba(0,0,0,0.5)
-        display: flex
-        align-items: center
-        justify-content: center
-        z-index: 3
-        transform: scale(0,0)
-        transform-origin: top right
-        transition: transform ease-in-out 100ms
-    #edit-title-and-description:target,
-    #lightbox-solar-charger:target
-        transform: scale(1,1)
-    .edit-title-and-description-body,
-    .lightbox-body
-        width: 75%
-        max-width: 400px
-        background: white
-        position: relative
-        .edit-title-and-description-header
-            background-color: rgb(246 248 250)
-            border: 1px solid rgb(225 228 232)
-            text-align: right
-            padding: 10px
-            p
-                float: left
-                font-weight: 600
-                font-size: 0.8em
-                margin-top: 4px
-            .close
-                text-decoration: none
-                display: inline
-            .close::after
-                clear: both
-        .edit-title-and-description-content
-            padding: 20px 20px 20px 20px
-            display: flow-root
-            input.title
-                width: 95%
-                font-size: 1.1em
-                border: 1px solid #333
-                border-radius: 3px
-                margin-bottom: 20px
-                padding: 10px
-                background-color: rgb(250 251 252)
-                color: rgb(36 41 46)
-            textarea
-                width: 95%
-                font-family: Noto Sans JP
-                border: 1px solid #333
-                padding: 10px
-                border-radius: 3px
-                min-height: 250px
-            input#submit-title
-                position: relative
-                display: inline-block
-                padding: 5px 16px
-                margin-top: 10px
-                font-size: 14px
-                font-weight: 500
-                line-height: 20px
-                white-space: nowrap
-                vertical-align: middle
-                cursor: pointer
-                user-select: none
-                appearance: none
-                background: $color-element-background
-                box-shadow: inset 0 1px 0 $color-element-background
-                border: 1px solid
-                border-radius: 6px
-                border-color: rgba(27,31,35,0.15)
-                color: rgb(255 255 255)
-                float: right
-            input#submit-title::after
-                clear: both
     .resources
         .sidebar
             display: none
     .actions
-        display: block
+        display: flex
+        justify-content: flex-end
+        align-items: center
         .button
             float: right
             display: block
@@ -195,6 +119,101 @@ body.index
                 background: $color-element-background-inactive
         .print
             padding: 14px 50px
+        #print-info
+            .icon
+                display: inline-flex
+                justify-content: center
+                align-items: center
+                height: 30px
+                width: 30px
+                margin-right: 10px
+                background: $color-element-background
+
+#edit-title-and-description,
+#lightbox-solar-charger,
+#edit-summary,
+.edit-trainer-notes-popup
+    position: fixed
+    top: 0
+    left: 0
+    width: 100vw
+    height: 100vh
+    background: rgba(0,0,0,0.5)
+    display: flex
+    align-items: center
+    justify-content: center
+    z-index: 99
+    transform: scale(0,0)
+    transform-origin: top right
+    transition: transform ease-in-out 100ms
+#edit-title-and-description:target,
+#lightbox-solar-charger:target,
+#edit-summary:target,
+.edit-trainer-notes-popup:target
+    transform: scale(1,1)
+.edit-title-and-description-body,
+.lightbox-body,
+.edit-summary-body
+    width: 75%
+    max-width: 400px
+    background: white
+    position: relative
+    .edit-title-and-description-header
+        background-color: rgb(246 248 250)
+        border: 1px solid rgb(225 228 232)
+        text-align: right
+        padding: 10px
+        p
+            float: left
+            font-weight: 600
+            font-size: 0.8em
+            margin-top: 4px
+        .close
+            text-decoration: none
+            display: inline
+        .close::after
+            clear: both
+    .edit-title-and-description-content
+        padding: 20px 20px 20px 20px
+        display: flow-root
+        input.title
+            width: 95%
+            font-size: 1.1em
+            border: 1px solid #333
+            border-radius: 3px
+            margin-bottom: 20px
+            padding: 10px
+            background-color: rgb(250 251 252)
+            color: rgb(36 41 46)
+        textarea
+            width: 95%
+            font-family: Noto Sans JP
+            border: 1px solid #333
+            padding: 10px
+            border-radius: 3px
+            min-height: 250px
+        input#submit-title
+            position: relative
+            display: inline-block
+            padding: 5px 16px
+            margin-top: 10px
+            font-size: 14px
+            font-weight: 500
+            line-height: 20px
+            white-space: nowrap
+            vertical-align: middle
+            cursor: pointer
+            user-select: none
+            appearance: none
+            background: $color-element-background
+            box-shadow: inset 0 1px 0 $color-element-background
+            border: 1px solid
+            border-radius: 6px
+            border-color: rgba(27,31,35,0.15)
+            color: rgb(255 255 255)
+            float: right
+        input#submit-title::after
+            clear: both
 
 #sidebar
     max-width:350px
@@ -208,6 +227,8 @@ body.index
     border-right: 1px $color-general-borders solid
     display: flex
     flex-direction: column
+    .pointer-none
+        pointer-events: none
     .header
         background: #999999
         border-bottom: 1px #000 solid
@@ -217,33 +238,99 @@ body.index
     #module-list-side-bar
         overflow: auto
         flex-grow: 1
+        background: #fff
     .resource-list
         display: none
     .time
         display: none
     .module
         margin: 15px 0
+        background: #fff
         .content
             width: 90%
             float: none
             display: block
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075)
             border: 1px $color-general-borders solid
-            border-radius: 5px
-            padding-left: 10px
-            padding-right: 10px
+            border-radius: 0.375rem
+            padding: 0
             margin: 0 auto
             transition: 0.2s ease
             .intro
                 display: none
             h4
                 display: none
-            .options
+            .icons
                 a.trash
                     display: none
                 .button
                     display: none
                 a.select-check
                     display: inline
+            .module-header
+                justify-content: end
+                .module-name
+                    display: none
+                .icons
+                    .intro
+                        display: none
+            .module-img
+                a
+                    pointer-events: none
+                    img
+                        height: 100px
+                        object-fit: cover
+                        object-position: 0 0%
+            .module-info
+                .module-item__name
+                    margin: 10px 0
+                    display: block
+                    a
+                        color: $primary-color
+                        font-weight: 500
+                        line-height: 1.2
+                .module-description-sidebar
+                    display: block
+                .resources
+                    border: 1px $primary-color solid
+                    position: relative
+                    margin-bottom: 10px
+                    display: block
+                    h4
+                        background: $primary-color
+                        color: $text-color-light
+                        display: inline-block !important
+                        margin: -1px 0 2px -1px
+                        padding: 3px 10px
+                        font-size: 100%
+                    ul
+                        border-radius: 0
+                        display: flex
+                        flex-direction: column
+                        padding-left: 0
+                        margin-bottom: 0
+                        li
+                            border: solid #dee2e6
+                            border-width: 0 0 1px 0
+                            position: relative
+                            display: block
+                            padding: 0.5rem 1rem
+                            color: $primary-color
+                            font-size: 1rem
+                            font-weight: 400
+                            line-height: 1.5
+                            &:first-child
+                                border-top-left-radius: inherit
+                                border-top-right-radius: inherit
+                .meta
+                    justify-content: space-between
+                    .icons
+                        width: 100%
+                        button
+                            background: #fff
+                            &:hover
+                                background-color: #6c757d
+                                border-color: #6c757d
         .content:hover
             -webkit-transform: scale(1.04)
             -ms-transform: scale(1.04)
@@ -252,16 +339,17 @@ body.index
             position: relative
             .overlay
                 position: absolute
-                top: 0
-                left: 0
-                width: 100%
-                height: 100%
+                top: 35%
+                left: 20%
+                width: 60%
+                height: 85px
                 display: block
                 background: $color-element-background
                 text-align: center
                 display: flex
                 justify-content: center
                 align-items: center
+                border-radius: 10px
                 i
                     color: $color-element-font
                     font-size: 3em
@@ -435,6 +523,7 @@ a.help
             border-radius: 100%
             background: $color-general-borders
             cursor: pointer
+
 .options
     position: absolute
     top: 0px
@@ -462,23 +551,40 @@ a.help
         float: right
         display: block
         border: 1px $color-general-borders solid
-        padding: 0 0 10px 10px
-        .options
-            top: 3px
-            right: 10px
-            text-align: right
-            a.add-module
-                display: none
-                color: #fff
-                font-size: 0.8em
-            .button
-                padding: 3px 0
-                width: 80px
-                font-size: 0.7em
+        padding: 0 0 10px 0
+        .module-header
+            display: flex
+            justify-content: space-between
+            align-items: center
+            padding: 0 10px
+            .module-name
                 margin: 0
-                color: $color-element-font
-            a.select-check
-                display: none
+                a
+                    color: $primary-color
+                    font-weight: 500
+                    line-height: 1.5
+                    font-size: 2rem
+            .icons
+                display: flex
+                gap: 0.5rem
+                align-items: center
+                font-size: 1.2em
+                a
+                    color: $color-element-background
+                    margin-left: 5px
+                a.add-module
+                    display: none
+                    color: #fff
+                    font-size: 0.8em
+                .button
+                    padding: 3px 0
+                    width: 80px
+                    font-size: 0.7em
+                    margin-left: 5px
+                    color: $color-element-font
+                    display: inline-block
+                a.select-check
+                    display: none
         .intro
             margin-bottom: 15px
         .module-meta
@@ -489,8 +595,82 @@ a.help
                 i
                     padding-left: 5px
                     width: 20px
+        .module-img
+            a
+                pointer-events: auto
+                img
+                    margin-left: auto
+                    margin-right: auto
+                    display: block
+                    width: 100%
+                    aspect-ratio: 3/2
+                    object-fit: cover
+                    object-position: 0 0
+        .module-info
+            display: flex
+            flex-direction: column
+            gap: 0
+            padding: 10px 10px 0 10px
+            .module-item__name
+                display: none
+            .module-description-sidebar
+                display: none
+            .module-description
+                margin-bottom: 0 !important
+            p
+                font-weight: 400
+            .resources
+                display: none 
+            .license
+                margin-top: 5px
+                padding-left: 10px
+                margin-bottom: 0
+                p
+                    margin-bottom: 0
+                    a
+                        text-decoration: none
+                        color: $primary-color
+                        cursor: pointer
+            .edit-trainer-notes-button
+                width: fit-content
         .overlay
             display: none
+
+.meta
+    display: flex
+    justify-content: flex-start
+    align-items: center
+    border-radius: 0.375rem
+    position: relative
+    button
+        margin-right: 3px
+        cursor: pointer
+        font-size: 15px
+        padding: 10px 10px
+        border-radius: 5px
+        font-weight: 600
+        border: 0
+        transition: .2s ease
+        color: #6c757d
+        background: inherit
+        &:hover
+            color: #fff
+            background-color: #6c757d
+            border-color: #6c757d
+    .intro
+        margin-bottom: 0 !important
+
+.edit-trainer-notes-button,
+.edit-button
+    font-weight: bold !important
+    font-size: 0.9em !important
+    display: inline-block
+    background: $color-element-background-inactive
+    color: $color-element-font
+    padding: 5px 10px
+    border-radius: 5px
+    margin-right: 10px
+    cursor: pointer
 
 .resource-list
     clear: both
@@ -512,7 +692,18 @@ a.help
             width: 80px
             font-size: 0.8em
             margin: 0
-    .timebreak
+            color: #000 !important
+        .author-license
+            padding-right: 10px
+        a
+            font-weight: 400
+        a:link
+            color: $primary-color
+        a:visited
+            color: $color-element-background-inactive
+            
+    .timebreak,
+    .daybreak
         .options
             top: -3px
             right: -3px
@@ -557,7 +748,7 @@ a.help
     background: $color-element-background
     color: $color-element-font
     padding: 20px
-    margin: 50px 0
+    margin: 50px 0 20px 0
     h2
         text-align: center
         margin-top: 0
@@ -630,6 +821,22 @@ a.help
         .overlay
             opacity: 1
 
+#reference-button,toc-list
+#toc-button
+    cursor: pointer
+    i
+        font-size: 1.5rem
+
+#summary-text
+    font-weight: 400
+
+#table-of-contents
+    ul
+        li
+            display: flex
+            justify-content: space-between
+            align-items: center
+            font-weight: 400
 
 @media only screen and (max-width: 900px)
     #sidebar
@@ -713,13 +920,56 @@ a.help
         list-style-position: inside
         margin-left: 30px
 
+#toc-list-wrapper
+    display: none
+
+.display-print
+    display: none !important
+
+#edit-summary-button
+    margin-bottom: 20px !important
+
 .flex-start-center
     display: flex
-    justify-content: start
+    justify-content: flex-start
     align-items: center
     gap: 5px
+
+.flex-between-center
+    display: flex
+    justify-content: space-between
+    align-items: center
 
 .reset-notes
     i
         font-size: 0.6rem
 
+.hide
+    opacity: 0
+
+.font-weight-normal
+    font-weight: 400
+
+.scroll-button
+    border-radius: 100%
+    background: $color-element-background
+    color: white
+    padding: 10px
+    font-size: 1.5rem
+    width: fit-content !important
+    z-index: 999 !important
+    height: 20px
+    width: 20px
+    display: flex
+    justify-content: center
+    align-items: center
+    cursor: pointer
+    position: fixed !important
+
+#scroll-down
+    top: 10px
+    right: 5px
+
+#scroll-up
+    bottom: 10px
+    right: 5px

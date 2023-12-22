@@ -7,7 +7,9 @@ a.edit,
 .button,
 .options,
 .add-modules-breaks,
-.attachments
+.attachments,
+.display-print,
+#top-summary
     display: none
 #content
     padding: 0 10px
@@ -24,14 +26,15 @@ a.edit,
 .actions
     display: none
 
-@media print
-    .pagebreak
-        page-break-before: always
-    .dont-print, #reference-button
-        visibility: hidden
-    .print-display-none
-        display: none !important
-    #reference-list
-        display: block
-    .display-print
-        display: inline !important
+.pagebreak
+    page-break-before: always
+.dont-print,
+#reference-button
+    visibility: hidden
+.print-display-none
+    display: none !important
+#reference-list,
+#toc-list-wrapper
+    display: block
+.display-print
+    display: block !important

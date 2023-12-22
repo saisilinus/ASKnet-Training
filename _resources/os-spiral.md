@@ -9,5 +9,4 @@ resource:
     cost: 0      #in $ (dont leave empty, but type 0 instead)
     license: CC BY-SA 4.0 #e.g. CC BY-SA 4.0
     author: "[r0g_agency](https://openculture.agency/)"
-    # marker
 ---
