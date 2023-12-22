@@ -40,6 +40,17 @@ permalink: /training/
 
             {% for module in site.modules %}
 
+                {% if module.module.max-participants == nil or module.module.max-participants == "Unknown" %}
+                    {% assign participant = "Unknown" %}
+                {% else %}
+                    {% assign participant = module.module.max-participants %}
+                {% endif %}
+
+                {% if module.module.difficulty == nil or module.module.difficulty == "Unknown" %}
+                    {% assign difficulty = "Unknown" %}
+                {% else %}
+                    {% assign difficulty = module.module.difficulty %}
+                {% endif %}
                 {% case module.module.difficulty %}
                     {% when 1 %}
                         {% assign module_diff_text = 'easy' %}
@@ -48,7 +59,7 @@ permalink: /training/
                     {% when 3 %}
                         {% assign module_diff_text = 'advanced' %}
                     {% else %}
-                        {% assign module_diff_text = module.module.difficulty %}
+                        {% assign module_diff_text = difficulty %}
                 {% endcase %}
 
                 {% assign module_cost = 0 %}
@@ -75,6 +86,7 @@ permalink: /training/
                         <i class="fas fa-sort"></i>
                     </div>
                 </div>
+                
                 <!--
                 <div class="time">
                     <div style="display:inline;" data-tooltip="edit duration" data-tooltip-location="right"><i class="far fa-clock"></i>
@@ -109,58 +121,74 @@ permalink: /training/
                             </div>
                         </div>
                     </div>
-                    <div class="options">
-                        <a class="button add-module" src="#">Add Module</a>
-                        <a class="info glightbox" href="{{ module.url }}" data-glightbox="max-width: 700; height: 800;" data-tooltip="more details" data-tooltip-location="left"><i class="fas fa-info-circle"></i></a> <a class="trash"><i class="fas fa-trash-alt"></i></a>
-                        {% if module.module.url %}<a href="{{ module.module.url }}" class="button" target="_blank">Source &nbsp; <i class="fas fa-external-link-alt"></i></a>{% endif %}
-                        <a class="select-check" data-tooltip="select module" data-tooltip-location="left"><i class="far fa-circle"></i></a>
-                    </div>
-                    <h2>{{ module.module.name }}</h2>
-                    <p class="intro">Learning Objective:</p>
-                    {% if module.module.description %}<p class="intro"> {{ module.module.description | truncatewords: 20 | markdownify }}</p>{% endif %}
-                    <p class="trainer-notes-display"></p>
-                    <a class="edit-trainer-notes-button edit intro print-display-none">Add trainer notes</a>
-                    <p />
-                    {% if module.module.license %}{{ module.module.license | prepend: "License: " | markdownify }}{% endif %}
-                    <div class="thumbnail"><img src="/assets/img/modules/{{ module.module.pic-url }}" class="thumbnail"></div>
-                    <div class="module-meta">
-                        <div class="module-meta">
-                            <p class="module-duration"><i class="far fa-clock"></i>
-                                {% if module_duration > 0 %}
-                                    {% if module_duration_hours > 0 %}
-                                        {{ module_duration_hours | append: ' ' }} h
-                                    {% endif %}
-                                    {% if module_duration_minutes > 0 %}
-                                        {{ module_duration_minutes }} min
-                                    {% endif %}
-                                {% else %}
-                                    15 min
-                                {% endif %}
-                            </p>
-                            <p class="difficulty-level"><i class="fas fa-tachometer-alt"></i>{{ module_diff_text }}</p>
-                            <p class="material-costs"><i class="fas fa-dollar-sign"></i>{{ module_cost }} $ material costs</p>
+                    <div class="module-header">
+                        <h2 class="module-name">
+                            <a class="card-link" href="{{ module.url }}">{{ module.module.name }}</a>
+                        </h2>
+                        <div class="icons print-display-none">
+                            <a class="button add-module" src="#">Add Module</a>
+                            <a class="info glightbox" href="{{ module.url }}" data-glightbox="max-width: 700; height: 800;" data-tooltip="more details" data-tooltip-location="left"><i class="fas fa-info-circle"></i></a> <a class="trash"><i class="fas fa-trash-alt"></i></a>
+                            {% if module.module.url %}<a href="{{ module.module.url }}" class="button" target="_blank">Source &nbsp; <i class="fas fa-external-link-alt"></i></a>{% endif %}
+                            <a class="select-check" data-tooltip="select module" data-tooltip-location="left"><i class="far fa-circle"></i></a>
                         </div>
                     </div>
+                    <div class="module-img">
+                        <a href="{{ module.url }}">
+                            <img src="{{ site.baseurl }}/assets/img/modules/{{ module.module.pic-url }}" class="img-fluid d-block mx-auto">
+                        </a>
+                    </div>
+                    <div class="module-info">
+                        <h3 class="module-item__name">
+                            <a class="card-link" href="{{ module.url }}">{{ module.module.name }}</a>
+                        </h3>
+                        <p class="intro">Learning Objective:</p>
+                        {% if module.module.description %}
+                            <div class="module-description intro">
+                                {{ module.module.description | markdownify }}
+                            </div>
+                            <div class="module-description-sidebar">
+                                {{ module.module.description | truncatewords: 15 | markdownify }}
+                            </div>
+                        {% endif %}
+                        <p class="trainer-notes-display"></p>
+                        <a class="edit-trainer-notes-button intro print-display-none">Add trainer notes</a>
+                        <p />
+                        {%- if module.module.res.size > 0 -%}
+                            <div class="resources">
+                                <h4>Resources</h4>
+                                <ul>
+                                    {% for actual_res in formatted_resource_list %}
+                                        {% for res in site.resources %}
+                                            {% if res.resource.id == actual_res %}
+                                                <li>
+                                                    {{ res.resource.name }}
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endfor  %}
+                                </ul>
+                            </div>
+                        {%- endif -%}
+                        <div class="meta">
+                            <button type="button" class="module-duration" data-tooltip="Duration" data-tooltip-location="top"><i class="fas fa-hourglass-half"></i> {% if module_duration > 0 %}
+                                {% if module_duration_hours > 0 %}
+                                    {{ module_duration_hours | append: ' ' }} h
+                                {% endif %}
+                                {% if module_duration_minutes > 0 %}
+                                    {{ module_duration_minutes }} min
+                                {% endif %}
+                            {% else %}
+                                15 min
+                            {% endif %}</button>
+                            <button type="button" data-tooltip="Difficulty-Level" data-tooltip-location="top" data-difficulty="{{ difficulty }}"><i class="fas fa-tachometer-alt"></i> {{ module_diff_text }}</button>
+                            <button type="button" data-tooltip="Max. Participants" data-tooltip-location="left" data-participant="{{ participant }}"><i class="fas fa-users-viewfinder"></i> {{ participant }}</button>
+                            <button type="button" class="intro" data-tooltip="Min. Trainers" data-tooltip-location="top"><i class="fas fa-chalkboard-teacher"></i> {{ module.module.min-trainers }}</button>
+                            <button type="button" class="intro" data-tooltip="Cost" data-tooltip-location="top"><i class="fas fa-dollar-sign"></i> {{ module_cost }}</button>
+                        </div>
+                        <div class="license intro">{{ module.module.license | markdownify }}</div>
+                    </div>
 
-                    <div class="resources">
-                        <p class="sidebar">Resources included: 
-                            
-                            {% assign first = true %}
-                            {% assign all_res_output = '' %}
-
-                            {% for actual_res in formatted_resource_list %}
-                                {% for res in site.resources %}
-                                    {% if res.resource.id == actual_res %}
-                                        {% if first == false %}
-                                            {{ '|' }}
-                                        {% endif %}
-                                        {% assign first = false %}
-                                        <a href="{{ res.resource.url }}" target="_blank">{{ res.resource.name }}</a>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endfor  %}
-                            
-                        </p>    
+                    <div class="resources">   
                         <ul class="resource-list">
 
                             {% for actual_res in formatted_resource_list %}
@@ -175,22 +203,37 @@ permalink: /training/
                                             {% when 3 %}
                                                 {% assign diff_text = 'advanced' %}
                                             {% else %}
-                                                {% assign diff_text = res.resource.difficulty %}
+                                                {% assign diff_text = 'unknown' %}
                                         {% endcase %}
 
                                         <li class="resource" data-duration="{{ res.resource.duration }}" data-name="{{ res.resource.name }}" data-cost="{{ res.resource.cost }}" data-space="" data-internet="" data-power="">
-                                            <div class="time">
-                                                <div style="display:inline;" data-tooltip="edit duration" data-tooltip-location="right"><i class="far fa-edit print-display-none"></i></div> <span class='clock-time'>03:45pm - 05:15pm</span>
-                                                <div class="edit-time">
-                                                    <form>
-                                                        <label>Duration:</label>
-                                                        <input type="number" class="duration" placeholder="{{ res.resource.duration }}" min="0" max="240">
-                                                        <span>minutes</span>
-                                                        <input class="submit button" type="button" value="Save">
-                                                        <input class="close" type="button" value="X">
-                                                    </form>
+                                            {% if res.resource.duration > 0 %}
+                                                <div class="time">
+                                                    <div style="display:inline;" data-tooltip="edit duration" data-tooltip-location="right"><i class="far fa-edit print-display-none"></i></div> <span class='clock-time'>03:45pm</span>
+                                                    <div class="edit-time">
+                                                        <form>
+                                                            <label>Duration:</label>
+                                                            <input type="number" class="duration" placeholder="{{ res.resource.duration }}" min="0" max="240">
+                                                            <span>minutes</span>
+                                                            <input class="submit button" type="button" value="Save">
+                                                            <input class="close" type="button" value="X">
+                                                        </form>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                                {%- else -%}
+                                                <div class="time hide">
+                                                    <div style="display:inline;" data-tooltip="edit duration" data-tooltip-location="right"><i class="far fa-edit print-display-none"></i></div> <span class='clock-time'>03:45pm</span>
+                                                    <div class="edit-time">
+                                                        <form>
+                                                            <label>Duration:</label>
+                                                            <input type="number" class="duration" placeholder="{{ res.resource.duration }}" min="0" max="240">
+                                                            <span>minutes</span>
+                                                            <input class="submit button" type="button" value="Save">
+                                                            <input class="close" type="button" value="X">
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
                                             <div class="content">
                                                 <div class="edit-trainer-notes-popup">
                                                     <div class="edit-title-and-description-body">
@@ -210,27 +253,43 @@ permalink: /training/
                                                     </div>
                                                 </div>
                                                 {% if res.resource.url %}<a href="{{ res.resource.url }}" class="button" target="_blank">Source &nbsp; <i class="fas fa-external-link-alt"></i></a>{% endif %}
-                                                <div><strong>{{ res.resource.name }}</strong> | {{ diff_text }} <span class="duration-display">{% if res.resource.duration > 0 %}| {{ res.resource.duration }} minutes{% endif %}</span> | {{ res.resource.cost }} $</div>
+                                                <div><strong>{{ res.resource.name }}</strong></div>
                                                 {% if res.resource.description %}
                                                     {{ res.resource.description | markdownify }}
                                                 {% endif %}
                                                 <p class="trainer-notes-display"></p>
-                                                <a class="edit-trainer-notes-button edit print-display-none">Add trainer notes</a>
+                                                <a class="edit-trainer-notes-button print-display-none" data-tooltip="Add notes" data-tooltip-location="top">+</a>
                                                 <p />
-                                                {% if res.resource.license %}
-                                                    {{ res.resource.license | prepend: "License: " | markdownify }}
-                                                {% endif %}
-                                                {% if res.resource.author %}
-                                                    <div class="author-data">
-                                                        {{ res.resource.author | prepend: "Author(s): " | markdownify }}
-                                                        <span class="author" data-author="{{ res.resource.author }}" data-resource="{{ res.resource.name }}" data-resource-url="{{ res.resource.url }}" data-resource-license="{{ res.resource.license }}"></span>
-                                                    </div>
-                                                {% endif %}
-                                                <!-- Authors: <span class="author-list">{% for author in site.authors %}
-                                                    {% if res.resource.authors contains author.shortname %}
-                                                        <a href="{{ author.source }}" class="author" target="_blank" data-name="{{ author.name }}" data-source="{{ author.source }}" data-resource="{{ res.resource.name }}" data-shortname="{{ author.shortname }}" data-resource-url="{{ res.resource.url }}" data-resource-id="{{ res.resource.id }}" data-resource-license="{{ res.resource.license }}">{{ author.name }}</a>
+                                                <div class="meta">
+                                                    {% if res.resource.duration > 0 %}
+                                                        <button type="button" class="duration-display" data-tooltip="Duration" data-tooltip-location="top">
+                                                            <i class="fas fa-hourglass-half"></i> 
+                                                            {%- assign res_duration_hours = res.resource.duration | divided_by:60  -%}
+                                                            {%- assign res_duration_minutes = res.resource.duration | modulo:60  -%}
+                                                            {% if res_duration_hours > 0 %}
+                                                                {{ res_duration_hours | append: ' ' }} h
+                                                            {% endif %}
+                                                            {% if res_duration_minutes > 0 %}
+                                                                {{ res_duration_minutes }} min
+                                                            {% endif %}
+                                                        </button>
+                                                    {%- else -%}
+                                                        <button type="button" class="resource-tool" data-tooltip="Tool" data-tooltip-location="top"><i class="fas fa-tools"></i></button>
                                                     {% endif %}
-                                                {% endfor %}</span> -->
+                                                    <button type="button" data-tooltip="Difficulty-Level" data-tooltip-location="top" data-difficulty="{{ difficulty }}"><i class="fas fa-tachometer-alt"></i> {{ diff_text }}</button>
+                                                    <button type="button" class="intro" data-tooltip="Cost" data-tooltip-location="top"><i class="fas fa-dollar-sign"></i> {{ res.resource.cost }}</button>
+                                                </div>
+                                                <div class="author-license flex-between-center">
+                                                    {% if res.resource.author %}
+                                                        <div class="author-data">
+                                                            {{ res.resource.author | prepend: "By: " | markdownify }}
+                                                            <span class="author" data-author="{{ res.resource.author }}" data-resource="{{ res.resource.name }}" data-resource-url="{{ res.resource.url }}" data-resource-license="{{ res.resource.license }}"></span>
+                                                        </div>
+                                                    {% endif %}
+                                                    {% if res.resource.license %}
+                                                        {{ res.resource.license | prepend: "License: " | markdownify }}
+                                                    {% endif %}
+                                                </div>
                                             </div>
                                             <div class="clearer"></div>
                                         </li>
@@ -255,7 +314,7 @@ permalink: /training/
         <ul id="break-list-side-bar" class="breaks">
             <li class="timebreak" data-duration="15">
                 <div class="time">
-                    <div style="display:inline;" data-tooltip="edit duration" data-tooltip-location="right"><i class="far fa-edit print-display-none"></i></div> <span class='clock-time'>10:20am - 12:30am</span></a>
+                    <div style="display:inline;" data-tooltip="edit duration" data-tooltip-location="right"><i class="far fa-edit print-display-none"></i></div> <span class='clock-time'>10:20am</span></a>
                     <div class="edit-time">
                         <form>
                             <input type="text" class="title" placeholder="Time Slot">
@@ -277,7 +336,7 @@ permalink: /training/
             </li>
             <li class="daybreak pagebreak" data-duration="15" data-start="09:00">
                 <div class="time">
-                    <div style="display:inline;" data-tooltip="edit duration" data-tooltip-location="right"><i class="far fa-edit print-display-none"></i></div> <span class='clock-time'>10:00am - 10:20pm</span></a>
+                    <div style="display:inline;" data-tooltip="edit duration" data-tooltip-location="right"><i class="far fa-edit print-display-none"></i></div> <span class='clock-time'>10:00am</span></a>
                     <div class="edit-time">
                         <form>
                             <label>Start-Time:</label>
@@ -327,12 +386,29 @@ permalink: /training/
                         <a class="close" href="#"><i class="fas fa-times-circle"></i></a>
                     </div>
                     <div class="edit-title-and-description-content">
-                <form>
-                    <input type="text" class="title" placeholder="Title of the training">
-                    <textarea class="description"></textarea>
+                        <form>
+                            <input type="text" class="title" placeholder="Title of the training">
+                            <textarea class="description"></textarea>
                             <input id="submit-title" type="button" value="Save changes">
-                </form>
+                        </form>
+                    </div>
+                </div>
             </div>
+            <div id="edit-summary">
+                <div class="edit-summary-body">
+                    <div class="edit-title-and-description-header">
+                        <p>Edit summary</p>
+                        <a class="close" href="#"><i class="fas fa-times-circle"></i></a>
+                    </div>
+                    <div class="edit-title-and-description-content">
+                        <form>
+                            <textarea id="summary-text-input"></textarea>
+                            <div class="flex-start-center">
+                                <input class="reset-summary" type="button" value="Reset">
+                                <input id="submit-summary" type="button" value="Save changes">
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
             
@@ -340,11 +416,11 @@ permalink: /training/
                 <h1 id="training-title">{{ page.title }} - Title of the Training</h1>
             </div>
             <p id="training-description">Short description about the training.</p>
-            <a id="edit-icon" style="font-size: 0.9rem; font-weight: bold;" class="edit print-display-none" href="#edit-title-and-description">Edit title and description</a>
+            <a id="edit-icon" class="edit-button print-display-none" href="#edit-title-and-description">Edit title and description</a>
             <ul id="module-list-training" class="training-list">
                 <div id="trainingstart" class="trainingstart" data-duration="15" data-start="09:00">
                     <div class="time">
-                        <div style="display:inline;" data-tooltip="edit start time & title" data-tooltip-location="right"><i class="far fa-edit print-display-none"></i></div> <span class='clock-time'>10:00am - 10:20pm</span></a>
+                        <div style="display:inline;" data-tooltip="edit start time & title" data-tooltip-location="right"><i class="far fa-edit print-display-none"></i></div> <span class='clock-time'>9:00am</span></a>
                         <div class="edit-time">
                             <form>
                                 <input style="margin-bottom:20px;" type="text" class="title" placeholder="Introduction into the training">
@@ -371,7 +447,38 @@ permalink: /training/
                     </div>
                     <div class="clearer"></div>
                 </div>
-                <div class="clearer pagebreak"></div>
+                <div id="top-summary" class="summary display-print">
+                    <h2>Summary</h2>
+                    <ul class="duration">
+                        <li class="days"><i class="fas fa-calendar-day"></i><span class="summary-days"></span><span class="label">day(s)</span></li>
+                        <li class="time-icon"><i class="far fa-clock"></i></li>
+                        <li class="hours"><span class="label">hours</span><span class="summary-hours"></span><span class="label">total time of your training</span></li>
+                        <li class="minutes"><span class="label">minutes</span><span class="summary-minutes"></span></li>
+                        <div class="clearer"></div>
+                    </ul>
+                    <div class="separator"></div>
+                    <ul class="informations">
+                        <li><i class="fas fa-cubes"></i><span class="number-of-modules"></span><span class="label">Number of modules</span></li>
+                        <li><i class="fas fa-users"></i><span class="max-participants"></span><span class="label">Max. participants</span></li>
+                        <li><i class="fas fa-chalkboard-teacher"></i><span class="min-trainers"></span><span class="label">Min. trainers</span></li>
+                        <li><i class="fas fa-tachometer-alt"></i><span class="difficulty"></span><span class="label">Difficulty level</span></li>
+                        <div class="clearer"></div>
+                    </ul>
+                </div>
+                <div class="summary-text display-print font-weight-normal"></div>
+                <div id="table-of-contents" class="pagebreak">
+                    <div class="flex-between-center">
+                        <h3>Schedule Overview</h3>
+                        <a id="toc-button" class="dont-print">
+                            <i class="fas fa-angle-down"></i>
+                        </a>
+                    </div>
+                    <div id="toc-list-wrapper">
+                        <div id="start-end-time" class="font-weight-normal"></div>
+                        <ul id="toc-list"></ul>
+                    </div>
+                </div>
+                <div class="clearer page-break"></div>
             </ul>
         
             <div class="clearer "></div>
@@ -383,25 +490,26 @@ permalink: /training/
                 <a href="#" id="add-daybreak-mobile" class="button">+ Day Break</a>
             </div>
         </div>
-        <div class="summary pagebreak">
+        <div class="summary print-display-none">
             <h2>Summary</h2>
             <ul class="duration">
-                <li class="days"><i class="fas fa-calendar-day"></i><span id="summary-days"></span><span class="label">day(s)</span></li>
+                <li class="days"><i class="fas fa-calendar-day"></i><span class="summary-days"></span><span class="label">day(s)</span></li>
                 <li class="time-icon"><i class="far fa-clock"></i></li>
-                <li class="hours"><span class="label">hours</span><span id="summary-hours"></span><span class="label">total time of your training</span></li>
-                <li class="minutes"><span class="label">minutes</span><span id="summary-minutes"></span></li>
+                <li class="hours"><span class="label">hours</span><span class="summary-hours"></span><span class="label">total time of your training</span></li>
+                <li class="minutes"><span class="label">minutes</span><span class="summary-minutes"></span></li>
                 <div class="clearer"></div>
             </ul>
             <div class="separator"></div>
             <ul class="informations">
-                <li><i class="fas fa-cubes"></i><span id="number-of-modules"></span><span class="label">Number of modules</span></li>
-                <li><i class="fas fa-users"></i><span id="max-participants"></span><span class="label">Max. participants</span></li>
-                <li><i class="fas fa-chalkboard-teacher"></i><span id="min-trainers"></span><span class="label">Min. trainers</span></li>
-                <li><i class="fas fa-tachometer-alt"></i><span id="difficulty"></span><span class="label">Difficulty level</span></li>
+                <li><i class="fas fa-cubes"></i><span class="number-of-modules"></span><span class="label">Number of modules</span></li>
+                <li><i class="fas fa-users"></i><span class="max-participants"></span><span class="label">Max. participants</span></li>
+                <li><i class="fas fa-chalkboard-teacher"></i><span class="min-trainers"></span><span class="label">Min. trainers</span></li>
+                <li><i class="fas fa-tachometer-alt"></i><span class="difficulty"></span><span class="label">Difficulty level</span></li>
                 <div class="clearer"></div>
             </ul>
-            
         </div>
+        <a id="edit-summary-button" class="edit-button print-display-none">Add summary notes</a>
+        <div class="summary-text print-display-none font-weight-normal"></div>
         <div class="resource-overview pagebreak">
             <h3>Resources</h3>
             <table id="resource-table">
@@ -431,7 +539,7 @@ permalink: /training/
                 </tr>
             </table>
         </div>
-        <div class="attachments">
+        <!-- <div class="attachments">
             <h3>Attachments</h3>
             <div class="attachment">
                 <input type="checkbox" id="timetable" name="timetable" value="Timetable" disabled>
@@ -448,9 +556,9 @@ permalink: /training/
             <div class="overlay">
                 <p>This feature is coming</p>
             </div>
-        </div>
+        </div> -->
         <div class="references pagebreak">
-            <div class="flex-between">
+            <div class="flex-between-center">
                 <h3 id="reference-title">References</h3>
                 <a id="reference-button"><i class="fas fa-angle-down"></i></a>
             </div>
@@ -458,8 +566,8 @@ permalink: /training/
         </div>
         <div class="actions dont-print">
             <button class="button print noPrint" onclick="window.print();"><i class="fas fa-print"></i> Print</button>
-            <span class="btn-inactive button" data-tooltip="this feature is coming" data-tooltip-location="top"><i class="fas fa-save"></i> Save</span>
-            <span class="btn-inactive button" data-tooltip="this feature is coming" data-tooltip-location="top"><i class="fas fa-file-download"></i> Download</span>
+            <!-- <span class="btn-inactive button" data-tooltip="this feature is coming" data-tooltip-location="top"><i class="fas fa-save"></i> Save</span>
+            <span class="btn-inactive button" data-tooltip="this feature is coming" data-tooltip-location="top"><i class="fas fa-file-download"></i> Download</span> -->
         </div>
     </div>
 </div>

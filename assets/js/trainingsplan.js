@@ -153,6 +153,62 @@ function submitTitle(){
     if(newDescription != '') description.innerText = newDescription;
 }
 
+/**
+ * Initiate the buttons for editing summary
+ */
+function initiateEditSummary(){
+    let editButton = document.getElementById('edit-summary-button');
+    editButton.onclick = showEditSummary;
+    let submitButton = document.getElementById('submit-summary');
+    submitButton.onclick = submitSummary;
+    let closeButton = document.querySelector(`#edit-summary .close`);
+    closeButton.onclick = showEditSummary;
+    let resetButton = document.querySelector(`#edit-summary .reset-summary`);
+    resetButton.onclick = clearSummary;
+}
+
+/**
+ * Open and close the summary edit dialog
+ * @returns 
+ */
+function showEditSummary(){
+    let editSummary = document.getElementById('edit-summary');
+    if(editSummary.style.transform == 'scale(0, 0)' || editSummary.style.transform == ''){
+        editSummary.style.transform = 'scale(1,1)';
+        return;
+    }
+    editSummary.style.transform = 'scale(0,0)';
+}
+
+/**
+ * Submit changes after updating summary
+ */
+function submitSummary(){
+    let editSummary = document.getElementById('edit-summary');
+    editSummary.style.transform = 'scale(0,0)';
+
+    let form = this.parentNode.parentNode;
+    let summaryEl = document.querySelectorAll('.summary-text');   
+    let editButton = document.getElementById('edit-summary-button'); 
+    let newSummary = form.querySelector('#summary-text-input').value;
+    if(newSummary != '') {
+        summaryEl.forEach((el) => el.innerHTML = `<p>${newSummary}</p>`);
+        editButton.innerText = 'Edit summary notes';
+    } else {
+        summaryEl.forEach((el) => el.innerHTML = ``);
+        editButton.innerText = 'Add summary notes';
+    }
+}
+
+/**
+ * Clears the input textfield for the summary. It does not save the changes.
+ */
+function clearSummary(){
+    let form = this.parentNode.parentNode;
+    let inputEl = form.querySelector('#summary-text-input');
+    inputEl.value = "";
+}
+
 function initiateEditResourceQuantity(){
     let inputQuantity = document.getElementsByClassName('quantity-input');
     for(let input of inputQuantity){
@@ -190,12 +246,17 @@ function onClickDeleteOrMoveListElement() {
         let moduleListSideBar = document.getElementById(ID_MODULE_LIST_SIDE_BAR);
         moduleListSideBar.appendChild(currentElement);
         calculateTime();
+        insertDayBreaks();
         calculateSummary();
+        updateTableOfContents();
+        updateAuthorList();
         return;
     }
     currentElement.remove();
     calculateTime();
+    insertDayBreaks();
     calculateSummary();
+    updateTableOfContents();
 }
 
 function initiateTimeEdit(){
@@ -215,7 +276,7 @@ function initiateTimeButton(classes){
 }
 
 function toggleTimeEditWindow(){
-    let timeEdit = getChildByClassName(this.parentNode.parentNode, CLASS_EDITTIME);
+    let timeEdit = this.parentNode.parentNode.querySelector(`.${CLASS_EDITTIME}`);
     if(timeEdit == null){
         return;
     }
@@ -283,9 +344,17 @@ function submitTime(){
             if (currentElement.className.includes('resource')) {
                 let displayEl = currentElement.querySelector('.duration-display');
                 if (parseInt(duration) > 0) {
-                    displayEl.innerText = `| ${duration} minutes`;
+                    let hours = Math.floor(parseInt(duration)/60), displayText = '';
+                    let minutes = parseInt(duration)%60;
+                    if (hours > 0) {
+                        displayText = `${hours} h `;
+                    }
+                    if (minutes > 0) {
+                        displayText += `${minutes} min`;
+                    }
+                    displayEl.innerHTML = `<i class="fas fa-hourglass-half"></i> ${displayText}`;
                 } else {
-                    displayEl.innerText = '';
+                    displayEl.innerHTML = '0 h';
                 }
             }
             if(currClassName.includes(CLASS_TRAININGSTART)
@@ -446,7 +515,11 @@ function runDynamicCalculationsOnUpdate(evt) {
     let mod = evt.item;
     insertTimeBreaks(mod);
     calculateTime();
+    insertDayBreaks();
     calculateSummary();
+    updateAuthorList();
+    initiateEditNotes();
+    updateTableOfContents();
 }
 
 function runDynamicCalculationsOnAdd(evt) {
@@ -468,6 +541,8 @@ function runDynamicCalculationsOnAdd(evt) {
     insertDayBreaks();
     calculateSummary();
     updateAuthorList();
+    initiateEditNotes();
+    updateTableOfContents();
 }
 
 const INTRODUCTION_TEXT = 'Introduction';
@@ -484,6 +559,8 @@ function insertIntroductionDuration(mod) {
         let title = MODULE_TIME_BREAK.querySelector('.break-title');
         title.innerText = INTRODUCTION_TEXT;
         activateTimeBreak(MODULE_TIME_BREAK);
+        let form = MODULE_TIME_BREAK.querySelector('form');
+        clickButtonOnEnter(form, `.duration`, `.${CLASS_SUBMITTIME}`);
         resourceList.prepend(MODULE_TIME_BREAK);
     }
 }
@@ -504,7 +581,7 @@ function deleteIntroductionDuration(mod){
 
 function calculateTime() {
     let totalTime = 0;
-    let clockTime = new Date();
+    let clockTime = new Date(), startTime;
     let days = 0;
 
     let trainingstart = document.getElementById(CLASS_TRAININGSTART);
@@ -524,7 +601,7 @@ function calculateTime() {
             clockTime = insertClockTime(clockTime, duration, mod);
             totalTime+=duration;
 
-            let resources = document.querySelectorAll(`#${mod.id} li`);
+            let resources = mod.querySelectorAll('.resource-list li');
             let moduleEndTime = clockTime;
             let timeBetweenDayBreaks = 0;
             for(let el of resources){
@@ -540,10 +617,10 @@ function calculateTime() {
                 totalTime+=duration;
             }
 
-            let moduleDurationEl = getChildByClassName(mod, CLASS_MODULEDURATION);
+            let moduleDurationEl = mod.querySelector(`.${CLASS_MODULEDURATION}`);
 
             const durationSplit = getDurationSplit(moduleEndTime - moduleStartTime - timeBetweenDayBreaks);
-            let durationHtml = '<i class="fas fa-hourglass-half"></i>';
+            let durationHtml = '<i class="fas fa-hourglass-half"></i> ';
             Object.keys(durationSplit).forEach((key, index) => {
                 if (durationSplit[key]) {
                     durationHtml += index === 0 ? '' : ' ';
@@ -568,14 +645,16 @@ function calculateTime() {
         } 
     }
 
-    updateSummaryDuration(days, totalTime)
+    updateSummaryDuration(days, totalTime);
+    let startEndTimeDisplay = document.getElementById('start-end-time');
+    startEndTimeDisplay.innerText = `Day 1 ${convertTimeToString(startTime)} -${days > 1 ? ' Day ' + days : ''} ${convertTimeToString(clockTime)}`;
 }
 
 function updateSummaryDuration(days, totalTime){
     let summaryDuration = getDurationSplit(totalTime*60*1000);
-    document.querySelector('#summary-days').innerText = days;
-    document.querySelector('#summary-hours').innerText = summaryDuration.hours;
-    document.querySelector('#summary-minutes').innerText = summaryDuration.minutes;
+    document.querySelectorAll('.summary .summary-days').forEach((el) => el.innerText = days);
+    document.querySelectorAll('.summary .summary-hours').forEach((el) => el.innerText = summaryDuration.hours);
+    document.querySelectorAll('.summary .summary-minutes').forEach((el) => el.innerText = summaryDuration.minutes);
 }
 
 function addDays(date, days) {
@@ -609,7 +688,8 @@ function insertClockTime(clockTime, duration, mod) {
     const oldClockTime = new Date(clockTime);
     clockTime = new Date(clockTime.getTime() + duration * 60 * 1000);
     const clockTimeString = `${convertTimeToString(oldClockTime)} - ${convertTimeToString(clockTime)}`;
-    clockTimeSpan.innerText = clockTimeString;
+    clockTimeSpan.innerText = convertTimeToString(oldClockTime);
+    mod.dataset.clock = clockTimeString;
     return clockTime;
 }
 
@@ -666,10 +746,10 @@ function calculateSummary() {
         participants = 0;
         trainer = 0;
     }
-    document.querySelector('#number-of-modules').innerText = moduleListTraining.length;
-    document.querySelector('#max-participants').innerText = participants;
-    document.querySelector('#min-trainers').innerText = trainer;
-    document.querySelector('#difficulty').innerText = difficultyLevels[difficulty];
+    document.querySelectorAll('.summary .number-of-modules').forEach((el) => el.innerText = moduleListTraining.length);
+    document.querySelectorAll('.summary .max-participants').forEach((el) => el.innerText = participants);
+    document.querySelectorAll('.summary .min-trainers').forEach((el) => el.innerText = trainer);
+    document.querySelectorAll('.summary .difficulty').forEach((el) => el.innerText = difficultyLevels[difficulty]);
 
     let resourceList = document.querySelectorAll(`#${ID_MODULE_LIST_TRAINING} .${CLASS_MODULE} .${CLASS_RESOURCE}`);
     let space = 0;
@@ -803,8 +883,7 @@ function insertDayBreaks() {
         const nextModule = module.nextSibling;
         let resources = module.querySelectorAll(`.${CLASS_RESOURCE}`);
         for (let resource of resources) {
-            const clockTimeString = resource.querySelector('.clock-time').innerText;
-            let { start, end } = convertStringTimeToDate(clockTimeString);
+            let { start, end } = convertStringTimeToDate(resource.dataset.clock);
             const isLastResource = resources[resources.length - 1] === resource;
             let hasBreakAfter = false;
             let searchBreak = true;
@@ -1172,27 +1251,26 @@ function updateAuthorLinkTarget(){
  * Allows user to add custom notes
  */
 function initiateEditNotes(){
-    let editButtons = document.getElementsByClassName('edit-trainer-notes-button');
+    let editButtons = document.querySelectorAll(`#${ID_MODULE_LIST_TRAINING} .edit-trainer-notes-button`);
     for (let editButton of editButtons) {
         editButton.onclick = showEditNotes;
     }
-    let submitButtons = document.getElementsByClassName('submit-notes');
+    let submitButtons = document.querySelectorAll(`#${ID_MODULE_LIST_TRAINING} .submit-notes`);
     for (let submitButton of submitButtons) {
         submitButton.onclick = submitNotes;
     }
-    let dismissButtons = document.getElementsByClassName('close-notes-popup');
+    let dismissButtons = document.querySelectorAll(`#${ID_MODULE_LIST_TRAINING} .close-notes-popup`);
     for (let dismissButton of dismissButtons) {
         dismissButton.onclick = dismissEditNotes;
     }
-    let resetButtons = document.getElementsByClassName('reset-notes');
+    let resetButtons = document.querySelectorAll(`#${ID_MODULE_LIST_TRAINING} .reset-notes`);
     for (let resetButton of resetButtons) {
         resetButton.onclick = clearNote;
     }
 }
 
 function showEditNotes(){
-    let parentNode = this.parentNode;
-    let popupEl = parentNode.querySelector('.edit-trainer-notes-popup');
+    let popupEl = this.parentNode.querySelector('.edit-trainer-notes-popup') ?? this.parentNode.parentNode.querySelector('.edit-trainer-notes-popup');
     popupEl.style.transform = 'scale(1,1)';
 }
 
@@ -1212,9 +1290,10 @@ function submitNotes(){
     displayEl.innerText = newNote;
     let addNotesButton = parentEl.querySelector('.edit-trainer-notes-button');
     if (newNote != '') {
-        addNotesButton.innerHTML = '<i class="far fa-edit"></i> Edit your notes';
+        addNotesButton.dataset.tooltip = 'Edit notes';
+        addNotesButton.innerHTML = '<i class="far fa-edit"></i>';
     } else {
-        addNotesButton.innerHTML = 'Add trainer notes';
+        addNotesButton.innerHTML = '+';
     }
 }
 
@@ -1247,6 +1326,66 @@ function clickButtonOnEnter(form, inputSelector, buttonSelector){
 }
 
 /**
+ * Updates the table of contents when a module is added or deleted in the main area
+ */
+function updateTableOfContents(){
+    let items = document.querySelectorAll(`#${ID_MODULE_LIST_TRAINING} li`);
+    let modules = document.querySelectorAll(`#${ID_MODULE_LIST_TRAINING} .${CLASS_MODULE}`);
+    let tocList = document.getElementById('toc-list'); 
+    if (modules.length > 0) {
+        let contentList = '<h4>Day 1</h4>';
+        let day = 1, name;
+        for (let item of items) {
+            if (item.classList.contains(CLASS_DAYBREAK)){
+                const isLastItem = items[items.length - 1] === item;
+                if (!isLastItem) {
+                    day++;
+                    contentList += `<h4>Day ${day}</h4>`;
+                    const clockTime = parseDatefromString(new Date(), item.dataset.start);
+                    contentList += `<li><span>${name}</span><span>${convertTimeToString(clockTime)}</span></li>`;
+                }
+            }
+            if (item.classList.contains(CLASS_MODULE)){;
+                name = item.dataset.name;
+                let { start, end } = convertStringTimeToDate(item.dataset.clock);
+                contentList += `<li><span>${name}</span><span>${convertTimeToString(start)}</span></li>`;
+            }
+        }
+        tocList.innerHTML = contentList;
+    } else {
+        tocList.innerHTML = '';
+    }
+}
+
+/**
+ * Initiates the button for expanding/contracting the table of contents
+ */
+function initiateTableOfContentsToggleButton(){
+    let button = document.getElementById('toc-button');
+    button.onclick = expandTableOfContents;
+}
+
+/**
+* Expands the table of contents
+*/
+function expandTableOfContents(){
+   let listEl = document.getElementById('toc-list-wrapper');
+   listEl.style.display = 'block';
+   this.innerHTML = '<i class="fas fa-angle-up"></i>';
+   this.onclick = contractTableOfContents;
+}
+
+/**
+* Contracts the table of contents
+*/
+function contractTableOfContents(){
+   let listEl = document.getElementById('toc-list-wrapper');
+   listEl.style.display = 'none';
+   this.innerHTML = '<i class="fas fa-angle-down"></i>';
+   this.onclick = expandTableOfContents;
+}
+
+/**
  * and here we go
  */
 window.onload = function () {
@@ -1260,7 +1399,8 @@ window.onload = function () {
     calculateTime();
     calculateSummary();
     initiateAuthorListToggleButton();
-    initiateEditNotes();
     initiateSearchButton();
     initiateShowTagsButton();
+    initiateEditSummary();
+    initiateTableOfContentsToggleButton();
 }
