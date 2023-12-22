@@ -102,7 +102,9 @@ body.index
         .sidebar
             display: none
     .actions
-        display: block
+        display: flex
+        justify-content: flex-end
+        align-items: center
         .button
             float: right
             display: block
@@ -117,6 +119,15 @@ body.index
                 background: $color-element-background-inactive
         .print
             padding: 14px 50px
+        #print-info
+            .icon
+                display: inline-flex
+                justify-content: center
+                align-items: center
+                height: 30px
+                width: 30px
+                margin-right: 10px
+                background: $color-element-background
 
 #edit-title-and-description,
 #lightbox-solar-charger,
@@ -216,6 +227,8 @@ body.index
     border-right: 1px $color-general-borders solid
     display: flex
     flex-direction: column
+    .pointer-none
+        pointer-events: none
     .header
         background: #999999
         border-bottom: 1px #000 solid
