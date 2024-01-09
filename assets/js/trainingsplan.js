@@ -11,6 +11,7 @@ const CLASS_EDITTIME = 'edit-time';
 const CLASS_MODULEDURATION = 'module-duration';
 const CLASS_MULTIDRAGSELECTED = 'multidrag-selected';
 const GROUP_MODULELIST = 'module-list-group';
+const TRAINING_DATA = 'training-data';
 
 /**
  * Drag & Drop
@@ -250,6 +251,7 @@ function onClickDeleteOrMoveListElement() {
         calculateSummary();
         updateTableOfContents();
         updateAuthorList();
+        backupTrainingPlan();
         return;
     }
     currentElement.remove();
@@ -257,6 +259,7 @@ function onClickDeleteOrMoveListElement() {
     insertDayBreaks();
     calculateSummary();
     updateTableOfContents();
+    backupTrainingPlan();
 }
 
 function initiateTimeEdit(){
@@ -520,6 +523,7 @@ function runDynamicCalculationsOnUpdate(evt) {
     updateAuthorList();
     initiateEditNotes();
     updateTableOfContents();
+    backupTrainingPlan();
 }
 
 function runDynamicCalculationsOnAdd(evt) {
@@ -543,6 +547,7 @@ function runDynamicCalculationsOnAdd(evt) {
     updateAuthorList();
     initiateEditNotes();
     updateTableOfContents();
+    backupTrainingPlan();
 }
 
 const INTRODUCTION_TEXT = 'Introduction';
@@ -1386,6 +1391,48 @@ function contractTableOfContents(){
 }
 
 /**
+ * Caches the training plan
+ */
+function backupTrainingPlan(){
+    let trainingData = document.getElementById(ID_MODULE_LIST_TRAINING).innerHTML.replace(/>\s+</g,'><');
+    sessionStorage.setItem(TRAINING_DATA, trainingData);
+}
+
+/**
+ * Populates the training plan with data from url or session storage
+ */
+function populateTrainingPlanFromCache(){
+    const trainingData = sessionStorage.getItem(TRAINING_DATA);
+    if (trainingData) {
+        document.getElementById(ID_MODULE_LIST_TRAINING).innerHTML = trainingData;
+        initiateSortable();
+        removeModulesFromSidebar();
+        initiateTimeEdit();
+        initiateTrashButton();
+    }
+    backupTrainingPlan();
+}
+
+/**
+ * Deletes modules in the training plan from the sidebar
+ */
+function removeModulesFromSidebar(){
+    let trainingModules = document.getElementById(ID_MODULE_LIST_TRAINING).querySelectorAll(`.${CLASS_MODULE}`);
+    let sideBarModules = document.getElementById(ID_MODULE_LIST_SIDE_BAR);
+    trainingModules.forEach((module) => {
+        let el = sideBarModules.querySelector(`#${module.id}`);
+        if (el) {
+            el.remove();
+        }
+    });
+    calculateTime();
+    insertDayBreaks();
+    calculateSummary();
+    updateAuthorList();
+    updateTableOfContents();
+}
+
+/**
  * and here we go
  */
 window.onload = function () {
@@ -1403,4 +1450,5 @@ window.onload = function () {
     initiateShowTagsButton();
     initiateEditSummary();
     initiateTableOfContentsToggleButton();
+    populateTrainingPlanFromCache();
 }
