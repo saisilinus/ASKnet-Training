@@ -176,13 +176,13 @@ permalink: /
           {% else %}
               {% assign module_diff_text2 = difficulty %}
         {% endcase %}
-        <div class="module-item col-lg-4 col-md-6 p-2" data-difficulties="[&quot;{{ difficulty }}&quot;]" data-participants="[&quot;{{ participant }}&quot;]">
+        <div id="{{ module.module.id }}" class="module-item col-lg-4 col-md-6 p-2" data-difficulties="[&quot;{{ difficulty }}&quot;]" data-participants="[&quot;{{ participant }}&quot;]" data-id="{{ module.module.id }}" data-tags="{{ module.module.tag }}" data-name="{{ module.module.name }}" data-description="{{ module.module.description }}">
           <div class="col-12 card shadow-sm">
             <div class="module-img">
               <a href="{{ module.url }}"><img src="{{ site.baseurl }}/assets/img/modules/{{ module.module.pic-url }}" class="img-fluid d-block mx-auto"></a>
             </div>
             <div class="card-body module-content">
-              <h3 class="card-title module-item__name"><a class="card-link" href="{{ module.url }}">{{ module.module.name }}</a></h3>
+              <h3 class="card-title module-item__name"><a class="card-link" href="{{ module.url }}">{{ module.module.name }}</a><a class="select-check" data-tooltip="select" data-tooltip-location="right"><i class="far fa-circle"></i></a></h3>
               {% if module.module.description %}
                 <p class="card-text">{{ module.module.description | markdownify }}</p>
               {% endif %}
@@ -226,15 +226,15 @@ permalink: /
 
 <!-- Progressbar to load traininsplan-->
 <script>
-  function toPage() 
-  {  
-  window.location="/training/";
+  function toPage() {  
+    window.location.href = sessionStorage.getItem('trainingUrl') ?? new URL('/training', window.location.href).href;
   } 
   function redirectCustom(){ 
-  //redirect after 5 seconds for i min pass 60000
-  setTimeout('toPage()', 5000);
+    //redirect after 5 seconds for i min pass 60000
+    setTimeout('toPage()', 5000);
   }
 </script>
 <script src="{{ site.baseurl }}/assets/js/progressbar.js"></script>
 <script src="{{ site.baseurl }}/assets/js/counter.js"></script>
 <script src="{{ site.baseurl }}/assets/js/modules.js"></script>
+<script src="{{ site.baseurl }}/assets/js/dynamicLinks.js"></script>

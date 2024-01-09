@@ -18,7 +18,7 @@ permalink: /training/
                     {% for tag in module_tags %}
                         {%- assign striped_tag = tag | strip -%}
                         {% unless tag_list contains striped_tag %}
-                            <li>{{ striped_tag }}</li>
+                            <li id="{{ striped_tag }}">{{ striped_tag }}</li>
                             {%- assign tag_list = tag_list | push: striped_tag -%}
                         {% endunless %}
                     {% endfor %}
@@ -127,7 +127,7 @@ permalink: /training/
                         </h2>
                         <div class="icons print-display-none">
                             <a class="button add-module" src="#">Add Module</a>
-                            <a class="info glightbox" href="{{ module.url }}" data-glightbox="max-width: 700; height: 800;" data-tooltip="more details" data-tooltip-location="left"><i class="fas fa-info-circle"></i></a> <a class="trash"><i class="fas fa-trash-alt"></i></a>
+                            <a class="info glightbox" href="{{ module.url }}" data-glightbox="max-width: 700; height: 800;" data-tooltip="more details" data-tooltip-location="left"><i class="fas fa-info-circle"></i></a> <a class="trash"><i class="fas fa-times-circle"></i></a>
                             {% if module.module.url %}<a href="{{ module.module.url }}" class="button" target="_blank">Source &nbsp; <i class="fas fa-external-link-alt"></i></a>{% endif %}
                             <a class="select-check" data-tooltip="select module" data-tooltip-location="left"><i class="far fa-circle"></i></a>
                         </div>
@@ -206,7 +206,7 @@ permalink: /training/
                                                 {% assign diff_text = 'unknown' %}
                                         {% endcase %}
 
-                                        <li class="resource" data-duration="{{ res.resource.duration }}" data-name="{{ res.resource.name }}" data-cost="{{ res.resource.cost }}" data-space="" data-internet="" data-power="">
+                                        <li id="{{ res.resource.id }}" class="resource" data-duration="{{ res.resource.duration }}" data-name="{{ res.resource.name }}" data-cost="{{ res.resource.cost }}" data-space="" data-internet="" data-power="">
                                             {% if res.resource.duration > 0 %}
                                                 <div class="time">
                                                     <div style="display:inline;" data-tooltip="edit duration" data-tooltip-location="right"><i class="far fa-edit print-display-none"></i></div> <span class='clock-time'>03:45pm</span>
@@ -328,7 +328,7 @@ permalink: /training/
                 </div>
                 <div class="content">
                     <div class="options">
-                        <a class="trash"><i class="fas fa-trash-alt"></i></a>
+                        <a class="trash"><i class="fas fa-times-circle"></i></a>
                     </div>
                     <p class="break-title">Time Slot</p>
                 </div>
@@ -358,7 +358,7 @@ permalink: /training/
                 </div>
                 <div class="content">
                     <div class="options">
-                        <a class="trash"><i class="fas fa-trash-alt"></i></a>
+                        <a class="trash"><i class="fas fa-times-circle"></i></a>
                     </div>
                     <p class="break-title">Day Break</p>
                 </div>

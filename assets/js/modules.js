@@ -283,6 +283,9 @@
        */
       _handleSearchKeyup(evt) {
           const searchText = evt.target.value.toLowerCase();
+          let url = new URL(sessionStorage.getItem(TRAINING_URL));
+          url.searchParams.set('search', searchText);
+          sessionStorage.setItem(TRAINING_URL, url.href);
           this.shuffle.filter((element, shuffle) => {
               // If there is a current filter applied, ignore elements that don't match it.
               if (shuffle.group !== Shuffle.ALL_ITEMS) {
@@ -294,9 +297,9 @@
                       return false;
                   }
               }
-              const titleElement = element.querySelector('.module-item__name');
-              const titleText = titleElement.textContent.toLowerCase().trim();
-              return titleText.indexOf(searchText) !== -1;
+              const titleText = element.dataset.name.toLowerCase();
+              const description = element.dataset.description.toLowerCase();
+              return titleText.includes(searchText) || description.includes(searchText);
           });
       }
   }

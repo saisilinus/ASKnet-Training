@@ -10,7 +10,10 @@ const CLASS_CLOSETIME = 'close'
 const CLASS_EDITTIME = 'edit-time';
 const CLASS_MODULEDURATION = 'module-duration';
 const CLASS_MULTIDRAGSELECTED = 'multidrag-selected';
+const CLASS_INTRODUCTION = 'introduction'
 const GROUP_MODULELIST = 'module-list-group';
+const TRAINING_URL = 'trainingUrl';
+const TRAINING_DATA = 'training-data';
 
 /**
  * Drag & Drop
@@ -120,9 +123,42 @@ function onModuleDrag(evt){
 }
 
 /**
+ * Clones and activates a timebreak
+ * @param {Number} duration duration of the break
+ * @param {String} title Title of the break e.g. lunch, recess
+ * @returns {Node} Timebreak Node
+ */
+function cloneTimeBreak(duration, title){
+    let MODULE_TIME_BREAK = document.getElementsByClassName(CLASS_TIMEBREAK)[0].cloneNode(true);
+    MODULE_TIME_BREAK.dataset.duration = Number(duration) ?? 15;
+    if (title) {
+        let titleEl = MODULE_TIME_BREAK.querySelector('.break-title');
+        titleEl.innerText = title;
+    }
+    activateTimeBreak(MODULE_TIME_BREAK);
+    let form = MODULE_TIME_BREAK.querySelector('form');
+    clickButtonOnEnter(form, `.duration`, `.${CLASS_SUBMITTIME}`);
+    return MODULE_TIME_BREAK;
+}
+
+/**
+ * Clones and activates a daybreak
+ * @param {String} start starting time of the day
+ * @param {Number} duration duration of the day's introduction
+ * @returns {Node} daybreak Node
+ */
+function cloneDayBreak(start, duration){
+    let MODULE_DAY_BREAK = document.getElementsByClassName(CLASS_DAYBREAK)[0].cloneNode(true);
+    MODULE_DAY_BREAK.dataset.start = start ?? '09:00';
+    MODULE_DAY_BREAK.dataset.duration = Number(duration) ?? 15;
+    activateTimeBreak(MODULE_DAY_BREAK);
+    return MODULE_DAY_BREAK;
+}
+
+
+/**
  * Button onclick initialisations
  */
-
 function initiateEditTitle(){
     let editButton = document.getElementById('edit-icon');
     editButton.onclick = showEditTitle;
@@ -245,8 +281,10 @@ function onClickDeleteOrMoveListElement() {
         deleteIntroductionDuration(currentElement);
         let moduleListSideBar = document.getElementById(ID_MODULE_LIST_SIDE_BAR);
         moduleListSideBar.appendChild(currentElement);
+        updateUrl(currentElement.id);
         calculateTime();
         insertDayBreaks();
+        clearPageBreaks();
         calculateSummary();
         updateTableOfContents();
         updateAuthorList();
@@ -485,10 +523,8 @@ function initiateAddTimebreak(){
 }
 
 function addTimebreak(){
-    const timeBreak = document.getElementsByClassName(CLASS_TIMEBREAK)[0].cloneNode(true);
     let moduleList = document.getElementById(ID_MODULE_LIST_TRAINING);
-    activateTimeBreak(timeBreak);
-    moduleList.appendChild(timeBreak);
+    moduleList.appendChild(cloneTimeBreak());
     calculateTime();
     calculateSummary();
 }
@@ -508,6 +544,38 @@ function addDaybreak(){
 }
 
 /**
+ * Populates the training plan with data from url or session storage
+ */
+function populateTrainingPlan(){
+    const params = new URL(window.location).searchParams;
+    const modules = params.get("modules");
+    if (modules) {
+        addModulesToTrainingPlan(modules.split(','));
+    }
+}
+
+/**
+ * Adds a list of modules to the training plan
+ * @param {String} modules list of modules e.g. oer,bmc
+ */
+function addModulesToTrainingPlan(modules){
+    let moduleList = document.getElementById(ID_MODULE_LIST_TRAINING);
+    modules.forEach((module) => {
+        let el = document.getElementById(module);
+        if (el) {
+            moduleList.appendChild(el);
+            insertIntroductionDuration(el);
+            insertTimeBreaks(el);
+        }
+    });
+    calculateTime();
+    insertDayBreaks();
+    calculateSummary();
+    updateAuthorList();
+    updateTableOfContents();
+}
+
+/**
  * Dynamic Calculations
  */
 
@@ -516,9 +584,9 @@ function runDynamicCalculationsOnUpdate(evt) {
     insertTimeBreaks(mod);
     calculateTime();
     insertDayBreaks();
+    clearPageBreaks();
     calculateSummary();
     updateAuthorList();
-    initiateEditNotes();
     updateTableOfContents();
 }
 
@@ -530,19 +598,56 @@ function runDynamicCalculationsOnAdd(evt) {
             mod = evt.items[i];
             insertTimeBreaks(mod);
             insertIntroductionDuration(mod);
+            updateUrl(mod.id);
         }
     } else {
         // for cases where only one module is selected
         mod = evt.item;
         insertTimeBreaks(mod);
         insertIntroductionDuration(mod);
+        updateUrl(mod.id);
     }
     calculateTime();
     insertDayBreaks();
+    clearPageBreaks();
     calculateSummary();
     updateAuthorList();
-    initiateEditNotes();
     updateTableOfContents();
+}
+
+/**
+ * Removes pagebreak before module if preceded by daybreak
+ */
+function clearPageBreaks(){
+    let modules = document.getElementById(ID_MODULE_LIST_TRAINING).querySelectorAll(`.${CLASS_MODULE}`);
+    modules.forEach((module) => {
+        let sibling = module.previousSibling;
+        if (sibling && sibling.classList && sibling.classList.contains(CLASS_DAYBREAK)) {
+            module.classList.toggle('pagebreak');
+        }
+    });
+}
+
+/**
+ * Updates the url with module id after module is removed or added to training plan
+ * @param {String} id module id
+ */
+function updateUrl(id){
+    let url = new URL(window.location);
+    let modules = url.searchParams.get('modules');
+    if (modules) {
+        let moduleSet = new Set(modules.split(','));
+        if (moduleSet.has(id)) {
+            moduleSet.delete(id);
+        } else {
+            moduleSet.add(id);
+        }
+        url.searchParams.set('modules', Array.from(moduleSet).join(','));
+    } else {
+        url.searchParams.set('modules', id);
+    }
+    sessionStorage.setItem(TRAINING_URL, url.href);
+    window.history.pushState({}, '', url);
 }
 
 const INTRODUCTION_TEXT = 'Introduction';
@@ -554,13 +659,8 @@ const INTRODUCTION_TEXT = 'Introduction';
 function insertIntroductionDuration(mod) {
     if (mod.className.includes(CLASS_MODULE)) {
         let resourceList = mod.querySelector('.resource-list');
-        let MODULE_TIME_BREAK = document.getElementsByClassName(CLASS_TIMEBREAK)[0].cloneNode(true);
-        MODULE_TIME_BREAK.dataset.duration = mod.dataset.duration > 0 ? mod.dataset.duration : 15;
-        let title = MODULE_TIME_BREAK.querySelector('.break-title');
-        title.innerText = INTRODUCTION_TEXT;
-        activateTimeBreak(MODULE_TIME_BREAK);
-        let form = MODULE_TIME_BREAK.querySelector('form');
-        clickButtonOnEnter(form, `.duration`, `.${CLASS_SUBMITTIME}`);
+        let MODULE_TIME_BREAK = cloneTimeBreak(mod.dataset.duration > 0 ? mod.dataset.duration : 15, INTRODUCTION_TEXT);
+        MODULE_TIME_BREAK.classList.add(CLASS_INTRODUCTION);
         resourceList.prepend(MODULE_TIME_BREAK);
     }
 }
@@ -571,7 +671,7 @@ function insertIntroductionDuration(mod) {
  */
 function deleteIntroductionDuration(mod){
     let MODULE_DURATION = mod.querySelector('.resource-list').firstChild;
-    if (MODULE_DURATION.className.includes(CLASS_TIMEBREAK)) {
+    if (MODULE_DURATION && MODULE_DURATION.className && MODULE_DURATION.className.includes(CLASS_TIMEBREAK)) {
         let title = MODULE_DURATION.querySelector('.break-title');
         if (title.innerText === INTRODUCTION_TEXT) {
             MODULE_DURATION.remove();
@@ -862,9 +962,7 @@ function insertTimeBreaks(mod) {
 }
 
 function addTimeBreakAfter(resource) {
-    const MODULE_TIME_BREAK = document.getElementsByClassName(CLASS_TIMEBREAK)[0].cloneNode(true);
-    activateTimeBreak(MODULE_TIME_BREAK);
-    resource.parentNode.insertBefore(MODULE_TIME_BREAK, resource.nextSibling);
+    resource.parentNode.insertBefore(cloneTimeBreak(), resource.nextSibling);
 }
 
 /**
@@ -918,9 +1016,7 @@ function insertDayBreaks() {
  * @param {Node} resource Resource element
  */
 function addDayBreakAfter(resource) {
-    const MODULE_DAY_BREAK = document.getElementsByClassName(CLASS_DAYBREAK)[0].cloneNode(true);
-    activateTimeBreak(MODULE_DAY_BREAK);
-    resource.parentNode.insertBefore(MODULE_DAY_BREAK, resource.nextSibling);
+    resource.parentNode.insertBefore(cloneDayBreak(), resource.nextSibling);
     calculateTime();
 }
 
@@ -1043,12 +1139,18 @@ function updateSelectableModulesList() {
 }
 
 function initiateSearchButton() {
+    const params = new URL(window.location).searchParams;
+    const searchText = params.get('search');
     let button = document.getElementById('search-bar-button');
     button.onclick = updateModulesBySearch;
     let form = document.getElementById('search-bar-form');
     clickButtonOnEnter(form, '#search-bar-input', '#search-bar-button');
     let input = document.getElementById('search-bar-input');
     input.oninput = updateModulesBySearch;
+    if (searchText) {
+        input.value = searchText;
+        updateModulesBySearch();
+    }
 }
 
 /**
@@ -1251,19 +1353,19 @@ function updateAuthorLinkTarget(){
  * Allows user to add custom notes
  */
 function initiateEditNotes(){
-    let editButtons = document.querySelectorAll(`#${ID_MODULE_LIST_TRAINING} .edit-trainer-notes-button`);
+    let editButtons = document.querySelectorAll(`.edit-trainer-notes-button`);
     for (let editButton of editButtons) {
         editButton.onclick = showEditNotes;
     }
-    let submitButtons = document.querySelectorAll(`#${ID_MODULE_LIST_TRAINING} .submit-notes`);
+    let submitButtons = document.querySelectorAll(`.submit-notes`);
     for (let submitButton of submitButtons) {
         submitButton.onclick = submitNotes;
     }
-    let dismissButtons = document.querySelectorAll(`#${ID_MODULE_LIST_TRAINING} .close-notes-popup`);
+    let dismissButtons = document.querySelectorAll(`.close-notes-popup`);
     for (let dismissButton of dismissButtons) {
         dismissButton.onclick = dismissEditNotes;
     }
-    let resetButtons = document.querySelectorAll(`#${ID_MODULE_LIST_TRAINING} .reset-notes`);
+    let resetButtons = document.querySelectorAll(`.reset-notes`);
     for (let resetButton of resetButtons) {
         resetButton.onclick = clearNote;
     }
@@ -1398,9 +1500,12 @@ window.onload = function () {
     initiateMobileButtons();
     calculateTime();
     calculateSummary();
+    initiateEditNotes();
     initiateAuthorListToggleButton();
     initiateSearchButton();
     initiateShowTagsButton();
     initiateEditSummary();
     initiateTableOfContentsToggleButton();
+    populateTrainingPlan();
+    clearPageBreaks();
 }
