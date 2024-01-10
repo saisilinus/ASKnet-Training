@@ -416,7 +416,10 @@ permalink: /training/
                 <h1 id="training-title">{{ page.title }} - Title of the Training</h1>
             </div>
             <p id="training-description">Short description about the training.</p>
-            <a id="edit-icon" class="edit-button print-display-none" href="#edit-title-and-description">Edit title and description</a>
+            <div class="flex-between-center">
+                <a id="edit-icon" class="edit-button print-display-none" href="#edit-title-and-description">Edit title and description</a>
+                <a id="reset-training" class="edit-button print-display-none" onclick="clearCache()">Reset <i class="fas fa-sync-alt"></i></a>
+            </div>
             <ul id="module-list-training" class="training-list">
                 <div id="trainingstart" class="trainingstart" data-duration="15" data-start="09:00">
                     <div class="time">
@@ -584,4 +587,12 @@ permalink: /training/
     const lightbox = GLightbox({
         touchNavigation: true,
     });
+    /**
+     * Clears the cache and reloads the page
+     */
+    function clearCache(){
+        sessionStorage.clear();
+        window.location.href = window.location.origin + window.location.pathname;
+        window.location.reload();
+    }
 </script>
