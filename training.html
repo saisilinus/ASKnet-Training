@@ -592,7 +592,6 @@ permalink: /training/
      */
     function clearCache(){
         sessionStorage.clear();
-        window.location.href = window.location.origin + window.location.pathname;
-        window.location.reload();
+        window.location = window.location.origin + window.location.pathname;
     }
 </script>
