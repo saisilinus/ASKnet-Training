@@ -119,6 +119,12 @@
        */
        _handleDifficultyChange = function (evt) {
           var button = evt.currentTarget;
+          let similarButtons = [];
+          this.difficulties.forEach((btn) => {
+            if (btn.dataset.difficulty == button.dataset.difficulty) {
+              similarButtons.push(btn);
+            }
+          })
 
           if (button.getAttribute('data-difficulty') == 'All') {
               // remove all "active" classes
@@ -129,8 +135,10 @@
 
               if (button.classList.contains('active')) {
                   button.classList.remove('active');
+                  similarButtons.forEach((btn) => btn.classList.remove('active'));
               } else {
                   button.classList.add('active');
+                  similarButtons.forEach((btn) => btn.classList.add('active'));
               }
           }
 
@@ -143,6 +151,12 @@
        */
       _handleTagChange = function (evt) {
         var button = evt.currentTarget;
+        let similarButtons = [];
+        this.tags.forEach((btn) => {
+            if (btn.dataset.tag == button.dataset.tag) {
+                similarButtons.push(btn);
+            }
+        })
 
         if (button.getAttribute('data-tag') == 'All') {
             // remove all "active" classes
@@ -152,8 +166,10 @@
         } else {
             if (button.classList.contains('active')) {
                 button.classList.remove('active');
+                similarButtons.forEach((btn) => btn.classList.remove('active'));
             } else {
                 button.classList.add('active');
+                similarButtons.forEach((btn) => btn.classList.add('active'));
             }
         }
 
@@ -167,6 +183,12 @@
        */
       _handleParticipantChange = function (evt) {
         var button = evt.currentTarget;
+        let similarButtons = [];
+        this.participants.forEach((btn) => {
+            if (btn.dataset.participant == button.dataset.participant) {
+              similarButtons.push(btn);
+            }
+        })
 
         if (button.getAttribute('data-participant') == 'All') {
             // remove all "active" classes
@@ -178,12 +200,14 @@
             // Treat these buttons like radio buttons where only 1 can be selected.
             if (button.classList.contains('active')) {
                 button.classList.remove('active');
+                similarButtons.forEach((btn) => btn.classList.remove('active'));
             } else {
                 this.participants.forEach(function (btn) {
                     btn.classList.remove('active');
                 });
 
                 button.classList.add('active');
+                similarButtons.forEach((btn) => btn.classList.add('active'));
             }
         }
 
