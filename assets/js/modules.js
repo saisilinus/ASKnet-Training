@@ -9,6 +9,7 @@
           this.element = element;
           this.difficulties = Array.from(document.querySelectorAll('.filter-difficulty button'));
           this.participants = Array.from(document.querySelectorAll('.filter-participant button'));
+          this.tags = Array.from(document.querySelectorAll('.filter-tag button'));
           this.reset = Array.from(document.querySelectorAll('.filter-reset'));
           this.shuffle = new Shuffle(element, {
               itemSelector: '.module-item',
@@ -20,6 +21,7 @@
           this.filters = {
               difficulties: [],
               participants: [],
+              tags: [],
           };
           this._bindEventListeners();
 
@@ -46,15 +48,20 @@
       _bindEventListeners = function () {
           this._onDifficultyChange = this._handleDifficultyChange.bind(this);
           this._onParticipantChange = this._handleParticipantChange.bind(this);
+          this._onTagChange = this._handleTagChange.bind(this);
           this._onResetClick = this._resetFilters.bind(this);
 
           this.difficulties.forEach(function (button) {
               button.addEventListener('click', this._onDifficultyChange);
           }, this);
 
+          this.tags.forEach(function (button) {
+            button.addEventListener('click', this._onTagChange);
+          }, this);
+
           this.participants.forEach(function (button) {
             button.addEventListener('click', this._onParticipantChange);
-        }, this);
+          }, this);
 
           this.reset.forEach(function (button) {
               button.addEventListener('click', this._onResetClick);
@@ -76,6 +83,14 @@
           });
       };
 
+      _getCurrentTagFilters = function () {
+        return this.tags.filter(function (button) {
+            return button.classList.contains('active');
+        }).map(function (button) {
+            return button.getAttribute('data-tag');
+        });
+      };
+
       _getCurrentParticipantFilters = function () {
           return this.participants.filter(function (button) {
               return button.classList.contains('active');
@@ -85,7 +100,7 @@
       };
 
       _resetFilters = function () {
-          var allFilterButtons = Array.from(document.querySelectorAll('.filter-difficulty button, .filter-participant button'));
+          var allFilterButtons = Array.from(document.querySelectorAll('.filter-difficulty button, .filter-tag button, .filter-participant button'));
 
           // remove all "active" classes
           allFilterButtons.forEach(function (btn) {
@@ -95,6 +110,7 @@
           //filter() (filter aktualisieren)
           this.filters.difficulties = this._getCurrentDifficultyFilters();
           this.filters.participants = this._getCurrentParticipantFilters();
+          this.filters.tags = this._getCurrentTagFilters();
           this.filter();
       }
 
@@ -121,6 +137,29 @@
           this.filters.difficulties = this._getCurrentDifficultyFilters();
           this.filter();
       };
+
+      /**
+       * A tag state changed, update the current filters and filter
+       */
+      _handleTagChange = function (evt) {
+        var button = evt.currentTarget;
+
+        if (button.getAttribute('data-tag') == 'All') {
+            // remove all "active" classes
+            this.tags.forEach(function (btn) {
+                btn.classList.remove('active');
+            });
+        } else {
+            if (button.classList.contains('active')) {
+                button.classList.remove('active');
+            } else {
+                button.classList.add('active');
+            }
+        }
+
+        this.filters.tags = this._getCurrentTagFilters();
+        this.filter();
+    };
 
       /**
        * A participant button was clicked. Update filters and display.
@@ -200,8 +239,10 @@
 
           var difficulties = this.filters.difficulties;
           var participants = this.filters.participants;
+          var tags = this.filters.tags;
           var difficulty = JSON.parse(element.getAttribute('data-difficulties'));
           var participant = JSON.parse(element.getAttribute('data-participants'));
+          var tag = (element.dataset.tags).split(',').map((t) => t.trim());
 
           // If there are active filters and this difficulty is not in the filter array 
           if (difficulties.length > 0 && !difficulties.commonElements(difficulty)) {
@@ -210,6 +251,10 @@
 
           // If there are active filters and this participant is not in the filter array 
           if (participants.length > 0 && !participants.commonElements(participant)) {
+            return false;
+          }
+
+          if (tags.length > 0 && !tags.commonElements(tag)) {
             return false;
           }
 
