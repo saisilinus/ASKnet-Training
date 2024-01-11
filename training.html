@@ -587,14 +587,6 @@ permalink: /training/
     const lightbox = GLightbox({
         touchNavigation: true,
     });
-    lightbox.on('slide_before_load', ({ slideNode }) => {
-        // console.log({ children: slideNode.childNodes });
-        let link = document.querySelector('iframe');
-        console.log({ link });
-        if (link) {
-            link.classList.add('.hide-in-iframe')
-        };
-    })
     /**
      * Clears the cache and reloads the page
      */

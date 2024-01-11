@@ -189,7 +189,7 @@ permalink: /
             <div class="card-body module-content">
               <h3 class="card-title module-item__name"><a class="card-link" href="{{ module.url }}">{{ module.module.name }}</a><a class="select-check" data-tooltip="select" data-tooltip-location="right"><i class="far fa-circle"></i></a></h3>
               {% if module.module.description %}
-                <p class="card-text">{{ module.module.description | markdownify }}</p>
+                <p class="card-text">{{ module.module.description | truncatewords: 20 | markdownify }}</p>
               {% endif %}
               {% if module.module.res %}
                 {%- assign resource_list = module.module.res | split: ',' -%}
