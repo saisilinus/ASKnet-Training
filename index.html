@@ -54,7 +54,6 @@ permalink: /
       <div class="col-lg-12">
         {% assign difficulty-array = "" | split: ',' %}
         {% assign participant-array = "" | split: ',' %}
-        {% assign trainer-array = "" | split: ',' %}
         {% assign tag-array = "" | split: ',' %}
         {% for module in site.modules %}
           {% unless difficulty-array contains module.module.difficulty %}
@@ -69,13 +68,6 @@ permalink: /
               {% assign participant-array = participant-array | push: "Unknown" %}
             {% else %}
               {% assign participant-array = participant-array | push: module.module.max-participants %}
-            {% endif %}
-          {% endunless %}
-          {% unless trainer-array contains module.module.min-trainers %}
-            {% if module.module.min-trainers == nil %}
-              {% assign trainer-array = trainer-array | push: "Unknown" %}
-            {% else %}
-              {% assign trainer-array = trainer-array | push: module.module.min-trainers %}
             {% endif %}
           {% endunless %}
           {% unless tag-array contains module.module.tag %}
@@ -98,10 +90,6 @@ permalink: /
         {% assign participant-array = participant-array | sort | uniq %}
         {% comment %} {% if participant-array contains "Unknown" %}
           {% assign participant-array = participant-array | join: "|" | replace: "|Unknown|","|" | split: "|" | reverse | unshift: "Unknown" | reverse %}
-        {% endif %} {% endcomment %}
-        {% assign trainer-array = trainer-array | sort | uniq %}
-        {% comment %} {% if trainer-array contains "Unknown" %}
-          {% assign trainer-array = trainer-array | join: "|" | replace: "|Unknown|","|" | split: "|" | reverse | unshift: "Unknown" | reverse %}
         {% endif %} {% endcomment %}
         {% assign tag-array = tag-array | sort | uniq %}
         {% comment %} {% if tag-array contains "Unknown" %}
@@ -149,17 +137,6 @@ permalink: /
               {% endfor %}
             </div>
           </div>
-
-          <div class="dropdown p-2">
-            <button class="btn btn-sm btn-primary dropdown-toggle" data-flip="false" type="button" id="dropdownMenu3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Min. Trainers</button>
-            <div class="dropdown-menu mr-2 mb-2 filter-trainer">
-              <button class="dropdown-item all" type="button" data-trainer="All">All</button>
-              <div class="dropdown-divider"></div>
-              {% for trainer in trainer-array %}
-                <button class="dropdown-item" type="button" data-trainer="{{ trainer }}">{{ trainer }}</button>
-              {% endfor %}
-            </div>
-          </div>
          
           <div class="p-2 flex-grow-1">
             <input type="search" class="form-control col-6 js-shuffle-search" id="filters-search-input" placeholder="search by module title">
@@ -185,11 +162,6 @@ permalink: /
         {% else %}
           {% assign participant = module.module.max-participants %}
         {% endif %}
-        {% if module.module.min-trainers == nil or module.module.min-trainers == "Unknown" %}
-          {% assign trainer = "Unknown" %}
-        {% else %}
-          {% assign trainer = module.module.min-trainers %}
-        {% endif %}
         {% if module.module.tag == nil or module.module.tag == "Unknown" %}
           {% assign tag = "Unknown" %}
         {% else %}
@@ -209,7 +181,7 @@ permalink: /
           {% else %}
               {% assign module_diff_text2 = difficulty %}
         {% endcase %}
-        <div id="{{ module.module.id }}" class="module-item col-lg-4 col-md-6 p-2" data-difficulties="[&quot;{{ difficulty }}&quot;]" data-participants="[&quot;{{ participant }}&quot;]" data-trainers="[&quot;{{ trainer }}&quot;]" data-id="{{ module.module.id }}" data-tags="{{ module.module.tag }}" data-name="{{ module.module.name }}" data-description="{{ module.module.description }}">
+        <div id="{{ module.module.id }}" class="module-item col-lg-4 col-md-6 p-2" data-difficulties="[&quot;{{ difficulty }}&quot;]" data-participants="[&quot;{{ participant }}&quot;]" data-id="{{ module.module.id }}" data-tags="{{ module.module.tag }}" data-name="{{ module.module.name }}" data-description="{{ module.module.description }}">
           <div class="col-12 card shadow-sm">
             <div class="module-img">
               <a href="{{ module.url }}" onclick='event.stopPropagation();'><img src="{{ site.baseurl }}/assets/img/modules/{{ module.module.pic-url }}" class="img-fluid d-block mx-auto"></a>
