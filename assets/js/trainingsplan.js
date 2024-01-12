@@ -1187,6 +1187,23 @@ function initiateSearchButton() {
         input.value = searchText;
         updateModulesBySearch();
     }
+    let resetButton = document.getElementById('reset-search');
+    resetButton.onclick = resetSearch;
+}
+
+/**
+ * Clears the search filter
+ */
+function resetSearch(){
+    let url = new URL(window.location);
+    let input = document.getElementById('search-bar-input');
+    input.value = '';
+    showAllModules();
+    let all = document.getElementById('show-all-modules');
+    all.className = all.className.concat(CLASS_SELECTED);
+    url.searchParams.delete('search');
+    sessionStorage.setItem(TRAINING_URL, url.href);
+    window.history.pushState({}, '', url);
 }
 
 /**
@@ -1194,7 +1211,7 @@ function initiateSearchButton() {
  * @returns 
  */
 function updateModulesBySearch(){
-    const url = new URL(window.location);
+    let url = new URL(window.location);
     const searchWord = document.getElementById('search-bar-input').value.toLowerCase().trim();
     const sideBarModules = Array.from(document.getElementById(ID_MODULE_LIST_SIDE_BAR).getElementsByClassName(CLASS_MODULE));
     if (searchWord.length > 0) {
