@@ -288,6 +288,7 @@ function onClickDeleteOrMoveListElement() {
         calculateSummary();
         updateTableOfContents();
         updateAuthorList();
+        backupTrainingPlan();
         return;
     }
     currentElement.remove();
@@ -295,6 +296,7 @@ function onClickDeleteOrMoveListElement() {
     insertDayBreaks();
     calculateSummary();
     updateTableOfContents();
+    backupTrainingPlan();
 }
 
 function initiateTimeEdit(){
@@ -549,9 +551,14 @@ function addDaybreak(){
 function populateTrainingPlan(){
     const params = new URL(window.location).searchParams;
     const modules = params.get("modules");
+    const trainingData = sessionStorage.getItem(TRAINING_DATA);
+    if (trainingData) {
+        populateTrainingPlanFromCache(trainingData);
+    }
     if (modules) {
         addModulesToTrainingPlan(modules.split(','));
     }
+    backupTrainingPlan();
 }
 
 /**
@@ -588,6 +595,7 @@ function runDynamicCalculationsOnUpdate(evt) {
     calculateSummary();
     updateAuthorList();
     updateTableOfContents();
+    backupTrainingPlan();
 }
 
 function runDynamicCalculationsOnAdd(evt) {
@@ -613,6 +621,7 @@ function runDynamicCalculationsOnAdd(evt) {
     calculateSummary();
     updateAuthorList();
     updateTableOfContents();
+    backupTrainingPlan();
 }
 
 /**
@@ -1483,6 +1492,45 @@ function openLinksInNewTab(){
     links.forEach((link) => {
         link.setAttribute("target", "_blank");
     });
+}
+
+/**
+ * Caches the training plan
+ */
+function backupTrainingPlan(){
+    let trainingData = document.getElementById(ID_MODULE_LIST_TRAINING).innerHTML.replace(/>\s+</g,'><');
+    sessionStorage.setItem(TRAINING_DATA, trainingData);
+}
+
+/**
+ * Populates the training plan with data from session storage
+ * @param {String} cache cache from session storage
+ */
+function populateTrainingPlanFromCache(cache){
+    document.getElementById(ID_MODULE_LIST_TRAINING).innerHTML = cache;
+    initiateSortable();
+    removeModulesFromSidebar();
+    initiateTimeEdit();
+    initiateTrashButton();
+}
+
+/**
+ * Deletes modules in the training plan from the sidebar
+ */
+function removeModulesFromSidebar(){
+    let trainingModules = document.getElementById(ID_MODULE_LIST_TRAINING).querySelectorAll(`.${CLASS_MODULE}`);
+    let sideBarModules = document.getElementById(ID_MODULE_LIST_SIDE_BAR);
+    trainingModules.forEach((module) => {
+        let el = sideBarModules.querySelector(`#${module.id}`);
+        if (el) {
+            el.remove();
+        }
+    });
+    calculateTime();
+    insertDayBreaks();
+    calculateSummary();
+    updateAuthorList();
+    updateTableOfContents();
 }
 
 /**
