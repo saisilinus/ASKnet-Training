@@ -16,6 +16,8 @@ const TRAINING_URL = 'trainingUrl';
 const TRAINING_DATA = 'training-data';
 const SUMMARY_DATA = 'summary-data';
 const ID_SUMMARY_EL = 'summary-text-2';
+const ID_TRAINING_TITLE = 'training-title';
+const ID_TRAINING_DESCRIPTION = 'training-description';
 
 /**
  * Drag & Drop
@@ -84,8 +86,8 @@ function initiateSortable() {
             },
             fallbackOnBody: true,
             animation: ANIMATION_SPEED,
-            onAdd: calculateTime,
-            onUpdate: calculateTime
+            onAdd: onResourcesUpdate,
+            onUpdate: onResourcesUpdate
         });
         index++;
     }
@@ -122,6 +124,15 @@ function onModuleDrag(evt){
         Sortable.utils.deselect(evt.items[i]); // this is the ideal solution but doesn't work for now
         evt.items[i].className = evt.items[i].className.split(' ').filter(clazz => clazz != CLASS_MULTIDRAGSELECTED).join(' ');
     }
+}
+
+/**
+ * Performs actions after update to resources list
+ * @param {Event} evt Dragging event
+ */
+function onResourcesUpdate(evt) {
+    calculateTime();
+    backupTrainingPlan();
 }
 
 /**
@@ -182,13 +193,14 @@ function submitTitle(){
     editTitle.style.transform = 'scale(0,0)';
 
     let form = this.parentNode;
-    let title = document.getElementById('training-title');
+    let title = document.getElementById(ID_TRAINING_TITLE);
     let newTitle = getChildByClassName(form, 'title').value;
     if(newTitle != '') title.innerText = newTitle;
 
     let description = document.getElementById('training-description');    
     let newDescription = getChildByClassName(form, 'description').value;
     if(newDescription != '') description.innerText = newDescription;
+    backupTrainingPlan();
 }
 
 /**
@@ -555,8 +567,10 @@ function populateTrainingPlan(){
     const modules = params.get("modules");
     const trainingData = sessionStorage.getItem(TRAINING_DATA);
     const summaryData = sessionStorage.getItem(SUMMARY_DATA);
+    const trainingTitle = sessionStorage.getItem(ID_TRAINING_TITLE);
+    const trainingDescription = sessionStorage.getItem(ID_TRAINING_DESCRIPTION);
     if (trainingData) {
-        populateTrainingPlanFromCache(trainingData, modules.split(','));
+        populateTrainingPlanFromCache(trainingData);
     } else {
         if (modules) {
             addModulesToTrainingPlan(modules.split(','));
@@ -564,6 +578,12 @@ function populateTrainingPlan(){
     }
     if (summaryData) {
         document.getElementById(ID_SUMMARY_EL).innerHTML = summaryData;
+    }
+    if (trainingTitle) {
+        document.getElementById(ID_TRAINING_TITLE).innerHTML = trainingTitle;
+    }
+    if (trainingDescription) {
+        document.getElementById(ID_TRAINING_DESCRIPTION).innerHTML = trainingDescription;
     }
     backupTrainingPlan();
 }
@@ -1174,6 +1194,7 @@ function initiateSearchButton() {
  * @returns 
  */
 function updateModulesBySearch(){
+    const url = new URL(window.location);
     const searchWord = document.getElementById('search-bar-input').value.toLowerCase().trim();
     const sideBarModules = Array.from(document.getElementById(ID_MODULE_LIST_SIDE_BAR).getElementsByClassName(CLASS_MODULE));
     if (searchWord.length > 0) {
@@ -1192,6 +1213,9 @@ function updateModulesBySearch(){
         all.className = all.className.concat(CLASS_SELECTED);
         return;
     }
+    url.searchParams.set('search', searchWord);
+    sessionStorage.setItem(TRAINING_URL, url.href);
+    window.history.pushState({}, '', url);
 }
 
 /**
@@ -1401,6 +1425,7 @@ function submitNotes(){
     } else {
         addNotesButton.innerHTML = '+';
     }
+    backupTrainingPlan();
 }
 
 /**
@@ -1505,33 +1530,40 @@ function openLinksInNewTab(){
  * Caches the training plan
  */
 function backupTrainingPlan(){
+    const savingIndicator = document.getElementById('saving');
+    savingIndicator.classList.add('show');
     const trainingData = document.getElementById(ID_MODULE_LIST_TRAINING).innerHTML.replace(/>\s+</g,'><');
     const summaryData = document.getElementById(ID_SUMMARY_EL).innerHTML;
+    const trainingTitle = document.getElementById(ID_TRAINING_TITLE).innerHTML;
+    const trainingDescription = document.getElementById(ID_TRAINING_DESCRIPTION).innerHTML;
     sessionStorage.setItem(TRAINING_DATA, trainingData);
     sessionStorage.setItem(SUMMARY_DATA, summaryData);
+    sessionStorage.setItem(ID_TRAINING_TITLE, trainingTitle);
+    sessionStorage.setItem(ID_TRAINING_DESCRIPTION, trainingDescription);
+    setTimeout(() => savingIndicator.classList.remove('show'), 1000);
 }
 
 /**
  * Populates the training plan with data from session storage
  * @param {String} cache cache from session storage
- * @param {Array<string>} modules list of modules e.g. [oem,bmc]
  */
-function populateTrainingPlanFromCache(cache, modules){
+function populateTrainingPlanFromCache(cache){
     document.getElementById(ID_MODULE_LIST_TRAINING).innerHTML = cache;
     initiateSortable();
-    removeModulesFromSidebar(modules);
+    removeModulesFromSidebar();
     initiateTimeEdit();
     initiateTrashButton();
+    initiateEditNotes();
 }
 
 /**
  * Deletes modules in the training plan from the sidebar
- * @param {Array<String>} modules list of modules e.g. [oem,bmc]
  */
-function removeModulesFromSidebar(modules){
+function removeModulesFromSidebar(){
+    let trainingModules = document.getElementById(ID_MODULE_LIST_TRAINING).querySelectorAll(`.${CLASS_MODULE}`);
     let sideBarModules = document.getElementById(ID_MODULE_LIST_SIDE_BAR);
-    modules.forEach((module) => {
-        let el = sideBarModules.querySelector(`#${module}`);
+    trainingModules.forEach((module) => {
+        let el = sideBarModules.querySelector(`#${module.id}`);
         if (el) {
             el.remove();
         }

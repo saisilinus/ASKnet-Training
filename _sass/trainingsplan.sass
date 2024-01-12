@@ -943,6 +943,11 @@ a.help
     justify-content: space-between
     align-items: center
 
+.flex-center-center
+    display: flex
+    justify-content: center
+    align-items: center
+
 .reset-notes
     i
         font-size: 0.6rem
@@ -986,3 +991,36 @@ a.help
 
 .cursor-pointer
     cursor: pointer
+
+.loader
+    width: 24px
+    height: 24px
+    border: 5px dotted #fff
+    border-radius: 50%
+    display: inline-block
+    position: relative
+    box-sizing: border-box
+    animation: rotation 2s linear infinite
+    margin-left: 10px
+
+@keyframes rotation
+    0%
+        transform: rotate(0deg)
+    100%
+        transform: rotate(360deg)
+
+#saving
+    position: fixed
+    top: 15px
+    left: 50%
+    padding: 10px 20px
+    background: #000
+    color: #fff
+    border-radius: 10px
+    font-weight: 400
+    z-index: 99
+    opacity: 0
+    transition: all 2s
+
+.show
+    opacity: 1 !important
