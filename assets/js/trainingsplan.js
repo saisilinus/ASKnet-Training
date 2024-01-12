@@ -429,6 +429,7 @@ function submitTime(){
     
     form.parentNode.style.display = '';
     calculateTime()
+    backupTrainingPlan();
 }
 
 function initiateCloseButton(){
