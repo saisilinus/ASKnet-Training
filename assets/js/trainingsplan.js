@@ -143,7 +143,7 @@ function onResourcesUpdate(evt) {
  */
 function cloneTimeBreak(duration, title){
     let MODULE_TIME_BREAK = document.getElementsByClassName(CLASS_TIMEBREAK)[0].cloneNode(true);
-    MODULE_TIME_BREAK.dataset.duration = Number(duration) ?? 15;
+    MODULE_TIME_BREAK.dataset.duration = duration ? Number(duration) : 15;
     if (title) {
         let titleEl = MODULE_TIME_BREAK.querySelector('.break-title');
         titleEl.innerText = title;
@@ -163,7 +163,7 @@ function cloneTimeBreak(duration, title){
 function cloneDayBreak(start, duration){
     let MODULE_DAY_BREAK = document.getElementsByClassName(CLASS_DAYBREAK)[0].cloneNode(true);
     MODULE_DAY_BREAK.dataset.start = start ?? '09:00';
-    MODULE_DAY_BREAK.dataset.duration = Number(duration) ?? 15;
+    MODULE_DAY_BREAK.dataset.duration = duration ? Number(duration) : 15;
     activateTimeBreak(MODULE_DAY_BREAK);
     return MODULE_DAY_BREAK;
 }
@@ -570,7 +570,13 @@ function populateTrainingPlan(){
     const summaryData = sessionStorage.getItem(SUMMARY_DATA);
     const trainingTitle = sessionStorage.getItem(ID_TRAINING_TITLE);
     const trainingDescription = sessionStorage.getItem(ID_TRAINING_DESCRIPTION);
+    let dataIncludesModule = false;
     if (trainingData) {
+        let el = document.createElement('div');
+        el.innerHTML = trainingData;
+        dataIncludesModule = !!(el.querySelector('.module'));
+    } 
+    if (dataIncludesModule) {
         populateTrainingPlanFromCache(trainingData);
     } else {
         if (modules) {
