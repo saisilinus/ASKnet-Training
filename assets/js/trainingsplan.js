@@ -14,6 +14,8 @@ const CLASS_INTRODUCTION = 'introduction'
 const GROUP_MODULELIST = 'module-list-group';
 const TRAINING_URL = 'trainingUrl';
 const TRAINING_DATA = 'training-data';
+const SUMMARY_DATA = 'summary-data';
+const ID_SUMMARY_EL = 'summary-text-2';
 
 /**
  * Drag & Drop
@@ -197,15 +199,14 @@ function initiateEditSummary(){
     editButton.onclick = showEditSummary;
     let submitButton = document.getElementById('submit-summary');
     submitButton.onclick = submitSummary;
-    let closeButton = document.querySelector(`#edit-summary .close`);
+    let closeButton = document.getElementById('close-summary');
     closeButton.onclick = showEditSummary;
-    let resetButton = document.querySelector(`#edit-summary .reset-summary`);
+    let resetButton = document.getElementById('reset-summary');
     resetButton.onclick = clearSummary;
 }
 
 /**
  * Open and close the summary edit dialog
- * @returns 
  */
 function showEditSummary(){
     let editSummary = document.getElementById('edit-summary');
@@ -234,6 +235,7 @@ function submitSummary(){
         summaryEl.forEach((el) => el.innerHTML = ``);
         editButton.innerText = 'Add summary notes';
     }
+    backupTrainingPlan();
 }
 
 /**
@@ -552,18 +554,23 @@ function populateTrainingPlan(){
     const params = new URL(window.location).searchParams;
     const modules = params.get("modules");
     const trainingData = sessionStorage.getItem(TRAINING_DATA);
+    const summaryData = sessionStorage.getItem(SUMMARY_DATA);
     if (trainingData) {
-        populateTrainingPlanFromCache(trainingData);
+        populateTrainingPlanFromCache(trainingData, modules.split(','));
+    } else {
+        if (modules) {
+            addModulesToTrainingPlan(modules.split(','));
+        }
     }
-    if (modules) {
-        addModulesToTrainingPlan(modules.split(','));
+    if (summaryData) {
+        document.getElementById(ID_SUMMARY_EL).innerHTML = summaryData;
     }
     backupTrainingPlan();
 }
 
 /**
  * Adds a list of modules to the training plan
- * @param {String} modules list of modules e.g. oer,bmc
+ * @param {String} modules list of modules e.g. [oer,bmc]
  */
 function addModulesToTrainingPlan(modules){
     let moduleList = document.getElementById(ID_MODULE_LIST_TRAINING);
@@ -1498,39 +1505,37 @@ function openLinksInNewTab(){
  * Caches the training plan
  */
 function backupTrainingPlan(){
-    let trainingData = document.getElementById(ID_MODULE_LIST_TRAINING).innerHTML.replace(/>\s+</g,'><');
+    const trainingData = document.getElementById(ID_MODULE_LIST_TRAINING).innerHTML.replace(/>\s+</g,'><');
+    const summaryData = document.getElementById(ID_SUMMARY_EL).innerHTML;
     sessionStorage.setItem(TRAINING_DATA, trainingData);
+    sessionStorage.setItem(SUMMARY_DATA, summaryData);
 }
 
 /**
  * Populates the training plan with data from session storage
  * @param {String} cache cache from session storage
+ * @param {Array<string>} modules list of modules e.g. [oem,bmc]
  */
-function populateTrainingPlanFromCache(cache){
+function populateTrainingPlanFromCache(cache, modules){
     document.getElementById(ID_MODULE_LIST_TRAINING).innerHTML = cache;
     initiateSortable();
-    removeModulesFromSidebar();
+    removeModulesFromSidebar(modules);
     initiateTimeEdit();
     initiateTrashButton();
 }
 
 /**
  * Deletes modules in the training plan from the sidebar
+ * @param {Array<String>} modules list of modules e.g. [oem,bmc]
  */
-function removeModulesFromSidebar(){
-    let trainingModules = document.getElementById(ID_MODULE_LIST_TRAINING).querySelectorAll(`.${CLASS_MODULE}`);
+function removeModulesFromSidebar(modules){
     let sideBarModules = document.getElementById(ID_MODULE_LIST_SIDE_BAR);
-    trainingModules.forEach((module) => {
-        let el = sideBarModules.querySelector(`#${module.id}`);
+    modules.forEach((module) => {
+        let el = sideBarModules.querySelector(`#${module}`);
         if (el) {
             el.remove();
         }
     });
-    calculateTime();
-    insertDayBreaks();
-    calculateSummary();
-    updateAuthorList();
-    updateTableOfContents();
 }
 
 /**

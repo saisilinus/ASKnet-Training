@@ -400,13 +400,13 @@ permalink: /training/
                 <div class="edit-summary-body">
                     <div class="edit-title-and-description-header">
                         <p>Edit summary</p>
-                        <a class="close" href="#"><i class="fas fa-times-circle"></i></a>
+                        <a id="close-summary" class="cursor-pointer"><i class="fas fa-times-circle"></i></a>
                     </div>
                     <div class="edit-title-and-description-content">
                         <form>
                             <textarea id="summary-text-input"></textarea>
                             <div class="flex-start-center">
-                                <input class="reset-summary" type="button" value="Reset">
+                                <input id="reset-summary" class="reset-summary" type="button" value="Reset">
                                 <input id="submit-summary" type="button" value="Save changes">
                             </div>
                         </form>
@@ -514,7 +514,7 @@ permalink: /training/
             </ul>
         </div>
         <a id="edit-summary-button" class="edit-button print-display-none">Add summary notes</a>
-        <div class="summary-text print-display-none font-weight-normal"></div>
+        <div id="summary-text-2" class="summary-text print-display-none font-weight-normal"></div>
         <div class="resource-overview pagebreak">
             <h3>Resources</h3>
             <table id="resource-table">
@@ -583,7 +583,7 @@ permalink: /training/
 <div id="scroll-up" class="scroll-button print-display-none" data-tooltip="Scroll to top" data-tooltip-location="left" onclick="window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })">
     <i class="fas fa-angle-up"></i>
 </div>
-<a id="back-to-overview" href="/" target="_blank"><i class="fas fa-long-arrow-alt-left"></i> Back to overview </a>
+<a id="back-to-overview" class="print-display-none" href="/" target="_blank"><i class="fas fa-long-arrow-alt-left"></i> Back to overview </a>
 
 <script>
     const lightbox = GLightbox({
