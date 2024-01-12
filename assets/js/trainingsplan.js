@@ -1207,7 +1207,6 @@ function toggleShowTags () {
  * Author list
  */
 function updateAuthorList(){
-    updateAuthorLinkTarget();
     let moduleListEl = document.getElementById('module-list-training');
     let authorList =  moduleListEl.querySelectorAll('.author');
     let authorsWithResources = {};
@@ -1246,7 +1245,7 @@ function updateAuthorList(){
             // Single resource item that includes the name, url, and license of the resource
             let resourceItem = item.resources[resource];
 
-            resourceListEls +=`<li><a href="${resourceItem.url}">${resourceItem.name}</a>`;
+            resourceListEls +=`<li><a href="${resourceItem.url}" target="_blank">${resourceItem.name}</a>`;
             // Add resource link if it exists
             if (resourceItem.url) {
                 resourceListEls += `<span class="display-print"> (${resourceItem.url})</span>`;
@@ -1336,17 +1335,6 @@ function contractAuthorList(){
     referenceListEl.style.display = 'none';
     this.innerHTML = '<i class="fas fa-angle-down"></i>';
     this.onclick = expandAuthorList;
-}
-
-/**
- * Updates the author links to open in a new tab
- */
-function updateAuthorLinkTarget(){
-    let moduleList = document.getElementById('module-list-training');
-    let links = moduleList.querySelectorAll('.author-data a');
-    links.forEach((link) => {
-        link.setAttribute("target", "_blank");
-    });
 }
 
 /**
@@ -1488,6 +1476,16 @@ function contractTableOfContents(){
 }
 
 /**
+ * Open links enclosed with the class open-new-tab in a new tab e.g. licenses, authors
+ */
+function openLinksInNewTab(){
+    let links = document.querySelectorAll('.open-new-tab a');
+    links.forEach((link) => {
+        link.setAttribute("target", "_blank");
+    });
+}
+
+/**
  * and here we go
  */
 window.onload = function () {
@@ -1508,4 +1506,5 @@ window.onload = function () {
     initiateTableOfContentsToggleButton();
     populateTrainingPlan();
     clearPageBreaks();
+    openLinksInNewTab();
 }
