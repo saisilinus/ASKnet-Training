@@ -297,7 +297,7 @@ function onClickDeleteOrMoveListElement() {
         moduleListSideBar.appendChild(currentElement);
         updateUrl(currentElement.id);
         calculateTime();
-        insertDayBreaks();
+        // insertDayBreaks();
         clearPageBreaks();
         calculateSummary();
         updateTableOfContents();
@@ -307,7 +307,7 @@ function onClickDeleteOrMoveListElement() {
     }
     currentElement.remove();
     calculateTime();
-    insertDayBreaks();
+    // insertDayBreaks();
     calculateSummary();
     updateTableOfContents();
     backupTrainingPlan();
@@ -610,7 +610,7 @@ function addModulesToTrainingPlan(modules){
         }
     });
     calculateTime();
-    insertDayBreaks();
+    // insertDayBreaks();
     calculateSummary();
     updateAuthorList();
     updateTableOfContents();
@@ -624,7 +624,7 @@ function runDynamicCalculationsOnUpdate(evt) {
     let mod = evt.item;
     insertTimeBreaks(mod);
     calculateTime();
-    insertDayBreaks();
+    // insertDayBreaks();
     clearPageBreaks();
     calculateSummary();
     updateAuthorList();
@@ -650,7 +650,7 @@ function runDynamicCalculationsOnAdd(evt) {
         updateUrl(mod.id);
     }
     calculateTime();
-    insertDayBreaks();
+    // insertDayBreaks();
     clearPageBreaks();
     calculateSummary();
     updateAuthorList();
