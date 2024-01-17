@@ -340,10 +340,12 @@
       // Advanced filtering
       addSearchFilter() {
           const searchInput = document.querySelector('.js-shuffle-search');
+          const clearSearch = document.getElementById('reset-search');
           if (!searchInput) {
-              return;
+            return;
           }
           searchInput.addEventListener('keyup', this._handleSearchKeyup.bind(this));
+          clearSearch.addEventListener('click', this._clearSearch.bind(this));
       }
 
       /**
@@ -370,6 +372,15 @@
               const description = element.dataset.description.toLowerCase();
               return titleText.includes(searchText) || description.includes(searchText);
           });
+      }
+
+      _clearSearch(evt){
+        let searchInput = document.querySelector('.js-shuffle-search');
+        searchInput.value = '';
+        this.filter();
+        let url = new URL(sessionStorage.getItem(TRAINING_URL));
+        url.searchParams.delete('search');
+        sessionStorage.setItem(TRAINING_URL, url.href);
       }
   }
 

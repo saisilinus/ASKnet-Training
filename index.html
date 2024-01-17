@@ -95,7 +95,7 @@ permalink: /
         {% comment %} {% if tag-array contains "Unknown" %}
           {% assign tag-array = tag-array | join: "|" | replace: "|Unknown|","|" | split: "|" | reverse | unshift: "Unknown" | reverse %}
         {% endif %} {% endcomment %}
-        <div class="d-flex bd-highlight">
+        <div class="d-flex align-items-center bd-highlight">
           <div class="dropdown bd-highlight p-2">
             <button class="btn btn-sm btn-primary dropdown-toggle" data-flip="false" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Difficulty-Level</button>
             <div class="dropdown-menu sm mr-2 mb-2 filter-difficulty">
@@ -141,6 +141,7 @@ permalink: /
           <div class="p-2 flex-grow-1">
             <input type="search" class="form-control col-6 js-shuffle-search" id="filters-search-input" placeholder="search by module title">
           </div>
+          <a id="reset-search" class="cursor-pointer" data-tooltip="Clear search" data-tooltip-location="top"><i class="fas fa-sync-alt"></i></a>
         </div>
       </div>
     </div>
