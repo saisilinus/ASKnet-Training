@@ -586,7 +586,7 @@ permalink: /training/
 <div id="scroll-up" class="scroll-button print-display-none" data-tooltip="Scroll to top" data-tooltip-location="left" onclick="window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })">
     <i class="fas fa-angle-up"></i>
 </div>
-<a id="back-to-overview" class="print-display-none" href="/" target="_blank"><i class="fas fa-long-arrow-alt-left"></i> Back to overview </a>
+<a id="back-to-overview" class="print-display-none" onclick="clearCache('/')"><i class="fas fa-long-arrow-alt-left"></i> Back to overview </a>
 <div id="saving" class="flex-center-center">Saving <span class="loader"></span></div>
 
 <script>
@@ -596,8 +596,8 @@ permalink: /training/
     /**
      * Clears the cache and reloads the page
      */
-    function clearCache(){
+    function clearCache(path){
         sessionStorage.clear();
-        window.location = window.location.origin + window.location.pathname;
+        window.location = path ?? window.location.origin + window.location.pathname;
     }
 </script>
