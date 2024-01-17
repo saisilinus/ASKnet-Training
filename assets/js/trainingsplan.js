@@ -1578,6 +1578,8 @@ function populateTrainingPlanFromCache(cache){
     initiateTimeEdit();
     initiateTrashButton();
     initiateEditNotes();
+    updateAuthorList();
+    updateTableOfContents();
 }
 
 /**
