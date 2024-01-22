@@ -1,4 +1,8 @@
 const TRAINING_URL = 'trainingUrl';
+const TRAINING_DATA = 'training-data';
+const SUMMARY_DATA = 'summary-data';
+const ID_TRAINING_TITLE = 'training-title';
+const ID_TRAINING_DESCRIPTION = 'training-description';
 
 function initializeModuleItems(){
     let modules = document.getElementsByClassName('module-item');

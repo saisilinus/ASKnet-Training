@@ -132,6 +132,7 @@ function onModuleDrag(evt){
  */
 function onResourcesUpdate(evt) {
     calculateTime();
+    clearPageBreaks();
     backupTrainingPlan();
 }
 

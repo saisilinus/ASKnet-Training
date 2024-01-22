@@ -244,7 +244,10 @@ permalink: /
     window.location.href = sessionStorage.getItem('trainingUrl') ?? new URL('/training', window.location.href).href;
   } 
   function redirectCustom(){ 
-    sessionStorage.clear();
+    sessionStorage.removeItem(TRAINING_DATA);
+    sessionStorage.removeItem(SUMMARY_DATA);
+    sessionStorage.removeItem(ID_TRAINING_TITLE);
+    sessionStorage.removeItem(ID_TRAINING_DESCRIPTION);
     //redirect after 5 seconds for i min pass 60000
     setTimeout('toPage()', 5000);
   }
